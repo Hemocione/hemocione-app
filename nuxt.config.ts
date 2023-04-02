@@ -1,5 +1,5 @@
-export default {
-  nitro: {
-    preset: 'vercel-edge',
-  },
-};
+import { defineNuxtConfig } from "nuxt/config";
+
+export default defineNuxtConfig({
+  css: [],
+});

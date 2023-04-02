@@ -1,0 +1,6 @@
+{
+  "appId": "com.hemocione.donatorportal",
+  "appName": "donatorportal",
+  "webDir": ".output/public",
+  "bundledWebRuntime": false
+}

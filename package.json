@@ -5,9 +5,21 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "ionic:build": "nuxt generate --no-ssr",
+    "ionic:serve": "nuxt dev"
   },
   "devDependencies": {
     "nuxt": "^3.0.0"
-  }
+  },
+  "dependencies": {
+    "@capacitor/android": "4.7.1",
+    "@capacitor/app": "4.1.1",
+    "@capacitor/cli": "4.7.1",
+    "@capacitor/core": "4.7.1",
+    "@capacitor/haptics": "4.1.0",
+    "@capacitor/keyboard": "4.1.1",
+    "@capacitor/status-bar": "4.1.1"
+  },
+  "name": "hemocione.donatorportal",
+  "version": "0.0.1"
 }

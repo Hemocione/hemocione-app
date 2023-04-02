@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">donatorportal</string>
+    <string name="title_activity_main">donatorportal</string>
+    <string name="package_name">com.hemocione.donatorportal</string>
+    <string name="custom_url_scheme">com.hemocione.donatorportal</string>
+</resources>
