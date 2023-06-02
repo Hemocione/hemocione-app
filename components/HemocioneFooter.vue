@@ -12,11 +12,11 @@ footer {
   padding: 1rem 2rem;
   bottom: 0;
   background-color: white;
-  max-height: 18.75%;
-  display: flex;
-  gap: 0.5rem;
+  height: 18.75%;
+  display: grid;
+  gap: 0.7rem;
   width: 100%;
   flex-direction: column;
-  justify-content: center;
+  justify-items: stretch;
 }
 </style>

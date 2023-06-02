@@ -16,6 +16,7 @@ button {
   transition: 0.2s;
   color: white;
   align-self: stretch;
+  font-size: fill-available;
 }
 
 img {

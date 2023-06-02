@@ -13,5 +13,6 @@ button {
   transition: 0.2s;
   color: var(--black-80);
   align-self: stretch;
+  font-size: fill-available;
 }
 </style>

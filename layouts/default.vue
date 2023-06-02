@@ -1,7 +1,7 @@
 <template>
   <div>
     <HemocioneHeader />
-    <!-- <HemocioneMain /> this will be the content component-->
+    <slot />
     <HemocioneFooter />
   </div>
 </template>
