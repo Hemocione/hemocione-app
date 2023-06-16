@@ -12,13 +12,28 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.5em;
   width: 100%;
   height: 100%;
+  text-transform: uppercase;
+}
+
+.value {
+  font-size: 1.5em;
+  font-weight: 600;
+}
+
+.label {
+  width: 100%;
+  text-align: center;
+  font-size: 0.6em;
+  letter-spacing: 0.05em;
+  font-weight: 400;
 }
 
 .icon {
-  height: 1rem;
+  width: 15%;
+  aspect-ratio: 1/1;
 }
 </style>
 <script setup lang="ts">

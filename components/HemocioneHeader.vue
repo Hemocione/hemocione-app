@@ -10,7 +10,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1em 2em;
   background-color: var(--black-100);
   border-bottom: 1px solid var(--black-40);
   height: 6.25%;

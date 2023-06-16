@@ -9,8 +9,8 @@
 button {
   background-color: var(--red-negative-darker);
   border: 1px solid var(--red-negative-darker);
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
+  border-radius: 0.5em;
+  padding: 0.5em 1em;
   font-weight: 400;
   cursor: pointer;
   transition: 0.2s;
@@ -20,6 +20,6 @@ button {
 }
 
 img {
-  margin-right: 0.5rem;
+  margin-right: 0.5em;
 }
 </style>

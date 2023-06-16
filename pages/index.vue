@@ -10,6 +10,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  padding: 2em;
+  gap: 2em;
+  scroll-behavior: smooth;
+  overflow-y: scroll;
 }
 </style>

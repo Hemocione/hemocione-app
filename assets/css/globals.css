@@ -5,6 +5,7 @@ body {
   background-color: #ffffff;
   font-family: "Lato", -apple-system, "Inter", BlinkMacSystemFont, Segoe UI, Roboto,
     Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: var(--black-100);
 }
 
 a {
@@ -34,6 +35,7 @@ li {
 }
 
 :root {
+  --black-20: #DBDDE0;
   --black-40: #CACCCF;
   --black-80: #52575C;
   --black-100: #25282B;

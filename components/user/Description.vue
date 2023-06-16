@@ -28,10 +28,10 @@
   align-items: center;
   gap: 6px;
   width: 100%;
-  font-size: 0.8rem;
+  font-size: 0.8em;
 }
 .red-ball {
-  height: 50%;
+  height: 0.8em;
   aspect-ratio: 1/1;
   border-radius: 50%;
   background-color: var(--red-negative-default);
@@ -48,9 +48,10 @@
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: flex-start;
-  margin-left: 1rem;
+  margin-left: 1em;
+  gap: 0.5em;
   width: 70%;
   font-weight: 400;
   color: var(--black-80);
