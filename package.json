@@ -9,7 +9,7 @@
     "ionic:serve": "nuxt dev"
   },
   "devDependencies": {
-    "@nuxtjs/google-fonts": "^3.0.0",
+    "@nuxtjs/google-fonts": "^3.0.1",
     "nuxt": "^3.3.1"
   },
   "dependencies": {

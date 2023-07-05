@@ -5,8 +5,11 @@ export default defineNuxtConfig({
   buildModules: ["@nuxtjs/google-fonts"],
   googleFonts: {
     families: {
-      Lato: true,
-      Roboto: true,
+      Lato: [300, 500, 700, 900],
+      Roboto: [300, 500, 700, 900],
     },
+  },
+  app: {
+    layoutTransition: { name: "layout", mode: "out-in" },
   },
 });
