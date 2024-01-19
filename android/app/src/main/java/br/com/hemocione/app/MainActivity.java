@@ -1,4 +1,4 @@
-package com.hemocione.donatorportal;
+package br.com.hemocione.app;
 
 import com.getcapacitor.BridgeActivity;
 

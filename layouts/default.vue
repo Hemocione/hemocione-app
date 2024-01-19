@@ -2,7 +2,6 @@
   <div>
     <HemocioneHeader />
     <slot />
-    <HemocioneFooter />
   </div>
 </template>
 

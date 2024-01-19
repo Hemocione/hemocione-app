@@ -1,6 +1,8 @@
 {
-  "appId": "com.hemocione.donatorportal",
-  "appName": "donatorportal",
+  "appId": "br.com.hemocione.app",
+  "appName": "Hemocione",
   "webDir": ".output/public",
-  "bundledWebRuntime": false
+  "server": {
+    "androidScheme": "https"
+  }
 }

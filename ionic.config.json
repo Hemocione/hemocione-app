@@ -1,7 +1,0 @@
-{
-  "name": "donatorportal",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "custom"
-}
