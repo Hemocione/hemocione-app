@@ -62,4 +62,14 @@
   font-weight: 600;
   color: var(--black-100);
 }
+
+@media screen and (min-width: 768px) {
+  .user-image {
+    width: 20%;
+  }
+
+  .user-profile {
+    width: 80%;
+  }
+}
 </style>
