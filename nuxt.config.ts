@@ -1,6 +1,14 @@
 import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
+  runtimeConfig: {
+    public: {
+      hemocioneIdApiUrl:
+        process.env.NUXT_HEMOCIONE_ID_API_URL ||
+        "https://hemocione-id-dev.cpt.hemocione.com.br",
+    },
+  },
+  ssr: false,
   css: ["assets/css/globals.css", "assets/css/transitions.css"],
   modules: ["@nuxtjs/google-fonts", "@element-plus/nuxt", "@nuxt/image"],
   googleFonts: {

@@ -1,6 +1,6 @@
 <template>
   <button>
-    <img src="/icons/plus.svg" alt="Mais" />
+    <NuxtImg src="/icons/plus.svg" alt="Mais" />
     <span>Registrar nova doação</span>
   </button>
 </template>
@@ -13,9 +13,7 @@ button {
   padding: 0.5em 1em;
   font-weight: 400;
   cursor: pointer;
-  transition: 0.2s;
   color: white;
-  align-self: stretch;
   font-size: fill-available;
 }
 

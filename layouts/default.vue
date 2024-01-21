@@ -4,7 +4,6 @@
     <div class="page">
       <slot />
     </div>
-    <slot name="sticky-footer" />
   </div>
 </template>
 
