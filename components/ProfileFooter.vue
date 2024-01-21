@@ -4,14 +4,16 @@
       <div class="wrapper">
         <CommonRegisterDonationButton />
         <CommonAbleToDonateButton />
-        <el-icon @click="isOpen = false" size="30" class="close">
+        <el-icon @click="isOpen = false" size="30" class="toggler">
           <ElIconClose />
         </el-icon>
       </div>
     </footer>
-    <el-icon v-else @click="isOpen = true" size="30" class="open">
-      <ElIconArrowUp />
-    </el-icon>
+    <div class="fake-div" v-else>
+      <el-icon @click="isOpen = true" size="30" class="toggler">
+        <ElIconArrowUp />
+      </el-icon>
+    </div>
   </transition-group>
 </template>
 
@@ -36,20 +38,17 @@ footer {
   justify-items: stretch;
 }
 
-.close {
+.fake-div {
+  border-top: 1px solid var(--black-40);
+  position: fixed;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  max-width: 1270px;
+}
+.toggler {
   position: absolute;
   top: -1.5em;
-  left: 1rem;
-  cursor: pointer;
-  border-radius: 50%;
-  background-color: white;
-  border: 1px solid var(--black-40);
-  padding: 2px;
-}
-
-.open {
-  position: fixed;
-  bottom: 0.5em;
   left: 1rem;
   cursor: pointer;
   border-radius: 50%;
