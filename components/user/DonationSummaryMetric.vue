@@ -1,6 +1,6 @@
 <template>
   <div class="summary-metric">
-    <img class="icon" :src="iconSrc" alt="icon" />
+    <NuxtImg class="icon" :src="iconSrc" alt="icon" />
     <span class="value">{{ value }}</span>
     <span class="label">{{ label }}</span>
   </div>
@@ -32,7 +32,7 @@
 }
 
 .icon {
-  width: 15%;
+  width: 20%;
   aspect-ratio: 1/1;
 }
 </style>

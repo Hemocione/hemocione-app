@@ -1,16 +1,15 @@
 <template>
-  <h1>
-    <span style="color: var(--red); font-weight: 500">HEMO</span>
-    <span style="color: #fff; font-weight: 300">CIONE</span>
-  </h1>
+  <NuxtImg
+    class="logo"
+    src="/logos/principal-horizontal.svg"
+    alt="Hemocione Logo"
+  />
 </template>
 
 <style scoped>
-h1 {
-  font-size: fill-available;
-}
-span {
-  padding: 0;
-  margin: 0;
+.logo {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <img src="/icons/menu.svg" alt="Menu" />
+  <NuxtImg src="/icons/menu.svg" alt="Menu" />
 </template>
 
 <style scoped>

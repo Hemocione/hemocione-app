@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <img
+    <NuxtImg
       class="user-image"
       src="https://cdn.discordapp.com/attachments/757012940804194367/1113991633063641089/armin.png"
       alt="User Profile Image"
@@ -42,6 +42,7 @@
   aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 50%;
+  border: 2px solid var(--hemo-color-primary);
 }
 
 .user-profile {
