@@ -1,7 +1,7 @@
 <template>
   <header>
     <HeaderTitle />
-    <HeaderHamburguer />
+    <!-- <HeaderHamburguer /> TODO: implement menu! -->
   </header>
 </template>
 

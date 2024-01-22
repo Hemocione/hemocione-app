@@ -34,19 +34,21 @@
 </style>
 
 <script setup lang="ts">
+import { useUserStore } from "~/stores/user";
+const userStore = useUserStore();
 const metrics = [
   {
-    value: "3",
+    value: String(userStore.userWithMetrics?.totalDonations ?? 0),
     label: "DOAÇÕES",
     iconSrc: "/icons/syringe.svg",
   },
   {
-    value: "A+",
+    value: String(userStore.userWithMetrics?.bloodType ?? "Não informado"),
     label: "TIPO SANGUÍNEO",
     iconSrc: "/icons/droplet.svg",
   },
   {
-    value: "12",
+    value: String(userStore.userWithMetrics?.livesSaved ?? 0),
     label: "VIDAS SALVAS",
     iconSrc: "/icons/heartbeat.svg",
   },

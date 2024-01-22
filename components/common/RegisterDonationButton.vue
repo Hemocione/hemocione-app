@@ -1,6 +1,8 @@
 <template>
   <button>
-    <NuxtImg src="/icons/plus.svg" alt="Mais" />
+    <el-icon size="15">
+      <ElIconPlus />
+    </el-icon>
     <span>Registrar nova doação</span>
   </button>
 </template>
@@ -15,9 +17,9 @@ button {
   cursor: pointer;
   color: white;
   font-size: fill-available;
-}
-
-img {
-  margin-right: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
 }
 </style>

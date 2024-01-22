@@ -21,6 +21,7 @@
   --red-dark: var(--hemo-color-primary-dark);
   --red-light: var(--hemo-color-primary-light);
   --red-negative-default: #FB4E4E;
+  --light-purple: #B8C4F2;
   --el-color-primary: var(--hemo-color-primary) !important;
   --el-color-main: var(--hemo-color-secondary) !important;
   --el-color-success: var(--hemo-color-success) !important;

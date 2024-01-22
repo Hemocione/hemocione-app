@@ -1,16 +1,18 @@
 <template>
   <div class="wrapper">
-    <NuxtImg
-      class="user-image"
-      src="https://cdn.discordapp.com/attachments/757012940804194367/1113991633063641089/armin.png"
-      alt="User Profile Image"
-    />
+    <NuxtImg class="user-image" :src="userImgSrc" alt="User Profile Image" />
     <div class="user-profile">
-      <h3>Doador da Silva</h3>
-      <span>26, Masculino</span>
+      <h3>{{ userData?.name }}</h3>
+      <span>{{ description }}</span>
       <div class="status">
-        <div class="red-ball" />
-        <span>30 dias desde a última doação</span>
+        <div
+          :class="{
+            ball: true,
+            redBall: !ableToDonate,
+            greenBall: ableToDonate,
+          }"
+        />
+        <span>{{ userStore.userDonationStatus.label }}</span>
       </div>
     </div>
   </div>
@@ -30,11 +32,18 @@
   width: 100%;
   font-size: 0.8em;
 }
-.red-ball {
+.ball {
   height: 0.8em;
   aspect-ratio: 1/1;
   border-radius: 50%;
+}
+
+.redBall {
   background-color: var(--red-negative-default);
+}
+
+.greenBall {
+  background-color: var(--hemo-color-success);
 }
 
 .user-image {
@@ -43,6 +52,7 @@
   object-fit: cover;
   border-radius: 50%;
   border: 2px solid var(--hemo-color-primary);
+  background-color: var(--light-purple);
 }
 
 .user-profile {
@@ -73,3 +83,21 @@
   }
 }
 </style>
+
+<script setup lang="ts">
+import { useUserStore } from "~/stores/user";
+const userStore = useUserStore();
+const userData = userStore.userWithMetrics;
+
+const ableToDonate = computed(
+  () => userStore.userDonationStatus.status === "able-to-donate"
+);
+
+const userImgSrc = computed(
+  () => `/illustrations/bloodCharacters/${userData?.bloodType}.svg`
+);
+
+const description = computed(() =>
+  [userStore.userAge, userStore.userReadableGender].filter(Boolean).join(", ")
+);
+</script>

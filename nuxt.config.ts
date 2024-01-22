@@ -31,7 +31,12 @@ export default defineNuxtConfig({
   },
   ssr: false,
   css: ["assets/css/globals.css", "assets/css/transitions.css"],
-  modules: ["@nuxtjs/google-fonts", "@element-plus/nuxt", "@nuxt/image"],
+  modules: [
+    "@nuxtjs/google-fonts",
+    "@element-plus/nuxt",
+    "@nuxt/image",
+    "@pinia/nuxt",
+  ],
   googleFonts: {
     families: {
       Roboto: [100, 300, 400, 500, 700, 900],

@@ -13,14 +13,15 @@
   top: 0;
   z-index: 1;
   height: 65px;
+  width: 100%;
 }
 
 .application {
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
+  height: 100dvh;
+  width: 100dvw;
   overflow: hidden;
   align-items: center;
 }
@@ -30,5 +31,7 @@
   max-width: 1270px;
   min-height: calc(100dvh - 65px);
   margin-top: 65px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 </style>

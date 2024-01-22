@@ -4,7 +4,7 @@
     <UserDonationSummary />
     <UserLastDonations />
   </div>
-  <ProfileFooter />
+  <!-- <ProfileFooter /> TODO: uncomment when the footer actually does anything -->
 </template>
 
 <style scoped>
@@ -15,8 +15,6 @@
   align-items: center;
   padding: 2em;
   gap: 2em;
-  scroll-behavior: smooth;
-  overflow-y: scroll;
   width: 100%;
   min-height: 100%;
 }
