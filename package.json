@@ -5,24 +5,17 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "capacitor:build": "nuxt generate --no-ssr && npx cap sync"
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@capacitor/cli": "^5.6.0",
     "@element-plus/nuxt": "^1.0.7",
     "@nuxt/image": "^1.3.0",
     "@nuxtjs/google-fonts": "^3.0.1",
     "@pinia/nuxt": "^0.5.1",
     "element-plus": "^2.5.2",
-    "nuxt": "^3.9.3"
+    "nuxt": "^3.10.0"
   },
-  "dependencies": {
-    "@capacitor/android": "^5.6.0",
-    "@capacitor/browser": "^5.1.0",
-    "@capacitor/core": "^5.6.0",
-    "@capacitor/ios": "^5.6.0"
-  },
+  "dependencies": {},
   "name": "hemocione.app",
   "version": "0.0.1"
 }
