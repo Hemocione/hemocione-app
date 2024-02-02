@@ -29,7 +29,6 @@ export default defineNuxtConfig({
       siteUrl: getSiteUrl(),
     },
   },
-  ssr: false,
   css: ["assets/css/globals.css", "assets/css/transitions.css"],
   modules: [
     "@nuxtjs/google-fonts",
