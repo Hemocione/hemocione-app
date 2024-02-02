@@ -5,7 +5,7 @@
   <div class="hemocione-login-loading-wrapper" v-else>
     <NuxtImg src="/logos/principal-horizontal.svg" class="logo" />
     <ElButton
-      v-if="attemptedAutoLogin && !loggedIn && teuPaiLiberou"
+      v-show="attemptedAutoLogin && !loggedIn && teuPaiLiberou"
       @click="doLogin"
       type="primary"
       size="large"
@@ -16,7 +16,6 @@
 </template>
 
 <script lang="ts" setup>
-import { Browser } from "@capacitor/browser";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const loggedIn = ref(false);
@@ -67,18 +66,8 @@ const evaluateCurrentLogin = async () => {
   }
 };
 
-Browser.addListener("browserFinished", async () => {
-  await evaluateCurrentLogin();
-});
-
-const doLogin = async () => {
-  await Browser.open({
-    url: encodeURI(
-      `${config.public.hemocioneIdUrl}/?redirect=${window.location.href}`
-    ),
-    windowName: "_self",
-    toolbarColor: "#bb0a08",
-  });
+const doLogin = () => {
+  window.location.href = `${config.public.hemocioneIdUrl}/?redirect=${window.location.href}`;
 };
 
 // wait 3 seconds before doing anything
@@ -89,12 +78,13 @@ setTimeout(async () => {
     await userStore.setToken(String(urlToken));
     loggedIn.value = true;
     window.history.replaceState({}, document.title, window.location.pathname);
-  } else {
+    return;
+  }
+
+  await evaluateCurrentLogin();
+  if (!loggedIn.value) {
+    doLogin();
     await evaluateCurrentLogin();
-    if (!loggedIn.value) {
-      await doLogin();
-      await evaluateCurrentLogin();
-    }
   }
 }, 1000);
 </script>
