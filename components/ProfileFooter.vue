@@ -3,7 +3,7 @@
     <footer v-if="isOpen">
       <div class="wrapper">
         <CommonRegisterDonationButton />
-        <CommonAbleToDonateButton />
+        <!-- <CommonAbleToDonateButton /> TODO: IMPLEMENT PRE TRIAGEM -->
         <el-icon @click="isOpen = false" size="30" class="toggler">
           <ElIconClose />
         </el-icon>
@@ -23,9 +23,8 @@ footer {
   position: fixed;
   bottom: 0;
   background-color: white;
-  height: 17.5%;
+  height: 12%;
   width: 100%;
-  max-width: 1270px;
 }
 .wrapper {
   position: relative;
@@ -44,7 +43,6 @@ footer {
   bottom: 0;
   background-color: white;
   width: 100%;
-  max-width: 1270px;
 }
 .toggler {
   position: absolute;

@@ -17,19 +17,13 @@
   justify-content: space-around;
   padding: 1em;
   width: 100%;
-  aspect-ratio: 2.8;
+  aspect-ratio: 2.5;
   background-color: var(--white-100);
   border-radius: 8px;
   border-style: solid;
   border-width: 1px;
   border-color: var(--black-20);
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-@media screen and (min-width: 768px) {
-  .summary-box {
-    aspect-ratio: 4;
-  }
 }
 </style>
 

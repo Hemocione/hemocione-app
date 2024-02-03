@@ -3,8 +3,8 @@
     <UserDescription />
     <UserDonationSummary />
     <UserLastDonations />
+    <!-- <ProfileFooter /> TODO: uncomment when interaction is created -->
   </div>
-  <!-- <ProfileFooter /> TODO: uncomment when the footer actually does anything -->
 </template>
 
 <script setup lang="ts">

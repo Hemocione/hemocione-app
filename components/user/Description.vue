@@ -18,11 +18,18 @@
   </div>
 </template>
 <style scoped>
+h3 {
+  margin: 0;
+  color: var(--black-100);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
 .wrapper {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  height: 15dvh;
 }
 
 .status {
@@ -47,7 +54,7 @@
 }
 
 .user-image {
-  width: 30%;
+  height: 100%;
   aspect-ratio: 1/1;
   object-fit: cover;
   border-radius: 50%;
@@ -59,10 +66,10 @@
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: flex-start;
   margin-left: 1em;
-  gap: 0.5em;
+  gap: 1em;
   width: 70%;
   font-weight: 400;
   color: var(--black-80);
@@ -74,10 +81,6 @@
 }
 
 @media screen and (min-width: 768px) {
-  .user-image {
-    width: 20%;
-  }
-
   .user-profile {
     width: 80%;
   }

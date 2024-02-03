@@ -1,6 +1,6 @@
 <template>
   <div class="last-donations">
-    <div class="header">
+    <div class="header" v-if="donations.length">
       <h4>Últimas doações</h4>
       <!-- <span class="see-all">Ver todas</span> TODO: implement-->
     </div>
@@ -11,14 +11,33 @@
         :key="donation.id.toString()"
       />
     </div>
-    <div v-else>
-      <NuxtImg src="/illustrations/noresults.svg" />
-      <span>Nenhuma doação registrada</span>
+    <div v-else class="wrap-missing">
+      <NuxtImg src="/illustrations/bloodDonation.svg" class="missing-img" />
+      <span>Você ainda não registrou doações</span>
+      <span>Que tal doar hoje?</span>
     </div>
   </div>
 </template>
 
 <style scoped>
+.wrap-missing span {
+  color: var(--black-80);
+}
+.missing-img {
+  width: 80%;
+  max-width: 500px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.wrap-missing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .header h4 {
   color: var(black-100);
   font-weight: 500;
@@ -44,6 +63,7 @@
   align-items: center;
   width: 100%;
   gap: 1em;
+  height: 30dvh;
 }
 </style>
 
