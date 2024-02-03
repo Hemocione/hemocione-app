@@ -15,8 +15,20 @@ const genderToReadable = {
   O: "",
 } as const;
 
-const MALE_LIMIT_DAYS = 60;
-const FEMALE_LIMIT_DAYS = 90;
+const GENDER_CONFIG = {
+  M: {
+    limitDaysInterval: 60,
+    limitPerYear: 4,
+  },
+  F: {
+    limitDaysInterval: 90,
+    limitPerYear: 3,
+  },
+  O: {
+    limitDaysInterval: 90,
+    limitPerYear: 3,
+  },
+} as const;
 
 const genders = ["M", "F", "O"] as const;
 type Gender = (typeof genders)[number];
@@ -87,6 +99,20 @@ export const useUserStore = defineStore("user", {
       return genderToReadable[state.user?.gender || "O"];
     },
 
+    userDonations(state) {
+      if (!state.user?.donations.length) return [];
+
+      const donations = state.user.donations;
+      const orderedDonationsByDateDesc = donations.sort((a, b) => {
+        const dateA = new Date(Date.parse(String(a.donationDate)));
+        const dateB = new Date(Date.parse(String(b.donationDate)));
+
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      return orderedDonationsByDateDesc;
+    },
+
     userDonationStatus(state) {
       if (!state.user?.donations.length)
         return {
@@ -95,23 +121,13 @@ export const useUserStore = defineStore("user", {
         };
 
       const donations = state.user.donations;
-      let newestDonation: Donation | null = null;
-      for (const donation of donations) {
-        if (!newestDonation) {
-          newestDonation = donation;
-          continue;
-        }
+      const orderedDonationsByDateDesc = donations.sort((a, b) => {
+        const dateA = new Date(Date.parse(String(a.donationDate)));
+        const dateB = new Date(Date.parse(String(b.donationDate)));
 
-        const donationDate = new Date(
-          Date.parse(String(donation.donationDate))
-        );
-        const newestDonationDate = new Date(
-          Date.parse(String(newestDonation.donationDate))
-        );
-
-        if (donationDate > newestDonationDate) newestDonation = donation;
-      }
-
+        return dateB.getTime() - dateA.getTime();
+      });
+      const newestDonation = orderedDonationsByDateDesc[0];
       const donationDate = new Date(
         Date.parse(String(newestDonation?.donationDate))
       );
@@ -120,18 +136,33 @@ export const useUserStore = defineStore("user", {
         (now.getTime() - donationDate.getTime()) / (1000 * 3600 * 24)
       );
 
-      const manAbleToDonateAgain =
-        state.user.gender === "M" && daysSinceLastDonation >= MALE_LIMIT_DAYS;
+      const genderConfig = GENDER_CONFIG[state.user.gender];
+      const surpassedLimitDaysInterval =
+        daysSinceLastDonation > genderConfig.limitDaysInterval;
 
-      if (manAbleToDonateAgain || daysSinceLastDonation >= FEMALE_LIMIT_DAYS)
+      const donationOnYearLimit =
+        orderedDonationsByDateDesc[genderConfig.limitPerYear - 1] || null;
+      const alreadyDonatedMaxTimesOnCurrentYear =
+        donationOnYearLimit &&
+        (now.getTime() -
+          new Date(
+            Date.parse(String(donationOnYearLimit.donationDate))
+          ).getTime()) /
+          (1000 * 3600 * 24 * 365) <
+          1;
+      if (surpassedLimitDaysInterval && !alreadyDonatedMaxTimesOnCurrentYear) {
         return {
           status: "able-to-donate",
           label: `Última doação há ${daysSinceLastDonation} dias - você já pode doar novamente!`,
         };
+      }
 
+      let unableLabel = alreadyDonatedMaxTimesOnCurrentYear
+        ? `Você já doou ${genderConfig.limitPerYear} vezes no período de 1 ano - você ainda não pode doar novamente.`
+        : `Última doação há ${daysSinceLastDonation} dias - você ainda não pode doar novamente`;
       return {
         status: "unable-to-donate",
-        label: `Última doação há ${daysSinceLastDonation} dias - você ainda não pode doar novamente`,
+        label: unableLabel,
       };
     },
     userWithMetrics(state) {

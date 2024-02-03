@@ -7,6 +7,10 @@
   <!-- <ProfileFooter /> TODO: uncomment when the footer actually does anything -->
 </template>
 
+<script setup lang="ts">
+const { $pwa } = useNuxtApp();
+</script>
+
 <style scoped>
 .main {
   position: relative;

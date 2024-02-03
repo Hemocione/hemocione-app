@@ -1,11 +1,12 @@
 <template>
-  <NuxtLayout v-if="loggedIn && teuPaiLiberou">
+  <NuxtPwaManifest />
+  <NuxtLayout v-if="loggedIn">
     <NuxtPage />
   </NuxtLayout>
   <div class="hemocione-login-loading-wrapper" v-else>
     <NuxtImg src="/logos/principal-horizontal.svg" class="logo" />
     <ElButton
-      v-show="attemptedAutoLogin && !loggedIn && teuPaiLiberou"
+      v-show="attemptedAutoLogin && !loggedIn"
       @click="doLogin"
       type="primary"
       size="large"
@@ -22,7 +23,6 @@ const loggedIn = ref(false);
 const attemptedAutoLogin = ref(false);
 const config = useRuntimeConfig();
 const urlToken = useRoute().query.token;
-const teuPaiLiberou = ref(false);
 
 useHead({ title: "Hemocione" });
 
@@ -47,9 +47,7 @@ const evaluateCurrentLogin = async () => {
       const newToken = data.value.token;
       // always update local storage, unless it came from cookie - then update it as well
       localStorage.setItem(config.public.authLocalKey, newToken);
-      console.log("new token", newToken);
-      await userStore.setToken(newToken);
-      console.log("new token", newToken);
+      await useAsyncData("setUserToken", () => userStore.setToken(newToken));
       if (currentUserCookie.value) {
         currentUserCookie.value = newToken;
       }
@@ -64,29 +62,25 @@ const evaluateCurrentLogin = async () => {
       localStorage.removeItem(config.public.authLocalKey);
     }
   }
+  if (!loggedIn.value) {
+    doLogin();
+  }
 };
 
 const doLogin = () => {
   window.location.href = `${config.public.hemocioneIdUrl}/?redirect=${window.location.href}`;
 };
 
-// wait 3 seconds before doing anything
-setTimeout(async () => {
-  teuPaiLiberou.value = true;
-  if (urlToken) {
-    localStorage.setItem(config.public.authLocalKey, String(urlToken));
-    await userStore.setToken(String(urlToken));
-    loggedIn.value = true;
-    window.history.replaceState({}, document.title, window.location.pathname);
-    return;
-  }
-
-  await evaluateCurrentLogin();
-  if (!loggedIn.value) {
-    doLogin();
-    await evaluateCurrentLogin();
-  }
-}, 1000);
+if (urlToken) {
+  localStorage.setItem(config.public.authLocalKey, String(urlToken));
+  await useAsyncData("setUserToken", () =>
+    userStore.setToken(String(urlToken))
+  );
+  loggedIn.value = true;
+  window.history.replaceState({}, document.title, window.location.pathname);
+} else {
+  evaluateCurrentLogin();
+}
 </script>
 
 <style scoped>

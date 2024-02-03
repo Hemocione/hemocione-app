@@ -16,7 +16,10 @@ const getSiteUrl = () => {
   return "https://app.hemocione.com.br";
 };
 
+const isProduction = process.env.VERCEL_ENV === "production";
+
 export default defineNuxtConfig({
+  ssr: false,
   runtimeConfig: {
     public: {
       hemocioneIdApiUrl:
@@ -35,6 +38,7 @@ export default defineNuxtConfig({
     "@element-plus/nuxt",
     "@nuxt/image",
     "@pinia/nuxt",
+    "@vite-pwa/nuxt",
   ],
   googleFonts: {
     families: {
@@ -58,5 +62,75 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: "vercel",
+  },
+  future: {
+    typescriptBundlerResolution: true,
+  },
+  experimental: {
+    payloadExtraction: true,
+    watcher: "parcel",
+  },
+  imports: {
+    autoImport: true,
+  },
+  appConfig: {
+    // you don't need to include this: only for testing purposes
+    buildDate: new Date().toISOString(),
+  },
+  // TODO: use custom service worker to handle web push
+  pwa: {
+    registerType: "autoUpdate",
+    manifest: {
+      name: "Hemocione",
+      short_name: "Hemocione",
+      theme_color: "#bb0a08",
+      background_color: "#F9F9FA",
+      icons: [
+        {
+          src: "pwa/pwa-64x64.png",
+          sizes: "64x64",
+          type: "image/png",
+        },
+        {
+          src: "pwa/pwa-192x192.png",
+          sizes: "192x192",
+          type: "image/png",
+        },
+        {
+          src: "pwa/pwa-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+        },
+        {
+          src: "pwa/apple-touch-icon-180x180.png",
+          sizes: "180x180",
+          type: "image/png",
+        },
+        {
+          src: "pwa/maskable-icon-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "maskable",
+        },
+      ],
+      description:
+        "App do Hemocione - a maior rede de doadores de sangue do Brasil. Acompanhe suas doações, veja quantas vidas salvou, participe de eventos e campanhas de doação de sangue e muito mais!",
+      // TODO: add screenshots
+    },
+    workbox: {
+      globPatterns: ["**/*.{js,css,html,png,svg,ico}"],
+    },
+    client: {
+      installPrompt: true,
+      // you don't need to include this: only for testing purposes
+      // if enabling periodic sync for update use 1 hour or so (periodicSyncForUpdates: 3600)
+      periodicSyncForUpdates: isProduction ? 3600 : 20,
+    },
+    devOptions: {
+      enabled: true,
+      suppressWarnings: true,
+      navigateFallbackAllowlist: [/^\/$/],
+      type: "module",
+    },
   },
 });
