@@ -32,17 +32,17 @@ import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
 const metrics = [
   {
-    value: String(userStore.userWithMetrics?.totalDonations ?? 0),
+    value: String(userStore.userWithMetrics?.totalDonations || "-"),
     label: "DOAÇÕES",
     iconSrc: "/icons/syringe.svg",
   },
   {
-    value: String(userStore.userWithMetrics?.bloodType ?? "Não informado"),
+    value: String(userStore.userWithMetrics?.bloodType ?? "N/A"),
     label: "TIPO SANGUÍNEO",
     iconSrc: "/icons/droplet.svg",
   },
   {
-    value: String(userStore.userWithMetrics?.livesSaved ?? 0),
+    value: String(userStore.userWithMetrics?.livesSaved || "-"),
     label: "VIDAS SALVAS",
     iconSrc: "/icons/heartbeat.svg",
   },

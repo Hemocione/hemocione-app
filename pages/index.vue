@@ -7,10 +7,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const { $pwa } = useNuxtApp();
-</script>
-
 <style scoped>
 .main {
   position: relative;

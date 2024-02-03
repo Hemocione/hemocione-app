@@ -4,14 +4,15 @@
     <NuxtPage />
   </NuxtLayout>
   <div class="hemocione-login-loading-wrapper" v-else>
-    <NuxtImg src="/logos/principal-horizontal.svg" class="logo" />
+    <NuxtImg src="/logos/baseLogo.svg" class="logo" />
     <ElButton
-      v-show="attemptedAutoLogin && !loggedIn"
+      :disabled="!attemptedAutoLogin || loggedIn"
       @click="doLogin"
       type="primary"
       size="large"
+      :loading="!attemptedAutoLogin"
     >
-      Entrar
+      {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
     </ElButton>
   </div>
 </template>
@@ -95,7 +96,6 @@ if (urlToken) {
 }
 
 .logo {
-  width: 80%;
-  height: auto;
+  height: 300px;
 }
 </style>
