@@ -97,5 +97,6 @@ if (urlToken) {
 
 .logo {
   height: 300px;
+  animation: zoom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 </style>

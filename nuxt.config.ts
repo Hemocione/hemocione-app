@@ -32,7 +32,11 @@ export default defineNuxtConfig({
       siteUrl: getSiteUrl(),
     },
   },
-  css: ["assets/css/globals.css", "assets/css/transitions.css"],
+  css: [
+    "assets/css/globals.css",
+    "assets/css/transitions.css",
+    "assets/css/animations.css",
+  ],
   modules: [
     "@nuxtjs/google-fonts",
     "@element-plus/nuxt",
