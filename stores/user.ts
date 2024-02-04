@@ -76,21 +76,17 @@ export const useUserStore = defineStore("user", {
       donationDate: string;
     }) {
       const config = useRuntimeConfig();
-      const {
-        data,
-        error,
-      }: { data: Ref<{ message: string; donation: Donation }>; error: any } =
-        await useFetch(config.public.hemocioneIdApiUrl + "/donations", {
+      const data: { message: string; donation: Donation } = await $fetch(
+        config.public.hemocioneIdApiUrl + "/donations",
+        {
           method: "POST",
           headers: {
             Authorization: `Bearer ${this.token}`,
           },
           body: JSON.stringify(donationData),
-        });
-      if (error.value) {
-        throw error.value;
-      }
-      this.user?.donations.push(data.value.donation);
+        }
+      );
+      this.user?.donations.push(data.donation);
     },
   },
   getters: {

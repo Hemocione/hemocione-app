@@ -2,23 +2,21 @@
   <NuxtPwaManifest />
   <ElConfigProvider :locale="ptBr">
     <NuxtLoadingIndicator color="#bb0a08" />
-    <transition name="blur" mode="out-in">
-      <NuxtLayout v-if="loggedIn">
-        <NuxtPage />
-      </NuxtLayout>
-      <div class="hemocione-login-loading-wrapper" v-else>
-        <NuxtImg src="/logos/baseLogo.svg" class="logo" />
-        <ElButton
-          :disabled="!attemptedAutoLogin || loggedIn"
-          @click="doLogin"
-          type="primary"
-          size="large"
-          :loading="!attemptedAutoLogin"
-        >
-          {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
-        </ElButton>
-      </div>
-    </transition>
+    <NuxtLayout v-if="loggedIn">
+      <NuxtPage />
+    </NuxtLayout>
+    <div class="hemocione-login-loading-wrapper" v-else>
+      <NuxtImg src="/logos/baseLogo.svg" class="logo" />
+      <ElButton
+        :disabled="!attemptedAutoLogin || loggedIn"
+        @click="doLogin"
+        type="primary"
+        size="large"
+        :loading="!attemptedAutoLogin"
+      >
+        {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
+      </ElButton>
+    </div>
   </ElConfigProvider>
 </template>
 
@@ -46,15 +44,14 @@ const evaluateCurrentLogin = async () => {
   const currentUserToken = currentUserLocalStorage || currentUserCookie.value;
   if (currentUserToken) {
     try {
-      const { data }: { data: Ref<{ token: string; user: any }> } =
-        await useFetch(
-          `${config.public.hemocioneIdApiUrl}/users/regenerate-token`,
-          {
-            headers: {
-              Authorization: `Bearer ${currentUserToken}`,
-            },
-          }
-        );
+      const data: { token: string; user: any } = await $fetch(
+        `${config.public.hemocioneIdApiUrl}/users/regenerate-token`,
+        {
+          headers: {
+            Authorization: `Bearer ${currentUserToken}`,
+          },
+        }
+      );
       const newToken = data.value.token;
       // always update local storage, unless it came from cookie - then update it as well
       localStorage.setItem(config.public.authLocalKey, newToken);
