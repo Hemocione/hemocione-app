@@ -1,7 +1,7 @@
 <template>
   <header>
     <HeaderTitle />
-    <!-- <HeaderHamburguer /> TODO: implement menu! -->
+    <HeaderHamburguerMenu />
   </header>
 </template>
 
@@ -12,7 +12,6 @@ header {
   align-items: center;
   padding: 1em 2em;
   background-color: var(--black-100);
-  border-bottom: 1px solid var(--black-40);
   width: 100%;
 }
 </style>

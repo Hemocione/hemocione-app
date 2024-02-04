@@ -159,3 +159,16 @@
 .slide-left-fast-and-furious-leave-to {
   transform: translateX(500px);
 }
+
+.quick-fade-enter-active {
+  transition: all 0.4s ease-out;
+}
+
+.quick-fade-leave-active {
+  transition: all 0.4s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.quick-fade-enter-from,
+.quick-fade-leave-to {
+  opacity: 0;
+}

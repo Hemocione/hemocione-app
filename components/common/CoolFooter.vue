@@ -29,7 +29,6 @@ footer {
   background-color: white;
   height: v-bind("height");
   width: 100%;
-  z-index: 1;
   max-width: var(--app-max-width);
 }
 .wrapper {

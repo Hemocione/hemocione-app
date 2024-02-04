@@ -45,7 +45,8 @@
   --el-button-disabled-text-color: var(--el-color-white);
   --el-button-disabled-bg-color: var(--el-color-primary-light-5);
   --el-button-disabled-border-color: var(--el-color-primary-light-5);
-  --navbar-size: 65px;
+  --el-dialog-bg-color: var(--black-100) !important;
+  --navbar-size: 55px;
   --app-max-width: 1270px;
 }
 

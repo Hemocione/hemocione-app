@@ -63,7 +63,7 @@ interface User {
 export const useUserStore = defineStore("user", {
   state: () => ({
     user: null as User | null,
-    token: null as string | null,
+    token: "" as string,
   }),
   actions: {
     async fetchMe() {
