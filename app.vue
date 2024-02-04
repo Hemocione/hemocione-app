@@ -1,21 +1,24 @@
 <template>
   <NuxtPwaManifest />
   <ElConfigProvider :locale="ptBr">
-    <NuxtLayout v-if="loggedIn">
-      <NuxtPage />
-    </NuxtLayout>
-    <div class="hemocione-login-loading-wrapper" v-else>
-      <NuxtImg src="/logos/baseLogo.svg" class="logo" />
-      <ElButton
-        :disabled="!attemptedAutoLogin || loggedIn"
-        @click="doLogin"
-        type="primary"
-        size="large"
-        :loading="!attemptedAutoLogin"
-      >
-        {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
-      </ElButton>
-    </div>
+    <NuxtLoadingIndicator color="#bb0a08" />
+    <transition name="blur" mode="out-in">
+      <NuxtLayout v-if="loggedIn">
+        <NuxtPage />
+      </NuxtLayout>
+      <div class="hemocione-login-loading-wrapper" v-else>
+        <NuxtImg src="/logos/baseLogo.svg" class="logo" />
+        <ElButton
+          :disabled="!attemptedAutoLogin || loggedIn"
+          @click="doLogin"
+          type="primary"
+          size="large"
+          :loading="!attemptedAutoLogin"
+        >
+          {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
+        </ElButton>
+      </div>
+    </transition>
   </ElConfigProvider>
 </template>
 
