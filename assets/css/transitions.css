@@ -28,7 +28,7 @@
 
 .slow-blur-enter-active,
 .slow-blur-leave-active {
-  transition: all 1s;
+  transition: all 0.5s;
 }
 
 .slow-blur-enter-from,
@@ -103,7 +103,7 @@
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: all 0.5s;
+  transition: all 5s;
 }
 .slide-left-enter-from {
   opacity: 0;

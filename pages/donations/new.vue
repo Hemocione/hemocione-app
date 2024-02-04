@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <CommonBackHeader title="Registrar Doação" />
-    <transition name="slow-blur">
+    <transition name="slow-blur" mode="out-in">
       <div class="content" v-if="!donationRegistered">
         <div>
           <p>Olá, {{ userName ?? "doador" }}!</p>
@@ -151,9 +151,18 @@ const submitForm = async () => {
     await userStore.createUserDonation(donationData);
     donationRegistered.value = true;
   } catch (error) {
-    ElMessage.error(
-      "Erro ao registrar doação. Por favor, tente novamente mais tarde."
-    );
+    let errorMessage =
+      "Erro ao registrar doação. Por favor, tente novamente mais tarde.";
+    if ((error as any).statusCode === 409) {
+      errorMessage = (error as any).data?.message || errorMessage;
+    }
+    ElMessage({
+      message: errorMessage,
+      type: "error",
+      duration: 5000,
+      grouping: true,
+      showClose: true,
+    });
   }
 
   loading.value = false;

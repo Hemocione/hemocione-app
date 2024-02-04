@@ -8,6 +8,11 @@
       <UserDonation
         v-for="donation in donations"
         :donation="donation"
+        :backgroundColor="
+          donations.indexOf(donation) % 2 === 0 ? '#DBDDE0' : '#F9F9FA'
+        "
+        :borderTop="donations.indexOf(donation) === 0"
+        :borderBottom="donations.indexOf(donation) === donations.length - 1"
         :key="donation.id.toString()"
       />
     </div>
@@ -41,7 +46,7 @@
 
 .header h4 {
   color: var(black-100);
-  font-weight: 500;
+  font-weight: 400;
   margin: 0;
   font-size: 1.2em;
 }
@@ -66,11 +71,15 @@
   gap: 1em;
   flex-grow: 1;
 }
+
+.donations {
+  width: 100%;
+}
 </style>
 
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
 
-const donations = userStore.userWithMetrics?.donations ?? [];
+const donations = userStore.userWithMetrics?.donations.slice(0, 5) ?? [];
 </script>
