@@ -30,7 +30,21 @@ const attemptedAutoLogin = ref(false);
 const config = useRuntimeConfig();
 const urlToken = useRoute().query.token;
 
-useHead({ title: "Hemocione" });
+useHead({
+  title: "Hemocione",
+  meta: [
+    {
+      name: "viewport",
+      content:
+        "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+    },
+    {
+      name: "description",
+      content:
+        "Plataforma de doação de sangue do Hemocione. Acompanhe suas doações de sangue, seja notificado quando puder doar novamente e muito mais! 🩸",
+    },
+  ],
+});
 
 const evaluateCurrentLogin = async () => {
   const currentUserCookie = useCookie(config.public.authLocalKey, {
