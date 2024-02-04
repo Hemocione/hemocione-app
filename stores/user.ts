@@ -54,7 +54,7 @@ export const useUserStore = defineStore("user", {
     async fetchMe() {
       const config = useRuntimeConfig();
 
-      const { data }: { data: Ref<User> } = await useFetch(
+      const data: User = await $fetch(
         config.public.hemocioneIdApiUrl + "/users/me",
         {
           headers: {
@@ -62,7 +62,7 @@ export const useUserStore = defineStore("user", {
           },
         }
       );
-      this.setUser(data.value);
+      this.setUser(data);
     },
     async setToken(token: string) {
       this.token = token;
