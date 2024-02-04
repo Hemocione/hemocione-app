@@ -34,6 +34,7 @@
 .icon {
   width: 20%;
   aspect-ratio: 1/1;
+  max-height: 3em;
 }
 </style>
 <script setup lang="ts">

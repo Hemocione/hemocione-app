@@ -28,7 +28,7 @@
 
 @media (min-width: 768px) {
   .summary-box {
-    aspect-ratio: 4.5;
+    aspect-ratio: 5;
   }
 }
 </style>

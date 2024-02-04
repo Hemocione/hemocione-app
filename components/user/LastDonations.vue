@@ -35,7 +35,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  flex-grow: 1;
+  width: 100%;
 }
 
 .header h4 {
@@ -63,7 +64,7 @@
   align-items: center;
   width: 100%;
   gap: 1em;
-  height: 30dvh;
+  flex-grow: 1;
 }
 </style>
 

@@ -1,34 +1,25 @@
 <template>
-  <button>
-    <el-icon size="15">
-      <ElIconPlus />
-    </el-icon>
-    <span>Registrar nova doação</span>
-  </button>
+  <ElButton type="primary" :disabled="disabled" size="large">
+    Registrar doação
+    <template #icon>
+      <NuxtImg src="/icons/plus.svg" alt="plus" />
+    </template>
+  </ElButton>
 </template>
 
 <style scoped>
 button {
   background-color: var(--red-negative-darker);
   border: 1px solid var(--red-negative-darker);
-  border-radius: 0.5em;
-  padding: 0.5em 1em;
-  font-weight: 400;
-  cursor: pointer;
-  color: white;
-  font-size: fill-available;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
   height: 100%;
 }
-
-button:hover {
-  background-color: var(--red-negative-default);
-}
-
-span {
-  font-size: 1.2em;
-}
 </style>
+
+<script setup lang="ts">
+defineProps({
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+</script>
