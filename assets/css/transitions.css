@@ -140,3 +140,22 @@
 .slide-top-fast-and-furious-leave-to {
   transform: translateY(50dvh);
 }
+
+.slide-left-fast-and-furious-enter-from,
+.slide-left-fast-and-furious-leave-to {
+  transform: translateX(500px);
+}
+
+.slide-left-fast-and-furious-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-left-fast-and-furious-leave-active {
+  transition: all 0.3s ease-in;
+  opacity: 0;
+}
+
+.slide-left-fast-and-furious-enter-from,
+.slide-left-fast-and-furious-leave-to {
+  transform: translateX(500px);
+}
