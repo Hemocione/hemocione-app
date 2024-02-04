@@ -1,5 +1,12 @@
 <template>
-  <div :class="{ 'donation-card': true, borderBottom, borderTop }">
+  <div
+    :class="{
+      'donation-card': true,
+      borderBottom,
+      borderTop,
+      bothBorders: borderBottom && borderTop,
+    }"
+  >
     <NuxtImg
       :src="logoSrc"
       class="donation-provider-logo"
@@ -31,6 +38,10 @@
 
 .borderBottom {
   border-radius: 0 0 1.5em 1.5em;
+}
+
+.bothBorders {
+  border-radius: 1.5em;
 }
 </style>
 
