@@ -52,7 +52,7 @@ const evaluateCurrentLogin = async () => {
           },
         }
       );
-      const newToken = data.value.token;
+      const newToken = data.token;
       // always update local storage, unless it came from cookie - then update it as well
       localStorage.setItem(config.public.authLocalKey, newToken);
       await userStore.setToken(newToken);
