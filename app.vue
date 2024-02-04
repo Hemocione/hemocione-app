@@ -69,6 +69,10 @@ const evaluateCurrentLogin = async () => {
       localStorage.removeItem(config.public.authLocalKey);
     }
   }
+
+  if (!loggedIn.value) {
+    doLogin();
+  }
 };
 
 const doLogin = () => {
