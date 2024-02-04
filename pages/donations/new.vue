@@ -9,10 +9,10 @@
         </div>
         <ElForm :model="form" class="form" label-position="top" size="large">
           <ElFormItem label="Banco de Sangue" prop="Banco de Sangue">
-            <ElInput v-model="form.bloodBank" />
+            <ElInput v-model="form.bloodBank" placeholder="Hemorio" />
           </ElFormItem>
           <ElFormItem label="Data da Doação" prop="Data da Doação">
-            <ElDatePicker v-model="form.date" type="date" />
+            <ElDatePicker v-model="form.date" type="date" format="DD/MM/YYYY" />
           </ElFormItem>
         </ElForm>
       </div>
