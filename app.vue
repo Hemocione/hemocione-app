@@ -39,7 +39,8 @@ const evaluateCurrentLogin = async () => {
     config.public.authLocalKey
   );
 
-  const currentUserToken = currentUserCookie.value || currentUserLocalStorage;
+  // prefer local storage over cookie
+  const currentUserToken = currentUserLocalStorage || currentUserCookie.value;
   if (currentUserToken) {
     try {
       const { data }: { data: Ref<{ token: string; user: any }> } =
