@@ -18,10 +18,21 @@
 
 .blur-enter-active,
 .blur-leave-active {
-  transition: all 0.4s;
+  transition: all 0.2s;
 }
 .blur-enter-from,
 .blur-leave-to {
+  opacity: 0;
+  filter: blur(0.5rem);
+}
+
+.slow-blur-enter-active,
+.slow-blur-leave-active {
+  transition: all 1s;
+}
+
+.slow-blur-enter-from,
+.slow-blur-leave-to {
   opacity: 0;
   filter: blur(1rem);
 }
@@ -109,4 +120,23 @@
 .slide-right-leave-to {
   opacity: 0;
   transform: translate(50px, 0);
+}
+
+.slide-top-fast-and-furious-enter-from,
+.slide-top-fast-and-furious-leave-to {
+  transform: translateY(50dvh);
+}
+
+.slide-top-fast-and-furious-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.slide-top-fast-and-furious-leave-active {
+  transition: all 0.3s ease-in;
+  opacity: 0;
+}
+
+.slide-top-fast-and-furious-enter-from,
+.slide-top-fast-and-furious-leave-to {
+  transform: translateY(50dvh);
 }

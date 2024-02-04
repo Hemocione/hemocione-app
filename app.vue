@@ -1,23 +1,27 @@
 <template>
   <NuxtPwaManifest />
-  <NuxtLayout v-if="loggedIn">
-    <NuxtPage />
-  </NuxtLayout>
-  <div class="hemocione-login-loading-wrapper" v-else>
-    <NuxtImg src="/logos/baseLogo.svg" class="logo" />
-    <ElButton
-      :disabled="!attemptedAutoLogin || loggedIn"
-      @click="doLogin"
-      type="primary"
-      size="large"
-      :loading="!attemptedAutoLogin"
-    >
-      {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
-    </ElButton>
-  </div>
+  <ElConfigProvider :locale="ptBr">
+    <NuxtLayout v-if="loggedIn">
+      <NuxtPage />
+    </NuxtLayout>
+    <div class="hemocione-login-loading-wrapper" v-else>
+      <NuxtImg src="/logos/baseLogo.svg" class="logo" />
+      <ElButton
+        :disabled="!attemptedAutoLogin || loggedIn"
+        @click="doLogin"
+        type="primary"
+        size="large"
+        :loading="!attemptedAutoLogin"
+      >
+        {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
+      </ElButton>
+    </div>
+  </ElConfigProvider>
 </template>
 
 <script lang="ts" setup>
+import "dayjs/locale/pt-br";
+import ptBr from "element-plus/dist/locale/pt-br.mjs";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const loggedIn = ref(false);

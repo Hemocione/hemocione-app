@@ -71,6 +71,21 @@ export const useUserStore = defineStore("user", {
     setUser(user: any) {
       this.user = user;
     },
+    async createUserDonation(donationData: {
+      bloodbankName: string;
+      donationDate: string;
+    }) {
+      const config = useRuntimeConfig();
+      const { data }: { data: Ref<{ message: string; donation: Donation }> } =
+        await useFetch(config.public.hemocioneIdApiUrl + "/donations", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify(donationData),
+        });
+      this.user?.donations.push(data.value.donation);
+    },
   },
   getters: {
     userAge(state) {
