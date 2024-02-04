@@ -12,7 +12,7 @@
   position: fixed;
   top: 0;
   z-index: 1;
-  height: 65px;
+  height: var(--navbar-size);
   width: 100%;
 }
 
@@ -28,9 +28,10 @@
 
 .page {
   background-color: white;
-  max-width: 1270px;
-  min-height: calc(100dvh - 65px);
-  margin-top: 65px;
+  max-width: var(--app-max-width);
+  width: 100%;
+  min-height: calc(100dvh - var(--navbar-size));
+  margin-top: var(--navbar-size);
   overflow-y: auto;
   scroll-behavior: smooth;
 }

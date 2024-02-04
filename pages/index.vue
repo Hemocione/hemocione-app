@@ -3,7 +3,7 @@
     <UserDescription />
     <UserDonationSummary />
     <UserLastDonations />
-    <!-- <ProfileFooter /> TODO: uncomment when interaction is created -->
+    <ProfileFooter />
   </div>
 </template>
 

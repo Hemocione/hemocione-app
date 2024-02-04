@@ -21,5 +21,14 @@ button {
   align-items: center;
   justify-content: center;
   gap: 0.5em;
+  height: 100%;
+}
+
+button:hover {
+  background-color: var(--red-negative-default);
+}
+
+span {
+  font-size: 1.2em;
 }
 </style>

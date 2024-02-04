@@ -25,6 +25,12 @@
   border-color: var(--black-20);
   box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+@media (min-width: 768px) {
+  .summary-box {
+    aspect-ratio: 4.5;
+  }
+}
 </style>
 
 <script setup lang="ts">
