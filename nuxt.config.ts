@@ -22,6 +22,7 @@ export default defineNuxtConfig({
   ssr: false,
   runtimeConfig: {
     public: {
+      cookieDomain: process.env.NUXT_COOKIE_DOMAIN || "hemocione.com.br",
       hemocioneIdApiUrl:
         process.env.NUXT_HEMOCIONE_ID_API_URL ||
         "https://hemocione-id-dev.cpt.hemocione.com.br",

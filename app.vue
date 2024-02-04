@@ -32,7 +32,9 @@ const urlToken = useRoute().query.token;
 useHead({ title: "Hemocione" });
 
 const evaluateCurrentLogin = async () => {
-  const currentUserCookie = useCookie(config.public.authLocalKey);
+  const currentUserCookie = useCookie(config.public.authLocalKey, {
+    domain: config.public.cookieDomain,
+  });
   const currentUserLocalStorage = localStorage.getItem(
     config.public.authLocalKey
   );
@@ -66,9 +68,6 @@ const evaluateCurrentLogin = async () => {
     if (attemptedAutoLogin.value && !loggedIn.value) {
       localStorage.removeItem(config.public.authLocalKey);
     }
-  }
-  if (!loggedIn.value) {
-    doLogin();
   }
 };
 
