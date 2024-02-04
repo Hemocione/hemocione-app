@@ -39,7 +39,8 @@ const userStore = useUserStore();
 const metrics = [
   {
     value: String(userStore.userWithMetrics?.totalDonations || "-"),
-    label: "DOAÇÕES",
+    label:
+      userStore.userWithMetrics?.totalDonations === 1 ? "DOAÇÃO" : "DOAÇÕES",
     iconSrc: "/icons/syringe.svg",
   },
   {
