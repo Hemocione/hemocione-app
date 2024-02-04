@@ -52,7 +52,7 @@ const evaluateCurrentLogin = async () => {
       const newToken = data.value.token;
       // always update local storage, unless it came from cookie - then update it as well
       localStorage.setItem(config.public.authLocalKey, newToken);
-      await useAsyncData("setUserToken", () => userStore.setToken(newToken));
+      await userStore.setToken(newToken);
       if (currentUserCookie.value) {
         currentUserCookie.value = newToken;
       }
@@ -78,9 +78,7 @@ const doLogin = () => {
 
 if (urlToken) {
   localStorage.setItem(config.public.authLocalKey, String(urlToken));
-  await useAsyncData("setUserToken", () =>
-    userStore.setToken(String(urlToken))
-  );
+  await userStore.setToken(String(urlToken));
   loggedIn.value = true;
   window.history.replaceState({}, document.title, window.location.pathname);
 } else {

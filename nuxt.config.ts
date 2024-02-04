@@ -43,6 +43,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@pinia/nuxt",
     "@vite-pwa/nuxt",
+    "nuxt-vercel-analytics",
   ],
   googleFonts: {
     families: {

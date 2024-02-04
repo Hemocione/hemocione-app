@@ -45,8 +45,6 @@ const props = defineProps({
   },
 });
 
-console.log(props);
-
 const router = useRouter();
 const navigateBack = () => {
   try {
