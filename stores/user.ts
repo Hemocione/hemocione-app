@@ -147,7 +147,7 @@ export const useUserStore = defineStore("user", {
         Date.parse(String(newestDonation?.donationDate))
       );
       const now = new Date();
-      const daysSinceLastDonation = Math.floor(
+      const daysSinceLastDonation = Math.ceil(
         (now.getTime() - donationDate.getTime()) / (1000 * 3600 * 24)
       );
 
@@ -168,13 +168,17 @@ export const useUserStore = defineStore("user", {
       if (surpassedLimitDaysInterval && !alreadyDonatedMaxTimesOnCurrentYear) {
         return {
           status: "able-to-donate",
-          label: `Última doação há ${daysSinceLastDonation} dias - você já pode doar novamente!`,
+          label: `Última doação há ${daysSinceLastDonation} ${
+            daysSinceLastDonation === 1 ? "dia" : "dias"
+          } - você já pode doar novamente!`,
         };
       }
 
       let unableLabel = alreadyDonatedMaxTimesOnCurrentYear
         ? `Você já doou ${genderConfig.limitPerYear} vezes no período de 1 ano - você ainda não pode doar novamente.`
-        : `Última doação há ${daysSinceLastDonation} dias - você ainda não pode doar novamente`;
+        : `Última doação há ${daysSinceLastDonation} ${
+            daysSinceLastDonation === 1 ? "dia" : "dias"
+          } - você ainda não pode doar novamente`;
       return {
         status: "unable-to-donate",
         label: unableLabel,
