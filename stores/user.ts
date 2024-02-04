@@ -9,6 +9,20 @@ export interface Donation {
   } | null;
 }
 
+export interface Address {
+  id: Number;
+  userId: String;
+  postalCode: String;
+  state: String;
+  city: String;
+  neighborhood: String;
+  street: String;
+  number: String;
+  complement: String;
+  createdAt: String;
+  updatedAt: String;
+}
+
 const genderToReadable = {
   M: "Masculino",
   F: "Feminino",
@@ -43,6 +57,7 @@ interface User {
   bloodType: String;
   telephone: String;
   donations: Donation[];
+  addresses: Address[];
 }
 
 export const useUserStore = defineStore("user", {
