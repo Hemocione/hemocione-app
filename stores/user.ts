@@ -206,7 +206,7 @@ export const useUserStore = defineStore("user", {
 
       return {
         ...state.user,
-        name: `${state.user.givenName} ${state.user.surName}`,
+        name: state.user.givenName,
         totalDonations: state.user.donations.length,
         livesSaved: 4 * state.user.donations.length,
       };
