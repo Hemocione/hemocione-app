@@ -1,10 +1,10 @@
 <template>
   <transition-group name="slide-top">
-    <footer v-if="isOpen">
+    <footer v-if="isOpen" key="footer">
       <div class="wrapper">
         <slot />
         <el-icon
-          @click="isOpen = false"
+          @click="handleClick"
           size="30"
           class="toggler"
           v-if="!hideToggle"
@@ -13,8 +13,8 @@
         </el-icon>
       </div>
     </footer>
-    <div class="fake-div" v-else-if="!hideToggle">
-      <el-icon @click="isOpen = true" size="30" class="toggler">
+    <div class="fake-div" v-else-if="!hideToggle && !isOpen" key="fake-div">
+      <el-icon @click="handleClick" size="30" class="toggler">
         <ElIconArrowUp />
       </el-icon>
     </div>
@@ -63,8 +63,7 @@ footer {
 </style>
 
 <script setup lang="ts">
-const isOpen = ref(true);
-defineProps({
+const props = defineProps({
   height: {
     type: String,
     default: "12%",
@@ -73,5 +72,29 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  animationEntranceDelay: {
+    type: Number,
+    default: 0,
+  },
+});
+
+
+const entranceDelay = Math.max(props.animationEntranceDelay, 0);
+const isOpen = ref(!Boolean(entranceDelay));
+const interacted = ref(false);
+
+const handleClick = () => {
+  interacted.value = true;
+  isOpen.value = !isOpen.value;  
+};
+
+onMounted(() => {
+  if (!entranceDelay) return
+  
+  setTimeout(() => {
+    if (interacted.value) return;
+
+    isOpen.value = true;
+  }, entranceDelay);
 });
 </script>

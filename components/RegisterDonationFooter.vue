@@ -1,5 +1,5 @@
 <template>
-  <CommonCoolFooter>
+  <CommonCoolFooter :animation-entrance-delay="3000">
     <CommonRegisterDonationButton @click="goRegisterDonation" />
   </CommonCoolFooter>
 </template>
@@ -8,4 +8,5 @@
 const goRegisterDonation = () => {
   navigateTo("/donations/new");
 };
+
 </script>
