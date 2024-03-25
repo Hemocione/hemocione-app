@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <ElIcon @click="navigateBack" size="25" class="back-icon">
+    <ElIcon @click="navigate" size="25" class="back-icon">
       <ElIconArrowDown v-if="iconDirection === 'down'" />
       <ElIconArrowLeft v-else />
     </ElIcon>
@@ -43,16 +43,21 @@ const props = defineProps({
     type: String as PropType<"down" | "left">,
     default: "down",
   },
+  customPath: String,
 });
 
 const router = useRouter();
-const navigateBack = () => {
+const navigate = async () => {
+  if (props.customPath) {
+    console.log("going to custom path");
+    return await navigateTo(props.customPath);
+  }
+
   try {
     router.back();
   } catch (error) {
     console.error(error);
-  } finally {
-    navigateTo(props.fallBack);
+    await navigateTo(props.fallBack);
   }
 };
 </script>

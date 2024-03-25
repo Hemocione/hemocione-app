@@ -15,7 +15,7 @@
     "@vercel/analytics": "^1.1.2",
     "dayjs": "^1.11.10",
     "element-plus": "^2.5.2",
-    "nuxt": "^3.10.0",
+    "nuxt": "^3.11.1",
     "nuxt-vercel-analytics": "^1.0.0"
   },
   "dependencies": {},

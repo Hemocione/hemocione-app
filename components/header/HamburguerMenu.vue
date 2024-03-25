@@ -2,21 +2,10 @@
   <NuxtImg src="/icons/menu.svg" alt="Menu" @click="toggleDrawer" />
   <ElDrawer v-model="drawer" direction="rtl" size="200px">
     <div class="content">
-      <NuxtLink to="/" :active="isCurrentRoute('/')" @click="toggleDrawer"
-        >Início</NuxtLink
-      >
-      <NuxtLink
-        to="/events"
-        :active="isCurrentRoute('/events')"
+      <NuxtLink v-for="page in pages" :key="page.path" :to="page.path" :active="isCurrentRoute(page)"
         @click="toggleDrawer"
-        >Eventos</NuxtLink
-      >
-      <NuxtLink
-        to="/donations"
-        :active="isCurrentRoute('/donations')"
-        @click="toggleDrawer"
-        >Minhas Doações</NuxtLink
-      >
+        >{{ page.name }}
+      </NuxtLink>
     </div>
   </ElDrawer>
 </template>
@@ -37,6 +26,10 @@ img {
   color: var(--hemo-color-text-primary);
   font-size: 1.2em;
 }
+
+a[active="true"] {
+  color: var(--hemo-color-primary-light);
+}
 </style>
 
 <script setup lang="ts">
@@ -46,7 +39,37 @@ const toggleDrawer = () => {
 };
 const currentRoute = useRoute();
 
-const isCurrentRoute = (route: string) => {
-  return currentRoute.path === route;
+type Page = {
+  path: string;
+  name: string;
+  priority: number;
+};
+
+const pages: Page[] = [
+  {
+    path: "/",
+    name: "Início",
+    priority: 0,
+  },
+  {
+    path: "/events",
+    name: "Eventos",
+    priority: 1,
+  },
+  {
+    path: "/donations",
+    name: "Minhas Doações",
+    priority: 1,
+  }
+];
+
+const isCurrentRoute = (page: Page) => {
+  const pagesCopy = [...pages];
+  const posiblePages = pagesCopy.filter((page) => currentRoute.path.startsWith(page.path));
+  if (!posiblePages) return false;
+
+  const pagesSortedByPriority = posiblePages.sort((a, b) => b.priority - a.priority);
+  const highestPriorityPage = pagesSortedByPriority[0];
+  return page.name === highestPriorityPage.name;
 };
 </script>

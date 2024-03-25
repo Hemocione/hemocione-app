@@ -149,7 +149,7 @@ export const useUserStore = defineStore("user", {
       if (!state.user?.donations.length)
         return {
           status: "never-donated",
-          label: "Nunca doou sangue - doe pela primeira vez! :)",
+          label: "Nunca doou sangue - doe pela primeira vez e salve 4 vidas! 😊",
         };
 
       const donations = state.user.donations;

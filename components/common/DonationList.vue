@@ -14,11 +14,14 @@
   <div v-else class="wrap-missing">
     <NuxtImg src="/illustrations/bloodDonation.svg" class="missing-img" />
     <span>Você ainda não registrou doações</span>
-    <span>Que tal doar hoje?</span>
+    <NuxtLink to="/donations/new" class="register-first-donation">Registre sua primeira doação</NuxtLink>
   </div>
 </template>
 
 <style scoped>
+.register-first-donation {
+  color: var(--hemo-color-primary);
+}
 .wrap-missing span {
   color: var(--black-80);
 }

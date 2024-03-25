@@ -3,7 +3,6 @@
     <UserDescription />
     <UserDonationSummary />
     <UserLastDonations />
-    <RegisterDonationFooter />
   </div>
 </template>
 

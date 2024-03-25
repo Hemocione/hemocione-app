@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <CommonBackHeader title="Registrar Doação" />
+    <CommonBackHeader title="Registrar Doação" :custom-path="'/donations'" />
     <transition name="slow-blur" mode="out-in">
       <div class="content" v-if="!donationRegistered">
         <div>

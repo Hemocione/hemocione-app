@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <CommonBackHeader title="Últimas doações" iconDirection="left" />
+    <CommonBackHeader title="Últimas doações" iconDirection="left" :custom-path="'/'" />
     <div class="donations-wrapper">
       <CommonDonationList :donations="donations" />
     </div>
