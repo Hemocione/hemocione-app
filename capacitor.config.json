@@ -1,0 +1,5 @@
+{
+  "appId": "br.com.hemocione.app",
+  "appName": "hemocione.app",
+  "webDir": ".vercel/output/static"
+}

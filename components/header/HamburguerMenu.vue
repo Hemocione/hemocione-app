@@ -13,12 +13,7 @@
       <span class="out" @click="toggleOutDialog">Sair</span>
     </div>
   </ElDrawer>
-  <ElDialog
-    :title="logoutText"
-    v-model="confirmOutDialog"
-    width="80%"
-    align-center
-  >
+  <ElDialog :title="logoutText" v-model="confirmOutDialog" align-center>
     <span>Tem certeza que deseja sair?</span>
     <div class="dialog-actions">
       <ElButton @click="toggleOutDialog">Cancelar</ElButton>
@@ -123,9 +118,7 @@ const handleOut = () => {
   userStore.logout();
 };
 
-const logoutText = computed(() => {
-  return userStore.user?.givenName
-    ? `Sair (${userStore.user.givenName})`
-    : "Sair";
-});
+const logoutText = userStore.user?.givenName
+  ? `Sair (${userStore.user.givenName})`
+  : "Sair";
 </script>
