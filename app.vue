@@ -63,7 +63,8 @@ const evaluateCurrentLogin = async () => {
           Authorization: `Bearer ${currentUserToken}`,
         },
       });
-
+      localStorage.setItem(config.public.authLocalKey, currentUserToken);
+      await userStore.setToken(currentUserToken);
       loggedIn.value = true;
     } catch (e) {
       console.error(e);
@@ -71,6 +72,7 @@ const evaluateCurrentLogin = async () => {
       attemptedAutoLogin.value = true;
     }
     if (attemptedAutoLogin.value && !loggedIn.value) {
+      userStore.$reset();
       localStorage.removeItem(config.public.authLocalKey);
     }
   }
