@@ -78,19 +78,18 @@ const props = defineProps({
   },
 });
 
-
 const entranceDelay = Math.max(props.animationEntranceDelay, 0);
 const isOpen = ref(!Boolean(entranceDelay));
 const interacted = ref(false);
 
 const handleClick = () => {
   interacted.value = true;
-  isOpen.value = !isOpen.value;  
+  isOpen.value = !isOpen.value;
 };
 
 onMounted(() => {
-  if (!entranceDelay) return
-  
+  if (!entranceDelay) return;
+
   setTimeout(() => {
     if (interacted.value) return;
 

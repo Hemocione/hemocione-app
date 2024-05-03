@@ -1,5 +1,4 @@
 <template>
-  <!-- <NuxtPwaManifest /> TODO: pwa! -->
   <ElConfigProvider :locale="ptBr">
     <NuxtLoadingIndicator color="#bb0a08" />
     <NuxtLayout v-if="loggedIn">
