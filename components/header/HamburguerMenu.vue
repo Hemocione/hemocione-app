@@ -2,7 +2,11 @@
   <NuxtImg src="/icons/menu.svg" alt="Menu" @click="toggleDrawer" />
   <ElDrawer v-model="drawer" direction="rtl" size="200px">
     <div class="content">
-      <NuxtLink v-for="page in pages" :key="page.path" :to="page.path" :active="isCurrentRoute(page)"
+      <NuxtLink
+        v-for="page in pages"
+        :key="page.path"
+        :to="page.path"
+        :active="isCurrentRoute(page)"
         @click="toggleDrawer"
         >{{ page.name }}
       </NuxtLink>
@@ -57,18 +61,27 @@ const pages: Page[] = [
     priority: 1,
   },
   {
+    path: "/competitions",
+    name: "Copas Hemocione",
+    priority: 1,
+  },
+  {
     path: "/donations",
     name: "Minhas Doações",
     priority: 1,
-  }
+  },
 ];
 
 const isCurrentRoute = (page: Page) => {
   const pagesCopy = [...pages];
-  const posiblePages = pagesCopy.filter((page) => currentRoute.path.startsWith(page.path));
+  const posiblePages = pagesCopy.filter((page) =>
+    currentRoute.path.startsWith(page.path)
+  );
   if (!posiblePages) return false;
 
-  const pagesSortedByPriority = posiblePages.sort((a, b) => b.priority - a.priority);
+  const pagesSortedByPriority = posiblePages.sort(
+    (a, b) => b.priority - a.priority
+  );
   const highestPriorityPage = pagesSortedByPriority[0];
   return page.name === highestPriorityPage.name;
 };

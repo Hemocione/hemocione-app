@@ -58,21 +58,11 @@ const evaluateCurrentLogin = async () => {
   const currentUserToken = currentUserLocalStorage || currentUserCookie.value;
   if (currentUserToken) {
     try {
-      const data: { token: string; user: any } = await $fetch(
-        `${config.public.hemocioneIdApiUrl}/users/regenerate-token`,
-        {
-          headers: {
-            Authorization: `Bearer ${currentUserToken}`,
-          },
-        }
-      );
-      const newToken = data.token;
-      // always update local storage, unless it came from cookie - then update it as well
-      localStorage.setItem(config.public.authLocalKey, newToken);
-      await userStore.setToken(newToken);
-      if (currentUserCookie.value) {
-        currentUserCookie.value = newToken;
-      }
+      await $fetch(`${config.public.hemocioneIdApiUrl}/users/validate-token`, {
+        headers: {
+          Authorization: `Bearer ${currentUserToken}`,
+        },
+      });
 
       loggedIn.value = true;
     } catch (e) {
