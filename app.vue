@@ -25,9 +25,10 @@ import ptBr from "element-plus/dist/locale/pt-br.mjs";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const loggedIn = ref(false);
-const attemptedAutoLogin = ref(false);
 const config = useRuntimeConfig();
-const urlToken = useRoute().query.token;
+const route = useRoute();
+const { token: urlToken, noAuto } = route.query;
+const attemptedAutoLogin = ref(Boolean(noAuto));
 
 useHead({
   title: "Hemocione",
@@ -55,7 +56,7 @@ const evaluateCurrentLogin = async () => {
 
   // prefer local storage over cookie
   const currentUserToken = currentUserLocalStorage || currentUserCookie.value;
-  if (currentUserToken) {
+  if (currentUserToken && !noAuto) {
     try {
       await $fetch(`${config.public.hemocioneIdApiUrl}/users/validate-token`, {
         headers: {
@@ -76,7 +77,7 @@ const evaluateCurrentLogin = async () => {
     }
   }
 
-  if (!loggedIn.value) {
+  if (!loggedIn.value && !noAuto) {
     doLogin();
   }
 };

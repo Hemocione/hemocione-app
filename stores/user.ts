@@ -103,6 +103,17 @@ export const useUserStore = defineStore("user", {
       );
       this.user?.donations.push(data.donation);
     },
+    logout() {
+      const config = useRuntimeConfig();
+
+      this.$reset();
+      localStorage.removeItem(config.public.authLocalKey);
+      const cookie = useCookie(config.public.authLocalKey, {
+        domain: config.public.cookieDomain,
+      });
+      cookie.value = undefined;
+      window.location.href = "/?noAuto=true";
+    },
   },
   getters: {
     userAge(state) {
@@ -149,7 +160,8 @@ export const useUserStore = defineStore("user", {
       if (!state.user?.donations.length)
         return {
           status: "never-donated",
-          label: "Nunca doou sangue - doe pela primeira vez e salve 4 vidas! 😊",
+          label:
+            "Nunca doou sangue - doe pela primeira vez e salve 4 vidas! 😊",
         };
 
       const donations = state.user.donations;
