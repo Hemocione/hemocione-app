@@ -5,10 +5,15 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "capacitor:sync": "yarn generate && cap sync",
+    "capacitor:copy": "npx cap copy",
+    "capacitor:open:ios": "npx cap open ios",
+    "capacitor:open:android": "npx cap open android"
   },
   "devDependencies": {
     "@capacitor/android": "^6.0.0",
+    "@capacitor/browser": "^6.0.0",
     "@capacitor/cli": "^6.0.0",
     "@capacitor/core": "^6.0.0",
     "@capacitor/ios": "^6.0.0",
@@ -17,6 +22,7 @@
     "@nuxtjs/google-fonts": "^3.0.1",
     "@pinia/nuxt": "^0.5.1",
     "@vercel/analytics": "^1.1.2",
+    "@zadigetvoltaire/nuxt-well-known": "^0.0.13",
     "dayjs": "^1.11.10",
     "element-plus": "^2.5.2",
     "nuxt": "^3.11.1",

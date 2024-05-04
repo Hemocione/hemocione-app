@@ -1,5 +1,10 @@
 {
   "appId": "br.com.hemocione.app",
   "appName": "hemocione.app",
-  "webDir": ".vercel/output/static"
+  "webDir": ".vercel/output/static",
+  "server": {
+    "allowNavigation": [
+      "*"
+    ]
+  }
 }

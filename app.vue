@@ -29,6 +29,8 @@ const config = useRuntimeConfig();
 const route = useRoute();
 const { token: urlToken, noAuto } = route.query;
 const attemptedAutoLogin = ref(Boolean(noAuto));
+import { Browser } from "@capacitor/browser";
+import { Capacitor } from "@capacitor/core";
 
 useHead({
   title: "Hemocione",
@@ -82,8 +84,18 @@ const evaluateCurrentLogin = async () => {
   }
 };
 
-const doLogin = () => {
-  window.location.href = `${config.public.hemocioneIdUrl}/?redirect=${window.location.href}`;
+const doLogin = async () => {
+  const url = `${config.public.hemocioneIdUrl}/?redirect=${window.location.href}`;
+  if (!Capacitor.isNativePlatform()) {
+    await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
+    return;
+  }
+
+  Browser.addListener("browserFinished", async () => {
+    await evaluateCurrentLogin();
+    Browser.removeAllListeners();
+  });
+  await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
 
 if (urlToken) {
