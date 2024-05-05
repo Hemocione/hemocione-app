@@ -34,10 +34,7 @@ export default defineNuxtConfig({
         process.env.NUXT_COMPETITIONS_URL || "https://copa.hemocione.com.br",
     },
   },
-  routeRules: {
-    "**": { ssr: false },
-    "/.well-known/**": { ssr: true },
-  },
+  ssr: false,
   css: [
     "assets/css/globals.css",
     "assets/css/transitions.css",

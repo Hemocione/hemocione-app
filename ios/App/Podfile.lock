@@ -1,28 +1,40 @@
 PODS:
   - Capacitor (6.0.0):
     - CapacitorCordova
+  - CapacitorApp (6.0.0):
+    - Capacitor
   - CapacitorBrowser (6.0.0):
     - Capacitor
   - CapacitorCordova (6.0.0)
+  - CapacitorPreferences (6.0.0):
+    - Capacitor
 
 DEPENDENCIES:
   - "Capacitor (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorApp (from `../../node_modules/@capacitor/app`)"
   - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
 
 EXTERNAL SOURCES:
   Capacitor:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorApp:
+    :path: "../../node_modules/@capacitor/app"
   CapacitorBrowser:
     :path: "../../node_modules/@capacitor/browser"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorPreferences:
+    :path: "../../node_modules/@capacitor/preferences"
 
 SPEC CHECKSUMS:
   Capacitor: 559d073c4ca6c27f8e7002c807eea94c3ba435a9
+  CapacitorApp: 9d53aec7101f7b030a950c5bdc4df8612576b279
   CapacitorBrowser: 7e1e2cdbb3e372f09f0bad0c4c21a6d187b679ad
   CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
+  CapacitorPreferences: c9b839a80baa72e4ed4bdb117618e1950d3046b5
 
-PODFILE CHECKSUM: 6d1bdfa231af3689f92092a5b5d1c92ac170903e
+PODFILE CHECKSUM: d8122b9662231214730b508fd1972f3a60a5fe0d
 
 COCOAPODS: 1.15.2

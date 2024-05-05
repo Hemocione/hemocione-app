@@ -19,6 +19,7 @@
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
+const route = useRoute();
 const props = defineProps<{
   src: string;
   includeToken?: boolean;
@@ -27,15 +28,25 @@ const iframedLoaded = ref(false);
 const setLoaded = () => {
   iframedLoaded.value = true;
 };
+const routeSlug = route.params.slug;
+const routeQuery = route.query;
+const routeSlugPath = Array.isArray(routeSlug)
+  ? routeSlug.filter(Boolean).join("/")
+  : routeSlug;
 
 const iframeSrc = computed(() => {
-  if (props.includeToken) {
-    // build url correctly with oken
-    const src = new URL(props.src);
-    src.searchParams.append("token", userStore.token);
-    return src.toString();
+  const src = new URL(props.src);
+  src.pathname = routeSlugPath || "/";
+  // add query params to iframe
+  for (const [key, value] of Object.entries(routeQuery)) {
+    src.searchParams.set(key, value as string);
   }
-  return props.src;
+  src.searchParams.delete("token"); // remove token from query params if present
+  if (props.includeToken) {
+    // build url correctly with token
+    src.searchParams.set("token", userStore.token); // add token to query params
+  }
+  return src.toString();
 });
 </script>
 <style scoped>
