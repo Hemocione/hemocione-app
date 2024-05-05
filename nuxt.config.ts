@@ -16,10 +16,7 @@ const getSiteUrl = () => {
   return "https://app.hemocione.com.br";
 };
 
-const isProduction = process.env.VERCEL_ENV === "production";
-
 export default defineNuxtConfig({
-  ssr: false,
   runtimeConfig: {
     public: {
       cookieDomain: process.env.NUXT_COOKIE_DOMAIN || "hemocione.com.br",
@@ -34,9 +31,12 @@ export default defineNuxtConfig({
       eventsUrl:
         process.env.NUXT_EVENTS_URL || "https://eventos.hemocione.com.br",
       competitionsUrl:
-        process.env.NUXT_COMPETITIONS_URL ||
-        "https://copa.hemocione.com.br",
+        process.env.NUXT_COMPETITIONS_URL || "https://copa.hemocione.com.br",
     },
+  },
+  routeRules: {
+    "**": { ssr: false },
+    "/.well-known/**": { ssr: true },
   },
   css: [
     "assets/css/globals.css",
@@ -49,6 +49,7 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@pinia/nuxt",
     "nuxt-vercel-analytics",
+    "@zadigetvoltaire/nuxt-well-known",
   ],
   googleFonts: {
     families: {
@@ -87,5 +88,29 @@ export default defineNuxtConfig({
   appConfig: {
     // you don't need to include this: only for testing purposes
     buildDate: new Date().toISOString(),
-  }
+  },
+  wellKnown: {
+    devtools: true,
+    contentUris: [
+      {
+        path: "apple-developer-merchantid-domain-association",
+        content: "merchantid",
+      },
+      {
+        path: "assetlinks.json",
+        content: JSON.stringify([
+          {
+            relation: ["delegate_permission/common.handle_all_urls"],
+            target: {
+              namespace: "android_app",
+              package_name: "br.com.hemocione.app",
+              sha256_cert_fingerprints: [
+                "C3:04:BD:47:17:D4:29:76:D1:6D:CC:F1:FC:F3:99:A1:40:04:AA:DE:41:A7:A0:53:7F:20:65:1A:29:8C:16:1D",
+              ],
+            },
+          },
+        ]),
+      },
+    ],
+  },
 });

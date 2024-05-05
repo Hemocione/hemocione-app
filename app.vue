@@ -31,6 +31,7 @@ const { token: urlToken, noAuto } = route.query;
 const attemptedAutoLogin = ref(Boolean(noAuto));
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
+import { Preferences } from "@capacitor/preferences";
 
 useHead({
   title: "Hemocione",
@@ -52,12 +53,12 @@ const evaluateCurrentLogin = async () => {
   const currentUserCookie = useCookie(config.public.authLocalKey, {
     domain: config.public.cookieDomain,
   });
-  const currentUserLocalStorage = localStorage.getItem(
-    config.public.authLocalKey
-  );
+  const currentUserLocalToken = await Preferences.get({
+    key: config.public.authLocalKey,
+  });
 
   // prefer local storage over cookie
-  const currentUserToken = currentUserLocalStorage || currentUserCookie.value;
+  const currentUserToken = currentUserLocalToken || currentUserCookie.value;
   if (currentUserToken && !noAuto) {
     try {
       await $fetch(`${config.public.hemocioneIdApiUrl}/users/validate-token`, {
@@ -65,7 +66,10 @@ const evaluateCurrentLogin = async () => {
           Authorization: `Bearer ${currentUserToken}`,
         },
       });
-      localStorage.setItem(config.public.authLocalKey, currentUserToken);
+      await Preferences.set({
+        key: config.public.authLocalKey,
+        value: currentUserToken,
+      });
       await userStore.setToken(currentUserToken);
       loggedIn.value = true;
     } catch (e) {
@@ -75,7 +79,7 @@ const evaluateCurrentLogin = async () => {
     }
     if (attemptedAutoLogin.value && !loggedIn.value) {
       userStore.$reset();
-      localStorage.removeItem(config.public.authLocalKey);
+      await Preferences.remove({ key: config.public.authLocalKey });
     }
   }
 
@@ -99,7 +103,10 @@ const doLogin = async () => {
 };
 
 if (urlToken) {
-  localStorage.setItem(config.public.authLocalKey, String(urlToken));
+  await Preferences.set({
+    key: config.public.authLocalKey,
+    value: String(urlToken),
+  });
   await userStore.setToken(String(urlToken));
   loggedIn.value = true;
   window.history.replaceState({}, document.title, window.location.pathname);

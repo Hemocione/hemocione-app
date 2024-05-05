@@ -60,6 +60,8 @@ interface User {
   addresses: Address[];
 }
 
+import { Preferences } from "@capacitor/preferences";
+
 export const useUserStore = defineStore("user", {
   state: () => ({
     user: null as User | null,
@@ -103,11 +105,11 @@ export const useUserStore = defineStore("user", {
       );
       this.user?.donations.push(data.donation);
     },
-    logout() {
+    async logout() {
       const config = useRuntimeConfig();
 
       this.$reset();
-      localStorage.removeItem(config.public.authLocalKey);
+      await Preferences.remove({ key: config.public.authLocalKey });
       const cookie = useCookie(config.public.authLocalKey, {
         domain: config.public.cookieDomain,
       });
