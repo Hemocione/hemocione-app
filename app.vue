@@ -1,6 +1,5 @@
 <template>
   <ElConfigProvider :locale="ptBr">
-    <NuxtLoadingIndicator color="#bb0a08" />
     <NuxtLayout v-if="loggedIn">
       <NuxtPage />
     </NuxtLayout>

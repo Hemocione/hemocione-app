@@ -29,7 +29,6 @@
 
 .page {
   background-color: white;
-  max-width: var(--app-max-width);
   width: 100%;
   min-height: calc(100dvh - var(--navbar-size));
   margin-top: var(--navbar-size);
