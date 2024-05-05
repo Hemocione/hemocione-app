@@ -82,8 +82,13 @@ export const useUserStore = defineStore("user", {
       this.setUser(data);
     },
     async setToken(token: string) {
-      this.token = token;
-      await this.fetchMe();
+      try {
+        this.token = token;
+        await this.fetchMe();
+      } catch (error) {
+        console.error("Error fetching user data", error);
+        await this.logout();
+      }
     },
     setUser(user: any) {
       this.user = user;

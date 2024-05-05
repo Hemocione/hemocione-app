@@ -26,7 +26,6 @@ const userStore = useUserStore();
 const loggedIn = ref(false);
 const config = useRuntimeConfig();
 const route = useRoute();
-const router = useRouter();
 const { token: urlToken, noAuto } = route.query;
 const attemptedAutoLogin = ref(Boolean(noAuto));
 import { Browser } from "@capacitor/browser";
@@ -55,13 +54,14 @@ const navigateAfterLogin = ref<string | null>(null);
 const confirmLogin = () => {
   loggedIn.value = true;
   if (navigateAfterLogin.value) {
-    router.push(navigateAfterLogin.value);
+    navigateTo(navigateAfterLogin.value);
   }
 };
 
 App.addListener("appUrlOpen", function (event: URLOpenListenerEvent) {
   // Example url: https://app.hemocione.com.br/tabs/tabs2
   // slug = /tabs/tabs2
+  console.log("App opened with URL: " + event.url);
   const slug = event.url.split("hemocione.com.br").pop();
   if (slug && slug !== "/") {
     navigateAfterLogin.value = slug;
@@ -69,15 +69,19 @@ App.addListener("appUrlOpen", function (event: URLOpenListenerEvent) {
 });
 
 const evaluateCurrentLogin = async () => {
+  console.log("evaluating current login");
   const currentUserCookie = useCookie(config.public.authLocalKey, {
     domain: config.public.cookieDomain,
   });
-  const currentUserLocalToken = await Preferences.get({
-    key: config.public.authLocalKey,
-  });
+  const currentUserLocalToken = (
+    await Preferences.get({
+      key: config.public.authLocalKey,
+    })
+  ).value;
 
   // prefer local storage over cookie
   const currentUserToken = currentUserLocalToken || currentUserCookie.value;
+  console.log("current user token", currentUserToken);
   if (currentUserToken && !noAuto) {
     try {
       await $fetch(`${config.public.hemocioneIdApiUrl}/users/validate-token`, {
@@ -87,9 +91,9 @@ const evaluateCurrentLogin = async () => {
       });
       await Preferences.set({
         key: config.public.authLocalKey,
-        value: String(currentUserToken),
+        value: currentUserToken,
       });
-      await userStore.setToken(String(currentUserToken));
+      await userStore.setToken(currentUserToken);
       confirmLogin();
     } catch (e) {
       console.error(e);
