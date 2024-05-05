@@ -6,6 +6,7 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
+    "capacitor:generate-image-assets": "npx capacitor-assets generate --assetPath resources",
     "capacitor:sync": "yarn generate && cap sync",
     "capacitor:copy": "npx cap copy",
     "capacitor:open:ios": "npx cap open ios",
@@ -14,6 +15,7 @@
   "devDependencies": {
     "@capacitor/android": "^6.0.0",
     "@capacitor/app": "^6.0.0",
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/browser": "^6.0.0",
     "@capacitor/cli": "^6.0.0",
     "@capacitor/core": "^6.0.0",
@@ -31,5 +33,5 @@
   },
   "dependencies": {},
   "name": "hemocione.app",
-  "version": "0.0.1"
+  "version": "0.1.0"
 }

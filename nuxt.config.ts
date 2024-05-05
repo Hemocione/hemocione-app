@@ -62,12 +62,6 @@ export default defineNuxtConfig({
       enabled: true,
     },
   },
-  image: {
-    domains: ["cdn.hemocione.com.br"],
-    alias: {
-      cdn: "https://cdn.hemocione.com.br",
-    },
-  },
   nitro: {
     preset: "vercel",
   },

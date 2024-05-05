@@ -146,6 +146,9 @@ const doLogin = async () => {
   const url = `${baseUrl}${encodeURIComponent(
     "br.com.hemocione.app://app.hemocione.com.br/"
   )}`;
+  Browser.addListener("browserFinished", async () => {
+    attemptedLogin.value = true;
+  });
   await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
 
