@@ -68,9 +68,9 @@ const evaluateCurrentLogin = async () => {
       });
       await Preferences.set({
         key: config.public.authLocalKey,
-        value: currentUserToken,
+        value: String(currentUserToken),
       });
-      await userStore.setToken(currentUserToken);
+      await userStore.setToken(String(currentUserToken));
       loggedIn.value = true;
     } catch (e) {
       console.error(e);
