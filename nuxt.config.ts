@@ -53,7 +53,6 @@ export default defineNuxtConfig({
     },
   },
   app: {
-    layoutTransition: { name: "layout", mode: "out-in" },
     pageTransition: { name: "blur", mode: "out-in", appear: true },
   },
   devtools: {

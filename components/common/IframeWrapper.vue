@@ -26,10 +26,10 @@ const props = defineProps<{
 }>();
 const iframedLoaded = ref(false);
 const setLoaded = () => {
-  // wait 500ms before showing iframe after loading to avoid flickering and let external app handle iframe
+  // wait 1s before showing iframe after loading to avoid flickering and let external app handle iframe
   setTimeout(() => {
     iframedLoaded.value = true;
-  }, 500);
+  }, 1000);
 };
 const routeSlug = route.params.slug;
 const routeQuery = route.query;
