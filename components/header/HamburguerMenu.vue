@@ -1,5 +1,5 @@
 <template>
-  <NuxtImg src="/icons/menu.svg" alt="Menu" @click="toggleDrawer" />
+  <img src="/icons/menu.svg" alt="Menu" @click="toggleDrawer" />
   <ElDrawer v-model="drawer" direction="rtl" size="200px">
     <div class="content">
       <NuxtLink

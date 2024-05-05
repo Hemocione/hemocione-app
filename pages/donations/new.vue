@@ -17,7 +17,7 @@
         </ElForm>
       </div>
       <div class="success" v-else>
-        <NuxtImg
+        <img
           src="/icons/check-circle-red.svg"
           alt="check"
           width="200"

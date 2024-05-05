@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <NuxtImg class="user-image" :src="userImgSrc" alt="User Profile Image" />
+    <img class="user-image" :src="userImgSrc" alt="User Profile Image" />
     <div class="user-profile">
       <h3>{{ userData?.name }}</h3>
       <span>{{ description }}</span>

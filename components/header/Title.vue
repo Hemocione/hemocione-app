@@ -1,5 +1,5 @@
 <template>
-  <NuxtImg
+  <img
     class="logo"
     src="/logos/principal-horizontal-cionebranco.svg"
     alt="Hemocione Logo"

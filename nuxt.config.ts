@@ -43,7 +43,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/google-fonts",
     "@element-plus/nuxt",
-    "@nuxt/image",
     "@pinia/nuxt",
     "nuxt-vercel-analytics",
     "@zadigetvoltaire/nuxt-well-known",

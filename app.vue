@@ -4,15 +4,15 @@
       <NuxtPage />
     </NuxtLayout>
     <div class="hemocione-login-loading-wrapper" v-else>
-      <NuxtImg src="/logos/baseLogo.svg" class="logo" />
+      <img src="/logos/baseLogo.svg" class="logo" />
       <ElButton
-        :disabled="!attemptedAutoLogin || loggedIn"
+        :disabled="!attemptedLogin || loggedIn"
         @click="doLogin"
         type="primary"
         size="large"
-        :loading="!attemptedAutoLogin"
+        :loading="!attemptedLogin"
       >
-        {{ !attemptedAutoLogin ? "Entrando..." : "Entrar" }}
+        {{ !attemptedLogin ? "Entrando..." : "Entrar" }}
       </ElButton>
     </div>
   </ElConfigProvider>
@@ -26,8 +26,20 @@ const userStore = useUserStore();
 const loggedIn = ref(false);
 const config = useRuntimeConfig();
 const route = useRoute();
-const { token: urlToken, noAuto } = route.query;
-const attemptedAutoLogin = ref(Boolean(noAuto));
+const { token: initialUrlToken, noAuto } = route.query;
+
+const getTokenFromSlug = (slug: string) => {
+  const token = slug.split("?token=").pop();
+  return token;
+};
+
+const urlToken = initialUrlToken
+  ? String(initialUrlToken)
+  : route.query.slug
+  ? getTokenFromSlug(String(route.query.slug))
+  : null;
+
+const attemptedLogin = ref(Boolean(noAuto));
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
@@ -58,18 +70,26 @@ const confirmLogin = () => {
   }
 };
 
-App.addListener("appUrlOpen", function (event: URLOpenListenerEvent) {
+App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
   // Example url: https://app.hemocione.com.br/tabs/tabs2
   // slug = /tabs/tabs2
   console.log("App opened with URL: " + event.url);
-  const slug = event.url.split("hemocione.com.br").pop();
-  if (slug && slug !== "/") {
+  const url = new URL(event.url);
+  if (url.protocol.includes("http")) {
+    // deep link origin
+    const path = url.pathname;
+    const slug = path + url.search;
     navigateAfterLogin.value = slug;
+  }
+
+  const token = url.searchParams.get("token");
+  if (token) {
+    attemptedLogin.value = false;
+    await evaluateCurrentLogin(token);
   }
 });
 
-const evaluateCurrentLogin = async () => {
-  console.log("evaluating current login");
+const evaluateCurrentLogin = async (enforcedToken?: string) => {
   const currentUserCookie = useCookie(config.public.authLocalKey, {
     domain: config.public.cookieDomain,
   });
@@ -80,9 +100,10 @@ const evaluateCurrentLogin = async () => {
   ).value;
 
   // prefer local storage over cookie
-  const currentUserToken = currentUserLocalToken || currentUserCookie.value;
+  const currentUserToken =
+    enforcedToken || currentUserLocalToken || currentUserCookie.value;
   console.log("current user token", currentUserToken);
-  if (currentUserToken && !noAuto) {
+  if (currentUserToken && (enforcedToken || !noAuto)) {
     try {
       await $fetch(`${config.public.hemocioneIdApiUrl}/users/validate-token`, {
         headers: {
@@ -98,9 +119,9 @@ const evaluateCurrentLogin = async () => {
     } catch (e) {
       console.error(e);
     } finally {
-      attemptedAutoLogin.value = true;
+      attemptedLogin.value = true;
     }
-    if (attemptedAutoLogin.value && !loggedIn.value) {
+    if (attemptedLogin.value && !loggedIn.value) {
       userStore.$reset();
       await Preferences.remove({ key: config.public.authLocalKey });
     }
@@ -112,19 +133,19 @@ const evaluateCurrentLogin = async () => {
 };
 
 const doLogin = async () => {
+  console.log("eh o clicas");
   const baseUrl = `${config.public.hemocioneIdUrl}/?redirect=`;
   if (!Capacitor.isNativePlatform()) {
+    console.log("not native platform");
     const url = `${baseUrl}${encodeURIComponent(window.location.href)}`;
     await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
     return;
   }
 
-  const url = `${baseUrl}${encodeURIComponent("https://app.hemocione.com.br")}`;
-  Browser.addListener("browserFinished", async () => {
-    console.log("browser finished");
-    await evaluateCurrentLogin();
-    Browser.removeAllListeners();
-  });
+  console.log("native platform");
+  const url = `${baseUrl}${encodeURIComponent(
+    "br.com.hemocione.app://app.hemocione.com.br/"
+  )}`;
   await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
 

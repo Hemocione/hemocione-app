@@ -2,7 +2,7 @@
   <ElButton type="primary" :disabled="disabled" size="large">
     Registrar doação
     <template #icon>
-      <NuxtImg src="/icons/plus.svg" alt="plus" height="13" width="13" />
+      <img src="/icons/plus.svg" alt="plus" height="13" width="13" />
     </template>
   </ElButton>
 </template>

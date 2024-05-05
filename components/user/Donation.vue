@@ -7,12 +7,7 @@
       bothBorders: borderBottom && borderTop,
     }"
   >
-    <NuxtImg
-      :src="logoSrc"
-      class="donation-provider-logo"
-      width="25"
-      height="25"
-    />
+    <img :src="logoSrc" class="donation-provider-logo" width="25" height="25" />
     <span class="donation-label">{{ props.donation.label }}</span>
     <span class="donation-date">{{ readableSimpleDate }}</span>
   </div>

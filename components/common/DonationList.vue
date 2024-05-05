@@ -12,9 +12,11 @@
     />
   </div>
   <div v-else class="wrap-missing">
-    <NuxtImg src="/illustrations/bloodDonation.svg" class="missing-img" />
+    <img src="/illustrations/bloodDonation.svg" class="missing-img" />
     <span>Você ainda não registrou doações</span>
-    <NuxtLink to="/donations/new" class="register-first-donation">Registre sua primeira doação</NuxtLink>
+    <NuxtLink to="/donations/new" class="register-first-donation"
+      >Registre sua primeira doação</NuxtLink
+    >
   </div>
 </template>
 

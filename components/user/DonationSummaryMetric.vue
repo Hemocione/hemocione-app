@@ -1,6 +1,6 @@
 <template>
   <div class="summary-metric">
-    <NuxtImg class="icon" :src="iconSrc" alt="icon" />
+    <img class="icon" :src="iconSrc" alt="icon" />
     <span class="value">{{ value }}</span>
     <span class="label">{{ label }}</span>
   </div>
