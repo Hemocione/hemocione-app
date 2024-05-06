@@ -34,7 +34,7 @@ h3 {
 
 .status {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   width: 100%;
   font-size: 0.8em;
@@ -43,6 +43,7 @@ h3 {
   height: 0.8em;
   aspect-ratio: 1/1;
   border-radius: 50%;
+  margin-top: 2px;
 }
 
 .redBall {
