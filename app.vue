@@ -101,7 +101,7 @@ const evaluateCurrentLogin = async (enforcedToken?: string) => {
         value: currentUserToken,
       });
       await userStore.setToken(currentUserToken);
-      confirmLogin();
+      await confirmLogin();
     } catch (e) {
       console.error(e);
     } finally {
@@ -141,7 +141,7 @@ if (urlToken) {
     value: String(urlToken),
   });
   await userStore.setToken(String(urlToken));
-  confirmLogin();
+  await confirmLogin();
   window.history.replaceState({}, document.title, window.location.pathname);
 } else {
   evaluateCurrentLogin();
