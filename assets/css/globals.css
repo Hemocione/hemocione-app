@@ -1,27 +1,27 @@
 :root {
   --hemo-color-primary: #bb0a08;
   --hemo-color-primary-dark: #8a0000;
-  --hemo-color-primary-light: #FF6262;
+  --hemo-color-primary-light: #ff6262;
   --hemo-color-secondary: #f2f2f2;
   --hemo-color-success: #2ac769;
   --hemo-color-warn: #f6a609;
-  --hemo-color-text-secondary: #25282B;
-  --hemo-color-text-secondary-opaque: rgba(37, 40, 43, 0.2) ;
+  --hemo-color-text-secondary: #25282b;
+  --hemo-color-text-secondary-opaque: rgba(37, 40, 43, 0.2);
   --hemo-color-text-primary: #f2f2f2;
-  --hemo-color-link: #005FED;
-  --black-5: #F9F9FA;
-  --black-20: #DBDDE0;
-  --black-40: #CACCCF;
-  --black-80: #52575C;
-  --black-100: #25282B;
+  --hemo-color-link: #005fed;
+  --black-5: #f9f9fa;
+  --black-20: #dbdde0;
+  --black-40: #cacccf;
+  --black-80: #52575c;
+  --black-100: #25282b;
   --black-101: #000;
-  --gray: #F3F2F1;
+  --gray: #f3f2f1;
   --red: var(--hemo-color-primary);
-  --red-negative-darker: #E93C3C;
+  --red-negative-darker: #e93c3c;
   --red-dark: var(--hemo-color-primary-dark);
   --red-light: var(--hemo-color-primary-light);
-  --red-negative-default: #FB4E4E;
-  --light-purple: #B8C4F2;
+  --red-negative-default: #fb4e4e;
+  --light-purple: #b8c4f2;
   --el-color-primary: var(--hemo-color-primary) !important;
   --el-color-main: var(--hemo-color-secondary) !important;
   --el-color-success: var(--hemo-color-success) !important;
@@ -51,16 +51,8 @@
 }
 
 @font-face {
-  font-family:
-    "Roboto",
-    monospace,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    sans-serif;
+  font-family: "Roboto", monospace, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
   src: url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
   font-display: swap;
   font-style: normal;
@@ -71,6 +63,13 @@
   margin: 0 !important;
 }
 
+.el-drawer__header {
+  margin: 0 !important;
+}
+
+.el-divider--horizontal {
+  margin: 0 !important;
+}
 
 html,
 body {
@@ -79,23 +78,14 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-family:
-    "Roboto",
-    monospace,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    "Helvetica Neue",
-    Arial,
-    "Noto Sans",
-    sans-serif;
+  font-family: "Roboto", monospace, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 #__nuxt {
   width: 100%;
   min-height: 100dvh;
 }
-
 
 body {
   min-height: 100dvh;
@@ -112,7 +102,10 @@ a {
   text-decoration: none;
 }
 
-a:active, a:focus, a:hover, a:visited {
+a:active,
+a:focus,
+a:hover,
+a:visited {
   outline: 0;
   -moz-outline-style: none;
   outline-style: none;
