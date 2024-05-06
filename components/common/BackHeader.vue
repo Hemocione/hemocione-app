@@ -49,7 +49,6 @@ const props = defineProps({
 const router = useRouter();
 const navigate = async () => {
   if (props.customPath) {
-    console.log("going to custom path");
     return await navigateTo(props.customPath);
   }
 

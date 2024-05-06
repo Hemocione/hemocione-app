@@ -71,9 +71,6 @@ const confirmLogin = () => {
 };
 
 App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
-  // Example url: https://app.hemocione.com.br/tabs/tabs2
-  // slug = /tabs/tabs2
-  console.log("App opened with URL: " + event.url);
   const url = new URL(event.url);
   if (url.protocol.includes("http")) {
     // deep link origin
@@ -102,7 +99,6 @@ const evaluateCurrentLogin = async (enforcedToken?: string) => {
   // prefer local storage over cookie
   const currentUserToken =
     enforcedToken || currentUserLocalToken || currentUserCookie.value;
-  console.log("current user token", currentUserToken);
   if (currentUserToken && (enforcedToken || !noAuto)) {
     try {
       await $fetch(`${config.public.hemocioneIdApiUrl}/users/validate-token`, {
@@ -133,21 +129,19 @@ const evaluateCurrentLogin = async (enforcedToken?: string) => {
 };
 
 const doLogin = async () => {
-  console.log("eh o clicas");
   const baseUrl = `${config.public.hemocioneIdUrl}/?redirect=`;
   if (!Capacitor.isNativePlatform()) {
-    console.log("not native platform");
     const url = `${baseUrl}${encodeURIComponent(window.location.href)}`;
     await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
     return;
   }
 
-  console.log("native platform");
   const url = `${baseUrl}${encodeURIComponent(
     "br.com.hemocione.app://app.hemocione.com.br/"
   )}`;
   Browser.addListener("browserFinished", async () => {
     attemptedLogin.value = true;
+    Browser.removeAllListeners();
   });
   await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
