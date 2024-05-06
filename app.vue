@@ -126,9 +126,12 @@ const doLogin = async () => {
     return;
   }
 
-  const url = `${baseUrl}${encodeURIComponent(
-    "br.com.hemocione.app://app.hemocione.com.br/"
-  )}`;
+  const url =
+    Capacitor.getPlatform() === "ios"
+      ? `${baseUrl}${encodeURIComponent("br.com.hemocione.app")}`
+      : `${baseUrl}${encodeURIComponent(
+          "br.com.hemocione.app://app.hemocione.com.br/"
+        )}`;
   Browser.addListener("browserFinished", async () => {
     attemptedLogin.value = true;
   });
