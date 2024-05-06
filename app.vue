@@ -26,18 +26,7 @@ const userStore = useUserStore();
 const loggedIn = ref(false);
 const config = useRuntimeConfig();
 const route = useRoute();
-const { token: initialUrlToken, noAuto } = route.query;
-
-const getTokenFromSlug = (slug: string) => {
-  const token = slug.split("?token=").pop();
-  return token;
-};
-
-const urlToken = initialUrlToken
-  ? String(initialUrlToken)
-  : route.query.slug
-  ? getTokenFromSlug(String(route.query.slug))
-  : null;
+const { token: urlToken, noAuto } = route.query;
 
 const attemptedLogin = ref(Boolean(noAuto));
 import { Browser } from "@capacitor/browser";
@@ -63,7 +52,8 @@ useHead({
 });
 
 const navigateAfterLogin = ref<string | null>(null);
-const confirmLogin = () => {
+const confirmLogin = async () => {
+  await Browser.removeAllListeners();
   loggedIn.value = true;
   if (navigateAfterLogin.value) {
     navigateTo(navigateAfterLogin.value);
@@ -141,7 +131,6 @@ const doLogin = async () => {
   )}`;
   Browser.addListener("browserFinished", async () => {
     attemptedLogin.value = true;
-    await Browser.removeAllListeners();
   });
   await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
