@@ -141,7 +141,7 @@ const doLogin = async () => {
   )}`;
   Browser.addListener("browserFinished", async () => {
     attemptedLogin.value = true;
-    Browser.removeAllListeners();
+    await Browser.removeAllListeners();
   });
   await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
