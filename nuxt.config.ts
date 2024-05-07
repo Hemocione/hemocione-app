@@ -83,7 +83,17 @@ export default defineNuxtConfig({
     contentUris: [
       {
         path: "apple-developer-merchantid-domain-association",
-        content: "merchantid",
+        content: JSON.stringify({
+          applinks: {
+            apps: [],
+            details: [
+              {
+                appID: "JGY96PPKZK.br.com.hemocione.app",
+                paths: ["*"],
+              },
+            ],
+          },
+        }),
       },
       {
         path: "assetlinks.json",
