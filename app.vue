@@ -60,6 +60,7 @@ const confirmLogin = async () => {
 };
 
 App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
+  await Browser.close(); // ensure browser is closed. IOS doesn't close it automatically as android does
   const url = new URL(event.url);
   if (url.protocol.includes("http")) {
     // deep link origin
@@ -68,6 +69,7 @@ App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
     navigateAfterLogin.value = slug;
   }
 
+  // TODO: handle own app deeplinks in the future maybe
   const token = url.searchParams.get("token");
   if (token) {
     executingLogin.value = true;
@@ -129,11 +131,12 @@ const doLogin = async () => {
 
   const url =
     Capacitor.getPlatform() === "ios"
-      ? `${baseUrl}${encodeURIComponent("https://app.hemocione.com.br")}`
+      ? `${baseUrl}${encodeURIComponent("apphemocione:auth")}`
       : `${baseUrl}${encodeURIComponent(
           "br.com.hemocione.app://app.hemocione.com.br/"
         )}`;
   Browser.addListener("browserFinished", async () => {
+    console.log("Browser finished");
     attemptedLogin.value = true;
   });
   await Browser.open({
