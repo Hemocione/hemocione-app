@@ -112,6 +112,7 @@ a[active="true"] {
 const drawer = ref(false);
 const confirmOutDialog = ref(false);
 import { Browser } from "@capacitor/browser";
+import { AppLauncher } from "@capacitor/app-launcher";
 import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
 const toggleDrawer = () => {
@@ -177,7 +178,7 @@ const externalPages: ExternalPage[] = [
   },
   {
     url: "https://apoie.hemocione.com.br",
-    name: "Apoiar Financeiramente",
+    name: "Apoiar o Hemocione",
     icon: "help.svg",
   },
 ];
@@ -209,10 +210,7 @@ const logoutText = userStore.user?.givenName
   : "Sair";
 
 async function openExternalPage(externalPage: ExternalPage) {
-  await Browser.open({
-    url: externalPage.url,
-    toolbarColor: "#bb0a08",
-  });
+  await AppLauncher.openUrl({ url: externalPage.url });
 }
 
 function handleInternalPageClick(internalPage: InternalPage) {
