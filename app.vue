@@ -1,18 +1,18 @@
 <template>
   <ElConfigProvider :locale="ptBr">
-    <NuxtLayout v-if="loggedIn">
+    <NuxtLayout v-if="userStore.loggedIn">
       <NuxtPage />
     </NuxtLayout>
     <div class="hemocione-login-loading-wrapper" v-else>
       <img src="/logos/baseLogo.svg" class="logo" />
       <ElButton
-        :disabled="!attemptedLogin || loggedIn"
+        :disabled="!attemptedLogin || userStore.loggedIn || executingLogin"
         @click="doLogin"
         type="primary"
         size="large"
-        :loading="!attemptedLogin"
+        :loading="!attemptedLogin || executingLogin"
       >
-        {{ !attemptedLogin ? "Entrando..." : "Entrar" }}
+        {{ loginButtonText }}
       </ElButton>
     </div>
   </ElConfigProvider>
@@ -23,12 +23,12 @@ import "dayjs/locale/pt-br";
 import ptBr from "element-plus/dist/locale/pt-br.mjs";
 import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
-const loggedIn = ref(false);
 const config = useRuntimeConfig();
 const route = useRoute();
 const { token: urlToken, noAuto } = route.query;
 
 const attemptedLogin = ref(Boolean(noAuto));
+const executingLogin = ref(false);
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
@@ -54,7 +54,6 @@ useHead({
 const navigateAfterLogin = ref<string | null>(null);
 const confirmLogin = async () => {
   await Browser.removeAllListeners();
-  loggedIn.value = true;
   if (navigateAfterLogin.value) {
     navigateTo(navigateAfterLogin.value);
   }
@@ -71,6 +70,7 @@ App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
 
   const token = url.searchParams.get("token");
   if (token) {
+    executingLogin.value = true;
     attemptedLogin.value = false;
     await evaluateCurrentLogin(token);
   }
@@ -106,14 +106,15 @@ const evaluateCurrentLogin = async (enforcedToken?: string) => {
       console.error(e);
     } finally {
       attemptedLogin.value = true;
+      executingLogin.value = false;
     }
-    if (attemptedLogin.value && !loggedIn.value) {
+    if (attemptedLogin.value && !userStore.loggedIn) {
       userStore.$reset();
       await Preferences.remove({ key: config.public.authLocalKey });
     }
   }
 
-  if (!loggedIn.value && !noAuto) {
+  if (!userStore.loggedIn && !noAuto) {
     doLogin();
   }
 };
@@ -138,13 +139,23 @@ const doLogin = async () => {
   await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
 };
 
+const loginButtonText = computed(() => {
+  if (executingLogin.value || !attemptedLogin.value) {
+    return "Entrando...";
+  }
+
+  return "Entrar";
+});
+
 if (urlToken) {
+  executingLogin.value = true;
   await Preferences.set({
     key: config.public.authLocalKey,
     value: String(urlToken),
   });
   await userStore.setToken(String(urlToken));
   await confirmLogin();
+  executingLogin.value = false;
   window.history.replaceState({}, document.title, window.location.pathname);
 } else {
   evaluateCurrentLogin();

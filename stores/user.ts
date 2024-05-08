@@ -66,6 +66,7 @@ export const useUserStore = defineStore("user", {
   state: () => ({
     user: null as User | null,
     token: "" as string,
+    loggedIn: false as Boolean,
   }),
   actions: {
     async fetchMe() {
@@ -85,6 +86,7 @@ export const useUserStore = defineStore("user", {
       try {
         this.token = token;
         await this.fetchMe();
+        this.loggedIn = true;
       } catch (error) {
         console.error("Error fetching user data", error);
         await this.logout();
@@ -113,13 +115,13 @@ export const useUserStore = defineStore("user", {
     async logout() {
       const config = useRuntimeConfig();
 
+      window.location.href = "/?noAuto=true";
       this.$reset();
       await Preferences.remove({ key: config.public.authLocalKey });
       const cookie = useCookie(config.public.authLocalKey, {
         domain: config.public.cookieDomain,
       });
       cookie.value = undefined;
-      window.location.href = "/?noAuto=true";
     },
   },
   getters: {
