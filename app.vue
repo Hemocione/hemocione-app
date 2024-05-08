@@ -129,14 +129,19 @@ const doLogin = async () => {
 
   const url =
     Capacitor.getPlatform() === "ios"
-      ? `${baseUrl}${encodeURIComponent("br.com.hemocione.app")}`
+      ? `${baseUrl}${encodeURIComponent("https://app.hemocione.com.br")}`
       : `${baseUrl}${encodeURIComponent(
           "br.com.hemocione.app://app.hemocione.com.br/"
         )}`;
   Browser.addListener("browserFinished", async () => {
     attemptedLogin.value = true;
   });
-  await Browser.open({ url, toolbarColor: "#bb0a08", windowName: "_self" });
+  await Browser.open({
+    url,
+    toolbarColor: "#bb0a08",
+    windowName: "_self",
+    presentationStyle: "popover",
+  });
 };
 
 const loginButtonText = computed(() => {

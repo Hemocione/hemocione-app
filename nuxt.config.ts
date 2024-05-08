@@ -82,7 +82,7 @@ export default defineNuxtConfig({
     devtools: true,
     contentUris: [
       {
-        path: "apple-developer-merchantid-domain-association",
+        path: "apple-app-site-association",
         content: JSON.stringify({
           applinks: {
             apps: [],
