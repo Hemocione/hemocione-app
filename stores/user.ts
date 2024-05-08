@@ -115,6 +115,7 @@ export const useUserStore = defineStore("user", {
     async logout() {
       const config = useRuntimeConfig();
 
+      // TODO: do this in a better way. This is a workaround to force reload the page
       window.location.href = "/?noAuto=true";
       this.$reset();
       await Preferences.remove({ key: config.public.authLocalKey });

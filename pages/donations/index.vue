@@ -1,6 +1,10 @@
 <template>
   <div class="main">
-    <CommonBackHeader title="Últimas doações" iconDirection="left" :custom-path="'/'" />
+    <CommonBackHeader
+      title="Últimas doações"
+      iconDirection="left"
+      :custom-path="'/'"
+    />
     <div class="donations-wrapper">
       <CommonDonationList :donations="donations" />
     </div>
@@ -35,6 +39,7 @@ definePageMeta({
     mode: "out-in",
   },
 });
+await setTimeout(() => {}, 5000);
 const userStore = useUserStore();
 const donations = userStore.userWithMetrics?.donations || [];
 </script>

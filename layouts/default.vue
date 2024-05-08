@@ -21,8 +21,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  width: 100dvw;
+  height: var(--available-height);
+  width: var(--available-width);
   overflow: hidden;
   align-items: center;
 }
@@ -31,7 +31,7 @@
   background-color: white;
   max-width: var(--app-max-width);
   width: 100%;
-  min-height: calc(100dvh - var(--navbar-size));
+  min-height: calc(var(--available-height) - var(--navbar-size));
   margin-top: var(--navbar-size);
   overflow-y: auto;
   scroll-behavior: smooth;

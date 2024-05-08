@@ -66,7 +66,7 @@ footer {
 const props = defineProps({
   height: {
     type: String,
-    default: "12%",
+    default: "90px",
   },
   hideToggle: {
     type: Boolean,

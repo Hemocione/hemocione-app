@@ -2,11 +2,12 @@
   <img src="/icons/menu.svg" alt="Menu" @click="toggleDrawer" />
   <ElDrawer v-model="drawer" direction="rtl" size="300px">
     <div class="content">
-      <div
+      <NuxtLink
         class="menu-item"
         v-for="(internalPage, index) in internalPages"
         :key="internalPage.name"
-        @click="() => handleInternalPageClick(internalPage)"
+        :to="internalPage.path"
+        @click="() => toggleDrawer()"
       >
         <img
           :src="`/icons/${internalPage.icon}${
@@ -14,14 +15,8 @@
           }.svg`"
           class="icon"
         />
-        <NuxtLink
-          :key="internalPage.path"
-          :to="internalPage.path"
-          :active="isCurrentRoute(index)"
-          @click="toggleDrawer"
-          >{{ internalPage.name }}
-        </NuxtLink>
-      </div>
+        <span :active="isCurrentRoute(index)">{{ internalPage.name }}</span>
+      </NuxtLink>
       <ElDivider />
       <div
         class="menu-item"
@@ -89,7 +84,7 @@ img {
   width: 0.6rem;
 }
 
-a[active="true"] {
+span[active="true"] {
   color: var(--hemo-color-primary-light);
 }
 
@@ -111,7 +106,6 @@ a[active="true"] {
 <script setup lang="ts">
 const drawer = ref(false);
 const confirmOutDialog = ref(false);
-import { Browser } from "@capacitor/browser";
 import { AppLauncher } from "@capacitor/app-launcher";
 import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
@@ -214,10 +208,10 @@ async function openExternalPage(externalPage: ExternalPage) {
 }
 
 function handleInternalPageClick(internalPage: InternalPage) {
-  if (isCurrentRoute(internalPages.indexOf(internalPage))) {
-    toggleDrawer();
-  } else {
+  if (!isCurrentRoute(internalPages.indexOf(internalPage))) {
     navigateTo(internalPage.path);
   }
+
+  toggleDrawer();
 }
 </script>

@@ -8,8 +8,9 @@
 
 <style scoped>
 .logo {
-  width: 100%;
-  max-width: 250px;
-  height: auto;
+  width: auto;
+  object-fit: contain;
+  height: 100%;
+  max-width: 150px;
 }
 </style>

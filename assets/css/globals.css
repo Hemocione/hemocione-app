@@ -46,8 +46,13 @@
   --el-button-disabled-bg-color: var(--el-color-primary-light-5);
   --el-button-disabled-border-color: var(--el-color-primary-light-5);
   --el-dialog-bg-color: var(--black-100) !important;
-  --navbar-size: 55px;
+  --navbar-content-height: 65px;
+  --navbar-size: calc(var(--navbar-content-height) + env(safe-area-inset-top));
   --app-max-width: 1270px;
+  --available-height: calc(100dvh);
+  --available-width: calc(
+    100vw - env(safe-area-inset-left) - env(safe-area-inset-right)
+  );
 }
 
 @font-face {
@@ -71,6 +76,10 @@
   margin: 0 !important;
 }
 
+.el-drawer {
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0 !important;
+}
+
 html,
 body {
   background-color: var(--black-5);
@@ -90,6 +99,7 @@ body {
 body {
   min-height: 100dvh;
   width: 100vw;
+  padding: 0 env(safe-area-inset-right) 0 env(safe-area-inset-left);
 }
 
 * {
@@ -117,8 +127,4 @@ a:visited {
 
 * {
   -webkit-tap-highlight-color: transparent;
-}
-
-el-drawer__header {
-  margin: 0 !important;
 }
