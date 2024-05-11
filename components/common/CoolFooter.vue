@@ -33,7 +33,7 @@ footer {
 }
 .wrapper {
   position: relative;
-  padding: 1em 2em;
+  padding: 1em;
   display: flex;
   gap: 1em;
   width: 100%;

@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <ElIcon @click="navigate" size="25" class="back-icon">
+    <ElIcon @click="navigate" size="15" class="back-icon">
       <ElIconArrowDown v-if="iconDirection === 'down'" />
       <ElIconArrowLeft v-else />
     </ElIcon>
@@ -12,19 +12,21 @@
 .header {
   width: 100%;
   display: flex;
-  height: var(--navbar-size);
+  height: var(--subheader-size);
   align-items: center;
   color: var(--black-100);
+  border-bottom: 1px solid var(--black-20);
+  padding: 1rem;
+  gap: 1rem;
 }
 
 .back-icon {
   cursor: pointer;
   color: var(--black-100);
-  margin: 0 2rem;
 }
 
 .title {
-  font-size: 1.5em;
+  font-size: 1.1rem;
   margin: 0;
   display: flex;
   align-items: center;

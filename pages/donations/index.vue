@@ -19,13 +19,14 @@
   align-items: center;
   width: 100%;
   flex-grow: 1;
-  padding: 0 2em 2em 2em;
+  padding: 0 1rem 2rem 1rem;
 }
 .main {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1rem;
   width: 100%;
   min-height: 100%;
 }

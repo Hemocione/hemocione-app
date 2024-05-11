@@ -48,6 +48,7 @@
   --el-dialog-bg-color: var(--black-100) !important;
   --navbar-content-height: 65px;
   --navbar-size: calc(var(--navbar-content-height) + env(safe-area-inset-top));
+  --subheader-size: 50px;
   --app-max-width: 1270px;
   --available-height: calc(100dvh);
   --available-width: calc(
