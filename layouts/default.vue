@@ -1,7 +1,5 @@
 <template>
   <div class="application">
-    <HemocioneHeader class="header" />
-    <NuxtLoadingIndicator color="#bb0a08" />
     <div class="page">
       <slot />
     </div>
@@ -9,14 +7,6 @@
 </template>
 
 <style scoped>
-.header {
-  position: fixed;
-  top: 0;
-  z-index: 2;
-  height: var(--navbar-size);
-  width: 100%;
-}
-
 .application {
   position: relative;
   display: flex;

@@ -1,5 +1,7 @@
 <template>
   <ElConfigProvider :locale="ptBr">
+    <HemocioneHeader class="header" v-show="userStore.loggedIn" size="10" />
+    <NuxtLoadingIndicator color="#bb0a08" />
     <NuxtLayout v-if="userStore.loggedIn">
       <NuxtPage />
     </NuxtLayout>
