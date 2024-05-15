@@ -3,11 +3,8 @@
     <UserDonation
       v-for="donation in donations"
       :donation="donation"
-      :backgroundColor="
-        donations.indexOf(donation) % 2 === 0 ? '#DBDDE0' : '#F9F9FA'
-      "
-      :borderTop="donations.indexOf(donation) === 0"
-      :borderBottom="donations.indexOf(donation) === donations.length - 1"
+      :last="donations.indexOf(donation) === 0"
+      :first="donations.indexOf(donation) === donations.length - 1"
       :key="donation.id.toString()"
     />
   </div>
