@@ -13,9 +13,10 @@ dependencies {
     implementation project(':capacitor-app-launcher')
     implementation project(':capacitor-browser')
     implementation project(':capacitor-preferences')
-
+    implementation "com.onesignal:OneSignal:5.1.13"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
 }
-
+apply from: "../../node_modules/onesignal-cordova-plugin/build-extras-onesignal.gradle"
 
 if (hasProperty('postBuildExtras')) {
   postBuildExtras()
