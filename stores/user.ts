@@ -48,19 +48,21 @@ const genders = ["M", "F", "O"] as const;
 type Gender = (typeof genders)[number];
 
 interface User {
-  id: Number;
+  id: String;
   givenName: String;
   surName: String;
   email: String;
   gender: Gender;
   birthDate: String;
   bloodType: String;
-  telephone: String;
+  phone: String;
   donations: Donation[];
   addresses: Address[];
 }
 
+import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
+import OneSignal from "onesignal-cordova-plugin";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -87,6 +89,11 @@ export const useUserStore = defineStore("user", {
         this.token = token;
         await this.fetchMe();
         this.loggedIn = true;
+        // OneSignal initialization for push notifications
+        if (this.user && Capacitor.isNativePlatform()) {
+          OneSignal.login(this.user.id.toString());
+          await OneSignal.Notifications.requestPermission();
+        }
       } catch (error) {
         console.error("Error fetching user data", error);
         await this.logout();

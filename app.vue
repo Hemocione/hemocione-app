@@ -36,6 +36,7 @@ import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import { App } from "@capacitor/app";
 import type { URLOpenListenerEvent } from "@capacitor/app";
+import OneSignal from "onesignal-cordova-plugin";
 
 useHead({
   title: "Hemocione",
@@ -52,6 +53,10 @@ useHead({
     },
   ],
 });
+
+if (Capacitor.isNativePlatform() && config.public.oneSignalAppId) {
+  OneSignal.initialize(config.public.oneSignalAppId);
+}
 
 const navigateAfterLogin = ref<string | null>(null);
 const confirmLogin = async () => {

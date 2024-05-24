@@ -19,6 +19,7 @@ const getSiteUrl = () => {
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
+      oneSignalAppId: process.env.NUXT_ONE_SIGNAL_APP_ID,
       cookieDomain: process.env.NUXT_COOKIE_DOMAIN || "hemocione.com.br",
       hemocioneIdApiUrl:
         process.env.NUXT_HEMOCIONE_ID_API_URL ||
