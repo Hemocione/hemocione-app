@@ -1,49 +1,51 @@
 <template>
-  <div class="wrapper">
-    <img class="user-image" :src="userImgSrc" alt="User Profile Image" />
-    <div class="user-profile">
-      <h3>{{ userData?.name }}</h3>
-      <span>{{ description }}</span>
-      <div class="status">
-        <div
-          :class="{
-            ball: true,
-            redBall: !ableToDonate,
-            greenBall: ableToDonate,
-          }"
-        />
-        <span>{{ userStore.userDonationStatus.label }}</span>
+  <section class="header">
+    <div class="wrapper">
+      <img class="user-image" :src="userImgSrc" alt="User Profile Image" />
+      <div class="user-profile">
+        <h4>{{ userData?.name }}</h4>
+        <span>{{ description }}</span>
       </div>
     </div>
-  </div>
+    <div class="status">
+      <div
+        :class="{
+          ball: true,
+          redBall: !ableToDonate,
+          greenBall: ableToDonate,
+        }"
+      />
+      <span>{{ userStore.userDonationStatus.label }}</span>
+    </div>
+  </section>
 </template>
 <style scoped>
-h3 {
-  margin: 0;
-  color: var(--black-100);
-  font-weight: 500;
-  font-size: 1.5rem;
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 }
 .wrapper {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 15dvh;
+  height: 4rem;
+  gap: 1rem;
 }
 
 .status {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 6px;
   width: 100%;
-  font-size: 0.8em;
+  font-size: 0.75rem;
 }
 .ball {
-  height: 0.8em;
+  height: 0.6rem;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  margin-top: 2px;
 }
 
 .redBall {
@@ -67,18 +69,19 @@ h3 {
   display: flex;
   height: 100%;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: flex-start;
-  margin-left: 1em;
-  gap: 1em;
+  padding: 0.2rem 0;
   width: 70%;
   font-weight: 400;
   color: var(--black-80);
 }
 
-.user-profile h3 {
-  font-weight: 600;
+.user-profile h4 {
+  margin: 0;
   color: var(--black-100);
+  font-size: 1.5rem;
+  font-weight: 400;
 }
 
 @media screen and (min-width: 768px) {

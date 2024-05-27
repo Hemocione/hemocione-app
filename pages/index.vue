@@ -13,7 +13,7 @@
   flex-direction: column;
   align-items: center;
   padding: 1rem;
-  gap: 2em;
+  gap: 1rem;
   width: 100%;
   min-height: 100%;
 }
