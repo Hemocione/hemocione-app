@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <CommonBackHeader
-      title="Últimas doações"
+      title="Histórico de Doações"
       iconDirection="left"
       :custom-path="'/'"
     />

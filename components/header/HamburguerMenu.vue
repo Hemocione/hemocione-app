@@ -148,7 +148,7 @@ const internalPages: InternalPage[] = [
   },
   {
     path: "/donations",
-    name: "Minhas Doações",
+    name: "Histórico de Doações",
     priority: 1,
     icon: "syringe-light",
   },
