@@ -240,5 +240,18 @@ export const useUserStore = defineStore("user", {
         livesSaved: 4 * state.user.donations.length,
       };
     },
+    lastDonation(state) {
+      if (!state.user?.donations.length) return null;
+
+      const donations = state.user.donations;
+      const orderedDonationsByDateDesc = donations.sort((a, b) => {
+        const dateA = new Date(Date.parse(String(a.donationDate)));
+        const dateB = new Date(Date.parse(String(b.donationDate)));
+
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      return orderedDonationsByDateDesc[0];
+    },
   },
 });

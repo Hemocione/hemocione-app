@@ -2,7 +2,7 @@
   <div class="main">
     <UserDescription />
     <UserDonationSummary />
-    <UserLastDonations />
+    <UserLastDonation />
   </div>
 </template>
 

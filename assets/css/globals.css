@@ -39,6 +39,8 @@
   --el-color-primary-dark-2: var(--hemo-color-primary-dark) !important;
   --el-color-primary-light-5: var(--hemo-color-primary-light) !important;
   --el-color-primary-light-3: var(--hemo-color-primary-light) !important;
+  --el-color-primary-light-7: var(--hemo-color-secondary) !important;
+  --el-color-primary-light-9: var(--black-5) !important;
   --el-button-hover-border-color: var(--el-color-primary-light-3);
   --el-button-active-bg-color: var(--el-color-primary-dark-2);
   --el-button-active-border-color: var(--el-color-primary-dark-2);
@@ -57,9 +59,9 @@
 }
 
 @font-face {
-  font-family: "Roboto", monospace, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  src: url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+  font-family: "Lato", monospace, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  src: url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;500;700;900&display=swap");
   font-display: swap;
   font-style: normal;
   font-weight: 400;
@@ -81,6 +83,10 @@
   padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom) 0 !important;
 }
 
+.el-button + .el-button {
+  margin-left: 0 !important;
+}
+
 html,
 body {
   background-color: var(--black-5);
@@ -88,8 +94,8 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-family: "Roboto", monospace, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  font-family: "Lato", monospace, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
 
 #__nuxt {
