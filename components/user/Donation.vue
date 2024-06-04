@@ -103,7 +103,8 @@ const shouldShowBottomLine = computed(
   () => (props.last || middleDonation) && !props.first
 );
 
-const logoSrc = props.donation.donationProvider?.logo || "/icons/syringe.svg";
+const logoSrc =
+  props.donation.donationProvider?.logo || "/icons/syringe-provider.svg";
 const readableSimpleDate = computed(() => {
   const date = new Date(Date.parse(String(props.donation.donationDate)));
   return `${date.getDate()}/${date.getMonth() + 1}/${date

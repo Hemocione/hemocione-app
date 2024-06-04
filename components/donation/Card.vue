@@ -3,8 +3,15 @@
     <div class="donation-provider-logo">
       <img :src="logoSrc" />
     </div>
-    <span class="donation-date">{{ readableSimpleDate }}</span>
-    <span class="donation-label">{{ props.donation.label }}</span>
+    <div class="donation-info">
+      <span class="donation-date">{{ readableSimpleDate }}</span>
+      <span class="donation-label">
+        {{ props.donation.label }}
+      </span>
+    </div>
+    <ElIcon :size="20">
+      <ElIconArrowRightBold />
+    </ElIcon>
   </div>
 </template>
 
@@ -12,8 +19,13 @@
 .donation-card {
   display: flex;
   align-items: center;
-  padding: 0 0;
+  border: 1px solid var(--black-20);
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
   width: 100%;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  gap: 1rem;
 }
 
 .hide {
@@ -21,31 +33,45 @@
 }
 
 .donation-date {
-  font-size: 0.5rem;
-  color: var(--hemo-color-primary);
-  font-weight: bold;
-  align-self: flex-start;
+  font-size: 0.7rem;
+  color: var(--black-80);
 }
 
-.donation-label {
-  padding-left: 1rem;
-  font-size: 0.9rem;
+.donation-info {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 80%;
+  max-width: 100%;
+  height: 100%;
+  gap: 0.5rem;
+}
+
+.donation-label {
+  font-size: 0.9rem;
+  overflow: hidden;
+  max-lines: 2;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  color: var(--black-100);
 }
 
 .donation-provider-logo {
-  border: var(--hemo-color-primary) solid 2px;
-  padding: 8px;
+  padding: 10px;
   border-radius: 50%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 30px;
-  width: 30px;
+  height: 45px;
+  aspect-ratio: 1;
+  background-color: var(--black-5);
+}
+
+.donation-provider-logo img {
+  aspect-ratio: 1;
+  width: 100%;
 }
 
 .timeline-wrapper {
@@ -60,11 +86,6 @@
   background-color: var(--hemo-color-primary);
   flex-grow: 1;
 }
-
-.donation-prodvider-logo img {
-  aspect-ratio: 1;
-  width: 50%;
-}
 </style>
 
 <script setup lang="ts">
@@ -72,12 +93,10 @@ const props = defineProps<{
   donation: Donation;
 }>();
 
-const logoSrc = props.donation.donationProvider?.logo || "/icons/syringe.svg";
+const logoSrc =
+  props.donation.donationProvider?.logo || "/icons/syringe-provider.svg";
 const readableSimpleDate = computed(() => {
   const date = new Date(Date.parse(String(props.donation.donationDate)));
-  return `${date.getDate()}/${date.getMonth() + 1}/${date
-    .getFullYear()
-    .toString()
-    .slice(2)}`;
+  return getMinorDate(date);
 });
 </script>
