@@ -42,7 +42,8 @@ const isLastDonation = (index: number) => {
   justify-content: center;
   flex-direction: column;
   height: 2.5rem;
-  border-left: 2px solid var(--hemo-color-primary);
+  border-left: var(--history-vertical-line-width) solid
+    var(--hemo-color-primary);
   color: var(--black-80);
   margin: 0 var(--year-margin-base);
 }
@@ -52,7 +53,7 @@ const isLastDonation = (index: number) => {
 }
 
 .vertical-line {
-  width: 2px;
+  width: var(--history-vertical-line-width);
   height: 1.5rem;
   margin-left: var(--year-margin-base);
   background-color: var(--hemo-color-primary);
@@ -60,7 +61,8 @@ const isLastDonation = (index: number) => {
 }
 
 .first-year {
-  border-left: 2px dotted var(--hemo-color-primary);
+  border-left: var(--history-vertical-line-width) dotted
+    var(--hemo-color-primary);
   justify-content: flex-start;
   height: 1.5rem;
 }

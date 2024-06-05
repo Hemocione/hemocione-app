@@ -57,6 +57,7 @@
     100vw - env(safe-area-inset-left) - env(safe-area-inset-right)
   );
   --year-margin-base: 2.4rem;
+  --history-vertical-line-width: 2px;
 }
 
 @font-face {

@@ -47,7 +47,7 @@
 }
 
 .vertical-line {
-  width: 2px;
+  width: var(--history-vertical-line-width);
   height: 3.5rem;
   margin-left: var(--year-margin-base);
   background-color: var(--hemo-color-primary);
