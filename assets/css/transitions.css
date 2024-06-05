@@ -124,21 +124,21 @@
 
 .slide-top-fast-and-furious-enter-from,
 .slide-top-fast-and-furious-leave-to {
-  transform: translateY(50dvh);
+  transform: translateY(75dvh);
 }
 
 .slide-top-fast-and-furious-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.5s ease-out;
 }
 
 .slide-top-fast-and-furious-leave-active {
-  transition: all 0.3s ease-in;
+  transition: all 0.5s ease-in;
   opacity: 0;
 }
 
 .slide-top-fast-and-furious-enter-from,
 .slide-top-fast-and-furious-leave-to {
-  transform: translateY(50dvh);
+  transform: translateY(75dvh);
 }
 
 .slide-left-fast-and-furious-enter-from,
@@ -147,11 +147,11 @@
 }
 
 .slide-left-fast-and-furious-enter-active {
-  transition: all 0.3s ease-out;
+  transition: all 0.5s ease-out;
 }
 
 .slide-left-fast-and-furious-leave-active {
-  transition: all 0.3s ease-in;
+  transition: all 0.5s ease-in;
   opacity: 0;
 }
 

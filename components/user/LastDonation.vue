@@ -12,12 +12,6 @@
         >Registre sua primeira doação ou confira os próximos eventos para doar
         😊</span
       >
-      <div class="missing-actions">
-        <CommonRegisterDonationButton @click="goRegisterDonation" />
-        <CommonSecondaryButton @click="goToEvents">
-          Ver próximos eventos
-        </CommonSecondaryButton>
-      </div>
     </div>
   </div>
 </template>
@@ -75,21 +69,6 @@ h4 {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-}
-
-.missing-actions {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: 0.5rem;
-  width: 100%;
-  padding-top: 0.5rem;
-}
-
-@media (min-width: 768px) {
-  .missing-actions {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr;
-  }
 }
 
 .last-donation-menu {

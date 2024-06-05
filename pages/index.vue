@@ -37,4 +37,10 @@
   gap: 0.75rem;
   width: 100%;
 }
+
+@media (min-width: 768px) {
+  .cta-wrapper {
+    flex-direction: row;
+  }
+}
 </style>
