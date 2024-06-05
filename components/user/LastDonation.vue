@@ -98,7 +98,6 @@ h4 {
   align-items: center;
   width: 100%;
   gap: 1em;
-  flex-grow: 1;
 }
 
 .donations {
