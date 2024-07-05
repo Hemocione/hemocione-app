@@ -35,23 +35,24 @@
 
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user";
+import { storeToRefs } from "pinia";
 const userStore = useUserStore();
-const metrics = [
+const { userWithMetrics } = storeToRefs(userStore);
+const metrics = computed(() => [
   {
-    value: String(userStore.userWithMetrics?.totalDonations || "-"),
-    label:
-      userStore.userWithMetrics?.totalDonations === 1 ? "DOAÇÃO" : "DOAÇÕES",
+    value: String(userWithMetrics.value?.totalDonations || "-"),
+    label: userWithMetrics.value?.totalDonations === 1 ? "DOAÇÃO" : "DOAÇÕES",
     iconSrc: "/icons/syringe.svg",
   },
   {
-    value: String(userStore.userWithMetrics?.bloodType ?? "N/A"),
+    value: String(userWithMetrics.value?.bloodType ?? "N/A"),
     label: "TIPO SANGUÍNEO",
     iconSrc: "/icons/droplet.svg",
   },
   {
-    value: String(userStore.userWithMetrics?.livesSaved || "-"),
+    value: String(userWithMetrics.value?.livesSaved || "-"),
     label: "VIDAS SALVAS",
     iconSrc: "/icons/heartbeat.svg",
   },
-];
+]);
 </script>

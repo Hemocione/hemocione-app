@@ -38,6 +38,12 @@ export interface Donation {
   metadata: Record<string, unknown> | null;
 }
 
+interface UserWithMetrics extends User {
+  donations: Donation[];
+  name: String;
+  totalDonations: Number;
+  livesSaved: Number;
+}
 export interface Address {
   id: Number;
   userId: String;
@@ -287,7 +293,8 @@ export const useUserStore = defineStore("user", {
         label: unableLabel,
       };
     },
-    userWithMetrics(state) {
+
+    userWithMetrics(state): UserWithMetrics | null {
       if (!state.user) return null;
 
       return {
