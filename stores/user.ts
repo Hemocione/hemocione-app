@@ -302,8 +302,8 @@ export const useUserStore = defineStore("user", {
       if (!state.user?.donations.length) return null;
 
       const donations = this.pendingDonations.length
-        ? state.pendingDonations
-        : state.confirmedDonations; // If there are pending donations, show the last pending donation
+        ? this.pendingDonations
+        : this.confirmedDonations; // If there are pending donations, show the last pending donation
       const orderedDonationsByDateDesc = donations.sort((a, b) => {
         const dateA = new Date(Date.parse(String(a.donationDate)));
         const dateB = new Date(Date.parse(String(b.donationDate)));
