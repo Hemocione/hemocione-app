@@ -18,6 +18,24 @@
         <span :active="isCurrentRoute(index)">{{ internalPage.name }}</span>
       </NuxtLink>
       <ElDivider />
+      <NuxtLink
+        class="menu-item"
+        v-for="(donationPage, index) in donationPages"
+        :key="donationPage.name"
+        :to="donationPage.path"
+        @click="() => toggleDrawer()"
+      >
+        <img
+          :src="`/icons/${donationPage.icon}${
+            isCurrentRoute(index, 'donations') ? '.active' : ''
+          }.svg`"
+          class="icon"
+        />
+        <span :active="isCurrentRoute(index, 'donations')">{{
+          donationPage.name
+        }}</span>
+      </NuxtLink>
+      <ElDivider />
       <div
         class="menu-item"
         v-for="externalPage in externalPages"
@@ -34,7 +52,12 @@
       </div>
     </div>
   </ElDrawer>
-  <ElDialog :title="logoutText" v-model="confirmOutDialog" align-center>
+  <ElDialog
+    :title="logoutText"
+    v-model="confirmOutDialog"
+    align-center
+    width="300px"
+  >
     <span>Tem certeza que deseja sair?</span>
     <div class="dialog-actions">
       <ElButton @click="toggleOutDialog">Cancelar</ElButton>
@@ -96,6 +119,7 @@ span[active="true"] {
   margin-top: 1rem;
   display: flex;
   width: 100%;
+  gap: 0.5rem;
 }
 
 .dialog-actions > * {
@@ -104,11 +128,17 @@ span[active="true"] {
 </style>
 
 <script setup lang="ts">
-const drawer = ref(false);
-const confirmOutDialog = ref(false);
 import { AppLauncher } from "@capacitor/app-launcher";
 import { useUserStore } from "~/stores/user";
+import { storeToRefs } from "pinia";
+const drawer = ref(false);
+const confirmOutDialog = ref(false);
 const userStore = useUserStore();
+const { pendingDonations, rejectedDonations } = storeToRefs(userStore);
+
+const pendingDonationsCount = computed(() => pendingDonations.value.length);
+const rejectedDonationsCount = computed(() => rejectedDonations.value.length);
+
 const toggleDrawer = () => {
   drawer.value = !drawer.value;
 };
@@ -120,6 +150,7 @@ const currentRoute = useRoute();
 interface Page {
   name: string;
   icon: string;
+  disabled?: boolean;
 }
 
 interface InternalPage extends Page {
@@ -147,18 +178,37 @@ const internalPages: InternalPage[] = [
     icon: "trophy",
   },
   {
-    path: "/donations",
-    name: "Histórico de Doações",
-    priority: 1,
-    icon: "syringe-light",
-  },
-  {
     path: "/where",
     name: "Onde Doar",
     priority: 1,
     icon: "location",
   },
 ];
+
+const donationPages = computed((): InternalPage => {
+  return [
+    {
+      path: "/donations",
+      name: "Histórico de doações",
+      priority: 1,
+      icon: "syringe-light",
+    },
+    {
+      path: "/donations/pending",
+      name: "Confirmações pendentes",
+      priority: 2,
+      icon: "alert-pending",
+      disabled: pendingDonationsCount.value === 0,
+    },
+    {
+      path: "/donations/rejected",
+      name: "Doações rejeitadas",
+      priority: 2,
+      icon: "donation-canceled",
+      disabled: rejectedDonationsCount.value === 0,
+    },
+  ].filter((page) => !page.disabled); // remove disabled pages for now
+});
 
 interface ExternalPage extends Page {
   url: string;
@@ -178,7 +228,7 @@ const externalPages: ExternalPage[] = [
 ];
 
 const currentRouteIndex = computed(() => {
-  const pagesCopy = [...internalPages];
+  const pagesCopy = [...internalPages, ...donationPages.value];
   const posiblePages = pagesCopy.filter((page) =>
     currentRoute.path.startsWith(page.path)
   );
@@ -188,11 +238,19 @@ const currentRouteIndex = computed(() => {
     (a, b) => b.priority - a.priority
   );
   const highestPriorityPage = pagesSortedByPriority[0];
-  return internalPages.indexOf(highestPriorityPage);
+  return pagesCopy.indexOf(highestPriorityPage);
 });
 
-const isCurrentRoute = (pageIndex: number) => {
-  return pageIndex === currentRouteIndex.value;
+const isCurrentRoute = (
+  pageIndex: number,
+  pageType: "internal" | "donations" = "internal"
+) => {
+  if (pageType === "internal") {
+    return pageIndex === currentRouteIndex.value;
+  }
+
+  const internalPagesLength = internalPages.length;
+  return pageIndex === currentRouteIndex.value - internalPagesLength;
 };
 
 const handleOut = () => {

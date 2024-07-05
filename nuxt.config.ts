@@ -35,12 +35,15 @@ export default defineNuxtConfig({
         process.env.NUXT_COMPETITIONS_URL || "https://copa.hemocione.com.br",
     },
   },
+
   ssr: false,
+
   css: [
     "assets/css/globals.css",
     "assets/css/transitions.css",
     "assets/css/animations.css",
   ],
+
   modules: [
     "@nuxtjs/google-fonts",
     "@element-plus/nuxt",
@@ -48,37 +51,46 @@ export default defineNuxtConfig({
     "nuxt-vercel-analytics",
     "@zadigetvoltaire/nuxt-well-known",
   ],
+
   googleFonts: {
     families: {
       Lato: [100, 300, 400, 700, 900],
     },
   },
+
   app: {
     pageTransition: { name: "blur", mode: "out-in", appear: true },
   },
+
   devtools: {
     enabled: true,
     timeline: {
       enabled: true,
     },
   },
+
   nitro: {
     preset: "vercel",
   },
+
   future: {
     typescriptBundlerResolution: true,
   },
+
   experimental: {
     payloadExtraction: true,
     watcher: "parcel",
   },
+
   imports: {
     autoImport: true,
   },
+
   appConfig: {
     // you don't need to include this: only for testing purposes
     buildDate: new Date().toISOString(),
   },
+
   wellKnown: {
     devtools: true,
     contentUris: [
@@ -113,4 +125,6 @@ export default defineNuxtConfig({
       },
     ],
   },
+
+  compatibilityDate: "2024-07-04"
 });

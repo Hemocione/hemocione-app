@@ -18,9 +18,11 @@
   --gray: #f3f2f1;
   --red: var(--hemo-color-primary);
   --red-negative-darker: #e93c3c;
+  --red-very-light: #fff0f0;
   --red-dark: var(--hemo-color-primary-dark);
   --red-light: var(--hemo-color-primary-light);
   --red-negative-default: #fb4e4e;
+  --yellow-light: #faead4;
   --light-purple: #b8c4f2;
   --el-color-primary: var(--hemo-color-primary) !important;
   --el-color-main: var(--hemo-color-secondary) !important;

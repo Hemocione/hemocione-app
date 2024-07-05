@@ -5,7 +5,10 @@
       iconDirection="left"
       :custom-path="'/'"
     />
-    <div class="donations-wrapper" v-if="donations.length">
+    <div class="alert-wrapper" v-if="pendingReviewDonationsCount">
+      <DonationPendingReviewAlert />
+    </div>
+    <div class="donations-wrapper" v-if="confirmedDonations.length">
       <DonationYearGrouping
         v-for="(year, index) in sortedYears"
         :key="year"
@@ -26,7 +29,7 @@
       <CommonNoDonationsRegistered />
       <CommonDonationCTAs />
     </div>
-    <RegisterDonationFooter v-if="donations.length" />
+    <RegisterDonationFooter v-if="confirmedDonations.length" />
   </div>
 </template>
 
@@ -91,10 +94,16 @@
   width: 100%;
   min-height: 100%;
 }
+
+.alert-wrapper {
+  width: 100%;
+  padding: 0 1rem;
+}
 </style>
 
 <script setup lang="ts">
 import { useUserStore, type Donation } from "@/stores/user";
+import { storeToRefs } from "pinia";
 definePageMeta({
   pageTransition: {
     name: "slide-left-fast-and-furious",
@@ -103,32 +112,39 @@ definePageMeta({
 });
 await setTimeout(() => {}, 5000);
 const userStore = useUserStore();
-const donations = userStore.userWithMetrics?.donations || [];
-const donationsGroupedByYear = donations.reduce(
-  (acc: Record<string, Donation[]>, donation) => {
-    console.log(donation.donationDate);
-    const year = String(
-      donation.donationDate instanceof Date
-        ? donation.donationDate.getFullYear()
-        : new Date(String(donation.donationDate)).getFullYear()
-    );
-    if (!acc[year]) {
-      acc[year] = [];
-    }
-    acc[year].push(donation);
-    return acc;
-  },
-  {}
+const { pendingDonations, confirmedDonations } = storeToRefs(userStore);
+const pendingReviewDonationsCount = computed(
+  () => pendingDonations.value.length
 );
-const sortedYears = Object.keys(donationsGroupedByYear).sort(
-  (a, b) => Number(b) - Number(a)
+const donationsGroupedByYear = computed(() =>
+  confirmedDonations.value.reduce(
+    (acc: Record<string, Donation[]>, donation) => {
+      const year = String(
+        donation.donationDate instanceof Date
+          ? donation.donationDate.getFullYear()
+          : new Date(String(donation.donationDate)).getFullYear()
+      );
+      if (!acc[year]) {
+        acc[year] = [];
+      }
+      acc[year].push(donation);
+      return acc;
+    },
+    {}
+  )
+);
+const sortedYears = computed(() =>
+  Object.keys(donationsGroupedByYear.value).sort(
+    (a, b) => Number(b) - Number(a)
+  )
 );
 
 const endingText = computed(() => {
-  if (!donations.length) return "";
+  if (!confirmedDonations.value.length) return "";
 
-  const savedLives = donations.length * 4;
-  const donationsText = donations.length === 1 ? "doação" : "doações";
-  return `Parabéns! Você já realizou ${donations.length} ${donationsText} de sangue e salvou até ${savedLives} vidas. Continue doando e ajudando a salvar vidas 🥰`;
+  const savedLives = confirmedDonations.value.length * 4;
+  const donationsText =
+    confirmedDonations.value.length === 1 ? "doação" : "doações";
+  return `Parabéns! Você já realizou ${confirmedDonations.value.length} ${donationsText} de sangue e salvou até ${savedLives} vidas. Continue doando e ajudando a salvar vidas 🥰`;
 });
 </script>

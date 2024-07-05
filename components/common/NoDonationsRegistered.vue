@@ -1,13 +1,23 @@
 <template>
   <div>
     <img src="/illustrations/bloodDonation.svg" class="missing-img" />
-    <h4>Você ainda não tem doações registradas</h4>
-    <span
-      >Registre sua primeira doação ou confira os próximos eventos para doar
-      😊</span
-    >
+    <h4>{{ visibleTitle }}</h4>
+    <span v-if="!hideMessage">{{ visibleMessage }}</span>
   </div>
 </template>
+
+<script setup lang="ts">
+const props = defineProps<{
+  title?: string;
+  message?: string;
+  hideMessage?: boolean;
+}>();
+
+const visibleTitle = props.title || "Você ainda não tem doações registradas";
+const visibleMessage =
+  props.message ||
+  "Registre sua primeira doação ou confira os próximos eventos para doar 😊";
+</script>
 
 <style scoped>
 div {

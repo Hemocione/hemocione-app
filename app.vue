@@ -143,7 +143,6 @@ const doLogin = async () => {
           "br.com.hemocione.app://app.hemocione.com.br/"
         )}`;
   Browser.addListener("browserFinished", async () => {
-    console.log("Browser finished");
     attemptedLogin.value = true;
   });
   await Browser.open({

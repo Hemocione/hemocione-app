@@ -1,3 +1,29 @@
+const reviewStatuses = ["confirmed", "pending", "rejected"] as const;
+export type ReviewStatus = (typeof reviewStatuses)[number];
+
+export const isReviewStatus = (value: any): value is ReviewStatus => {
+  return reviewStatuses.includes(value);
+};
+
+const getUserDonationsByStatus = (
+  userDonations: Donation[] | undefined,
+  status: ReviewStatus
+) => {
+  if (!userDonations?.length) return [];
+
+  const donations = userDonations.filter(
+    (donation) => donation.reviewStatus === status
+  );
+  const orderedDonationsByDateDesc = donations.sort((a, b) => {
+    const dateA = new Date(Date.parse(String(a.donationDate)));
+    const dateB = new Date(Date.parse(String(b.donationDate)));
+
+    return dateB.getTime() - dateA.getTime();
+  });
+
+  return orderedDonationsByDateDesc;
+};
+
 export interface Donation {
   id: Number;
   label: String;
@@ -7,6 +33,9 @@ export interface Donation {
     name: string;
     logo: string;
   } | null;
+  reviewStatus: ReviewStatus;
+  reviewedAt: Date | null;
+  metadata: Record<string, unknown> | null;
 }
 
 export interface Address {
@@ -71,6 +100,30 @@ export const useUserStore = defineStore("user", {
     loggedIn: false as Boolean,
   }),
   actions: {
+    async reviewDonation(donation: Donation, status: ReviewStatus) {
+      const config = useRuntimeConfig();
+
+      // update donation status on the server
+      await $fetch(
+        config.public.hemocioneIdApiUrl + `/donations/${donation.id}/review`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+          body: JSON.stringify({ status }),
+        }
+      );
+      // update donation status on the store after successfully updating it on the server
+      const userMatchingDonation = this.user?.donations.find(
+        (userDonation) => userDonation.id === donation.id
+      );
+      console.log("userMatchingDonation", userMatchingDonation);
+      if (userMatchingDonation) {
+        userMatchingDonation.reviewStatus = status; // update user donation status on the store
+        userMatchingDonation.reviewedAt = new Date(); // update user donation reviewedAt on the store
+      }
+    },
     async fetchMe() {
       const config = useRuntimeConfig();
 
@@ -82,6 +135,7 @@ export const useUserStore = defineStore("user", {
           },
         }
       );
+      const donations = data.donations;
       this.setUser(data);
     },
     async setToken(token: string) {
@@ -160,28 +214,31 @@ export const useUserStore = defineStore("user", {
     },
 
     userDonations(state) {
-      if (!state.user?.donations.length) return [];
+      return getUserDonationsByStatus(state.user?.donations, "confirmed") || [];
+    },
 
-      const donations = state.user.donations;
-      const orderedDonationsByDateDesc = donations.sort((a, b) => {
-        const dateA = new Date(Date.parse(String(a.donationDate)));
-        const dateB = new Date(Date.parse(String(b.donationDate)));
+    rejectedDonations(state) {
+      return getUserDonationsByStatus(state.user?.donations, "rejected") || [];
+    },
 
-        return dateB.getTime() - dateA.getTime();
-      });
+    pendingDonations(state) {
+      return getUserDonationsByStatus(state.user?.donations, "pending") || [];
+    },
 
-      return orderedDonationsByDateDesc;
+    confirmedDonations(state) {
+      return getUserDonationsByStatus(state.user?.donations, "confirmed") || [];
     },
 
     userDonationStatus(state) {
-      if (!state.user?.donations.length)
+      if (!this.confirmedDonations.length) {
         return {
           status: "never-donated",
           label:
             "Nunca doou sangue - doe pela primeira vez e salve 4 vidas! 😊",
         };
+      }
 
-      const donations = state.user.donations;
+      const donations = this.confirmedDonations;
       const orderedDonationsByDateDesc = donations.sort((a, b) => {
         const dateA = new Date(Date.parse(String(a.donationDate)));
         const dateB = new Date(Date.parse(String(b.donationDate)));
@@ -197,7 +254,7 @@ export const useUserStore = defineStore("user", {
         (now.getTime() - donationDate.getTime()) / (1000 * 3600 * 24)
       );
 
-      const genderConfig = GENDER_CONFIG[state.user.gender];
+      const genderConfig = GENDER_CONFIG[state?.user?.gender || "O"];
       const surpassedLimitDaysInterval =
         daysSinceLastDonation > genderConfig.limitDaysInterval;
 
@@ -235,15 +292,18 @@ export const useUserStore = defineStore("user", {
 
       return {
         ...state.user,
+        donations: this.confirmedDonations,
         name: state.user.givenName,
-        totalDonations: state.user.donations.length,
-        livesSaved: 4 * state.user.donations.length,
+        totalDonations: this.confirmedDonations.length,
+        livesSaved: 4 * this.confirmedDonations.length,
       };
     },
     lastDonation(state) {
       if (!state.user?.donations.length) return null;
 
-      const donations = state.user.donations;
+      const donations = this.pendingDonations.length
+        ? state.pendingDonations
+        : state.confirmedDonations; // If there are pending donations, show the last pending donation
       const orderedDonationsByDateDesc = donations.sort((a, b) => {
         const dateA = new Date(Date.parse(String(a.donationDate)));
         const dateB = new Date(Date.parse(String(b.donationDate)));
