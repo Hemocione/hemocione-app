@@ -5604,7 +5604,7 @@ nuxt-vercel-analytics@^1.0.0:
     "@vercel/analytics" "^1.0.0"
     defu "^6.1.2"
 
-nuxt@^3.12.3:
+nuxt@^3.11.1:
   version "3.12.3"
   resolved "https://registry.yarnpkg.com/nuxt/-/nuxt-3.12.3.tgz#7cb5dc07b3e45203637e276cccaa327557254a61"
   integrity sha512-Qdkc+ucWwFcKsiL/OTF87jbgyFSymwPRKiiu0mvzsd/RXTn4hGiBduAlF3f7Yy0F9pDjSj8XHKDSnHYsDzm6rA==
