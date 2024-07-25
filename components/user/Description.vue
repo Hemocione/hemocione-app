@@ -100,8 +100,13 @@ const ableToDonate = computed(
   () => userStore.userDonationStatus.status === "able-to-donate"
 );
 
+const bloodType = computed(() => userData?.bloodType ?? "-");
+
 const userImgSrc = computed(
-  () => `/illustrations/bloodCharacters/${userData?.bloodType}.svg`
+  () =>
+    `/illustrations/bloodCharacters/${
+      bloodType.value === "-" ? "O-" : bloodType.value
+    }.svg`
 );
 
 const description = computed(() =>
