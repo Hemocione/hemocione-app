@@ -272,4 +272,19 @@ function handleInternalPageClick(internalPage: InternalPage) {
 
   toggleDrawer();
 }
+
+const handlePopState = (_event: Event) => {
+  if (drawer.value) {
+    toggleDrawer();
+  }
+};
+
+watch(drawer, (newValue) => {
+  if (newValue) {
+    window.addEventListener("popstate", handlePopState);
+    window.history.pushState({ drawer: "open" }, "");
+  } else {
+    window.removeEventListener("popstate", handlePopState);
+  }
+});
 </script>
