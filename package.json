@@ -34,5 +34,8 @@
     "onesignal-cordova-plugin": "^5.1.4"
   },
   "name": "hemocione.app",
-  "version": "0.1.0"
+  "version": "0.1.0",
+  "dependencies": {
+    "yarn": "^1.22.22"
+  }
 }
