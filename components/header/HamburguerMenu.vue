@@ -216,7 +216,7 @@ interface ExternalPage extends Page {
 
 const externalPages: ExternalPage[] = [
   {
-    url: "https://loja.hemocione.com.br",
+    url: "https://vista.hemocione.com.br",
     name: "Vestir a Camisa",
     icon: "shirt.svg",
   },
