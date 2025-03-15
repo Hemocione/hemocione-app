@@ -2,6 +2,7 @@
 <script setup lang="ts">
 definePageMeta({
   keepalive: false,
+  allowFullscreen: true,
 });
 
 const iframeId = "events-iframe";

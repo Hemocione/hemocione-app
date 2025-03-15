@@ -1,12 +1,30 @@
 import { h, render, onMounted, onUnmounted, nextTick } from "vue";
 import CommonIframeWrapper from "~/components/common/IframeWrapper.vue";
 
+const fadeIn = (element: HTMLElement) => {
+  element.style.transition = "opacity 0.5s ease";
+  element.style.opacity = "0";
+  setTimeout(() => {
+    element.style.opacity = "1";
+  }, 10); // Small delay to ensure the transition is applied
+};
+
+// Function to add fade-out transition
+const fadeOut = (element: HTMLElement, callback: () => void) => {
+  element.style.transition = "opacity 0.5s ease";
+  element.style.opacity = "0";
+  setTimeout(() => {
+    callback();
+  }, 500); // Wait for the transition to complete before executing the callback
+};
+
 export function usePersistentIframe(
   iframeId: string,
   src: string,
   includeToken = false
 ) {
   const route = useRoute();
+
   onMounted(async () => {
     const iframeWrapper = document.getElementById("iframe-page-wrapper");
     let iframe = document.getElementById(iframeId) as HTMLIFrameElement;
@@ -17,6 +35,7 @@ export function usePersistentIframe(
 
     if (iframe) {
       iframe.style.display = "block";
+      fadeIn(iframe); // Apply fade-in transition
     }
 
     if (!iframe) {
@@ -34,6 +53,16 @@ export function usePersistentIframe(
       iframeWrapper.appendChild(div);
 
       render(component, div);
+
+      // Wait for the next tick to ensure the iframe is rendered
+      nextTick(() => {
+        const newIframe = document.getElementById(
+          iframeId
+        ) as HTMLIFrameElement;
+        if (newIframe) {
+          fadeIn(newIframe); // Apply fade-in transition to the new iframe
+        }
+      });
     }
 
     iframeWrapper.style.display = "block";
@@ -48,7 +77,10 @@ export function usePersistentIframe(
 
     const iframe = document.getElementById(iframeId);
     if (iframe) {
-      iframe.style.display = "none";
+      // Apply fade-out transition before hiding the iframe
+      fadeOut(iframe, () => {
+        iframe.style.display = "none";
+      });
     }
   });
 }
