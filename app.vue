@@ -3,6 +3,7 @@
     <HemocioneHeader class="header" v-show="userStore.loggedIn" size="10" />
     <NuxtLoadingIndicator color="#bb0a08" />
     <NuxtLayout v-if="userStore.loggedIn">
+      <div id="iframe-page-wrapper" style="display: none" />
       <NuxtPage />
     </NuxtLayout>
     <div class="hemocione-login-loading-wrapper" v-else>
@@ -198,5 +199,11 @@ if (urlToken) {
   z-index: 2;
   height: var(--navbar-size);
   width: 100%;
+}
+
+#iframe-page-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 </style>

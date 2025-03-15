@@ -1,10 +1,13 @@
 <template>
-  <CommonIframeWrapper :src="$config.public.competitionsUrl" include-token />
+  <div style="display: none" />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "external-page",
-  keepalive: true,
+  keepalive: false,
 });
+
+const iframeId = "competitions-iframe";
+
+usePersistentIframe(iframeId, useRuntimeConfig().public.competitionsUrl, true);
 </script>

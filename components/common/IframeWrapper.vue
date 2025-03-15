@@ -18,18 +18,23 @@
 </template>
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user";
+
 const userStore = useUserStore();
-const route = useRoute();
 const props = defineProps<{
   src: string;
   includeToken?: boolean;
+  route?: any;
 }>();
+
 const iframedLoaded = ref(false);
 const setLoaded = () => {
-  iframedLoaded.value = true;
+  setTimeout(() => {
+    iframedLoaded.value = true;
+  }, 300);
 };
-const routeSlug = route.params.slug;
-const routeQuery = route.query;
+
+const routeSlug = props.route.params.slug;
+const routeQuery = props.route.query;
 const routeSlugPath = Array.isArray(routeSlug)
   ? routeSlug.filter(Boolean).join("/")
   : routeSlug;

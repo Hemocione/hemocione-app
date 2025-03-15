@@ -1,10 +1,10 @@
-<template>
-  <CommonIframeWrapper :src="$config.public.eventsUrl" include-token />
-</template>
-
+<template><div style="display: none" /></template>
 <script setup lang="ts">
 definePageMeta({
-  layout: "external-page",
-  keepalive: true,
+  keepalive: false,
 });
+
+const iframeId = "events-iframe";
+
+usePersistentIframe(iframeId, useRuntimeConfig().public.eventsUrl, true);
 </script>
