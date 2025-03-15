@@ -180,6 +180,14 @@ const form = reactive({
 const states = getEstadosListWithLabel();
 
 // HANDLE ADDRESS IN THE END AGAIN
+/**
+ * TODOS:
+ * - [ ] Handle address in the end of the call
+ * - [ ] Handle submit (API call)
+ * - [ ] Add validations (CPF, email, phone, CEP).
+ * - [ ] Add masks (CEP, phone, CPF)
+ */
+ 
 
 const unknownBloodType = ref(userStore.user?.bloodType === "-");
 
