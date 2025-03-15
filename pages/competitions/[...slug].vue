@@ -5,7 +5,7 @@
 <script setup lang="ts">
 definePageMeta({
   keepalive: false,
-  allowFullscreen: true,
+  allowFullscreen: false,
 });
 
 const iframeId = "competitions-iframe";
