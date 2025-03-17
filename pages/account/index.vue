@@ -12,10 +12,7 @@
         <ElInput v-model="form.email" placeholder="Email" />
       </ElFormItem class="item">
       <ElFormItem class="item" label="CPF" prop="document" required>
-        <ElInput
-          v-model="form.document"
-          placeholder="123.456.789-10"
-        />
+        <CommonMaskedInput mask="###.###.###-##" v-model="form.document" placeholder="123.456.789-10" />
       </ElFormItem class="item">
       <ElDivider />
       <ElFormItem class="item" label="Tipo sanguíneo" prop="bloodType" required>
@@ -43,12 +40,12 @@
         </ElFormItem class="item">
       </div>
       <ElFormItem class="item" label="Telefone" prop="phone" required>
-        <ElInput v-model="form.phone" placeholder="(21) 99999-9999" />
+        <CommonMaskedInput mask="(##) #####-####" v-model="form.phone" placeholder="(21) 99999-9999"/>
       </ElFormItem class="item">
       <ElDivider />
       <div class="two-columns">
         <ElFormItem class="item" label="CEP" prop="address_postalCode" required>
-          <ElInput v-model="form.address_postalCode" placeholder="CEP" />
+          <CommonMaskedInput mask="#####-###" v-model="form.address_postalCode" placeholder="CEP" />
         </ElFormItem class="item">
         <ElFormItem class="item" label="Estado" prop="address_state" required>
           <ElSelect
@@ -144,31 +141,34 @@ p {
 </style>
 
 <script setup lang="ts">
+import { cloneDeep } from "lodash";
+import { useUserStore } from "@/stores/user";
+
 definePageMeta({
   pageTransition: {
     name: "slide-left-fast-and-furious",
     mode: "out-in",
   },
 });
-import { useUserStore } from "@/stores/user";
-import { cloneDeep } from "lodash";
-const userStore = useUserStore();
 
+const userStore = useUserStore();
 const userCopy = cloneDeep(userStore.user);
 const addressCopy = userCopy?.addresses?.[0];
+
+const phoneNoCountryCode = userCopy?.phone?.replace("+55", "");
 
 const form = reactive({
   id: userCopy?.id,
   givenName: userCopy?.givenName,
   surName: userCopy?.surName,
   email: userCopy?.email,
-  document: userCopy?.document,
+  document: userCopy?.document || "",
   gender: userCopy?.gender,
   birthDate: new Date(userCopy?.birthDate || ""),
   bloodType: userCopy?.bloodType,
-  phone: userCopy?.phone,
+  phone: phoneNoCountryCode || "",
   address_id: addressCopy?.id,
-  address_postalCode: addressCopy?.postalCode,
+  address_postalCode: addressCopy?.postalCode || "",
   address_state: addressCopy?.state,
   address_city: addressCopy?.city,
   address_neighborhood: addressCopy?.neighborhood,
@@ -177,6 +177,10 @@ const form = reactive({
   address_complement: addressCopy?.complement,
 });
 
+const handleClick = () => {
+  console.log('form', form);
+};
+
 const states = getEstadosListWithLabel();
 
 // HANDLE ADDRESS IN THE END AGAIN
@@ -184,8 +188,7 @@ const states = getEstadosListWithLabel();
  * TODOS:
  * - [ ] Handle address in the end of the call
  * - [ ] Handle submit (API call)
- * - [ ] Add validations (CPF, email, phone, CEP).
- * - [ ] Add masks (CEP, phone, CPF)
+ * - [ ] Add overall field validation (valid cpf and valid email, mostly.)
  */
  
 
