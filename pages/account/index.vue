@@ -142,7 +142,7 @@ p {
 
 <script setup lang="ts">
 import { cloneDeep } from "lodash";
-import { useUserStore } from "@/stores/user";
+import { useUserStore, type UserUpdate } from "@/stores/user";
 
 definePageMeta({
   pageTransition: {
@@ -157,17 +157,20 @@ const addressCopy = userCopy?.addresses?.[0];
 
 const phoneNoCountryCode = userCopy?.phone?.replace("+55", "");
 
+if (!userCopy) {
+  throw new Error("User not found");
+}
+
 const form = reactive({
-  id: userCopy?.id,
-  givenName: userCopy?.givenName,
-  surName: userCopy?.surName,
-  email: userCopy?.email,
-  document: userCopy?.document || "",
-  gender: userCopy?.gender,
-  birthDate: new Date(userCopy?.birthDate || ""),
-  bloodType: userCopy?.bloodType,
+  id: userCopy.id,
+  givenName: userCopy.givenName,
+  surName: userCopy.surName,
+  email: userCopy.email,
+  document: userCopy.document || "",
+  gender: userCopy.gender,
+  birthDate: new Date(userCopy.birthDate || ""),
+  bloodType: userCopy.bloodType,
   phone: phoneNoCountryCode || "",
-  address_id: addressCopy?.id,
   address_postalCode: addressCopy?.postalCode || "",
   address_state: addressCopy?.state,
   address_city: addressCopy?.city,
@@ -177,8 +180,80 @@ const form = reactive({
   address_complement: addressCopy?.complement,
 });
 
-const handleClick = () => {
-  console.log('form', form);
+let persistedStateHash = encodeBase64(form)
+
+const validAddress = computed(() => {
+  return (
+    form.address_postalCode &&
+    form.address_state &&
+    form.address_city
+  );
+});
+
+const getUserUpdatePayload = (): UserUpdate => {
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  // Converte a data para o início do dia no fuso do usuário
+  const birthDate = form.birthDate
+    ? new Date(
+        new Date(form.birthDate).toLocaleString("en-US", { timeZone: userTimezone })
+      )
+    : null;
+
+  return {
+    ...form,
+    email: form.email.trim().toLowerCase(),
+    phone: `+55${form.phone}`,
+    birthDate: birthDate?.toISOString() || userCopy.birthDate, // this is a brazilian "date" - we should handle the timezone here as well and store the correct day (AKA we should store the start of the brazilian day or the user's timezone)
+   ...(validAddress.value ? { addresses: [{
+      id: addressCopy?.id || undefined,
+      userId: addressCopy?.userId || userCopy.id,
+      postalCode: form.address_postalCode,
+      state: form.address_state,
+      city: form.address_city,
+      neighborhood: form.address_neighborhood,
+      street: form.address_street,
+      number: form.address_number,
+      complement: form.address_complement
+    }] } : {}),
+  };
+};
+
+const loading = ref(false);
+
+const requiredFields: (keyof typeof form)[] = [
+  "givenName",
+  "surName",
+  "email",
+  "document",
+  "phone"
+];
+
+const documentCorrectLength = computed(() => form.document.length === 11);
+const phoneCorrectLength = computed(() => form.phone.length === 11);
+const isValidEmail = computed(() => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(form.email);
+});
+
+const invalidChanges = computed(() => {
+  return persistedStateHash === encodeBase64(form) || !validAddress.value || requiredFields.some(field => !form[field]) || !documentCorrectLength.value || !phoneCorrectLength.value || !isValidEmail.value;
+});
+
+const handleClick = async () => {
+  loading.value = true;
+  persistedStateHash = encodeBase64(form);
+  // in the future, use the persisted state hash for adding a confirmation thing
+  try {
+    await userStore.updateUser(getUserUpdatePayload());
+    ElMessage.success("Alterações salvas com sucesso.");
+    nextTick(async () => {
+      await navigateTo("/") // go to home after successfull update
+    });
+  } catch (error) {
+    ElMessage.error("Erro ao salvar alterações.");
+  }
+  loading.value = false;
 };
 
 const states = getEstadosListWithLabel();
@@ -186,23 +261,12 @@ const states = getEstadosListWithLabel();
 // HANDLE ADDRESS IN THE END AGAIN
 /**
  * TODOS:
- * - [ ] Handle address in the end of the call
- * - [ ] Handle submit (API call)
- * - [ ] Add overall field validation (valid cpf and valid email, mostly.)
+ * - [X] Handle address in the end of the call
+ * - [X] Handle submit (API call)
+ * - [X] Add overall field validation (valid cpf and valid email, mostly.)
+ * - [ ] Handle changes in CEP (reload address)
  */
  
 
 const unknownBloodType = ref(userStore.user?.bloodType === "-");
-
-watchEffect(() => {
-  if (unknownBloodType.value) {
-    form.bloodType = "-";
-  }
-});
-
-watchEffect(() => {
-  if (form.bloodType !== "-") {
-    unknownBloodType.value = false;
-  }
-});
 </script>

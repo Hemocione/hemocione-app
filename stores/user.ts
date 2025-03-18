@@ -96,6 +96,10 @@ interface User {
   addresses: Address[];
 }
 
+export type UserUpdate = Omit<User, "donations" | "addresses"> & {
+  addresses?: Partial<Address>[];
+};
+
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import OneSignal from "onesignal-cordova-plugin";
@@ -179,6 +183,20 @@ export const useUserStore = defineStore("user", {
         }
       );
       this.user?.donations.push(data.donation);
+    },
+    async updateUser(user: UserUpdate) {
+      const config = useRuntimeConfig();
+      await $fetch(config.public.hemocioneIdApiUrl + `/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+        body: JSON.stringify(user),
+      });
+      this.setUser({
+        ...this.user, // keep the rest of the user data (derived from /me, for example donations)
+        ...user,
+      });
     },
     async logout() {
       const config = useRuntimeConfig();
