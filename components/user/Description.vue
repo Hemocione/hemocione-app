@@ -15,7 +15,12 @@
           greenBall: ableToDonate,
         }"
       />
-      <span>{{ userStore.userDonationStatus.label }}</span>
+      <span
+        >{{ userStore.userDonationStatus.label
+        }}<NuxtLink to="/can-donate" class="cta" v-if="ableToDonate">
+          Descubra se você pode doar sangue
+        </NuxtLink></span
+      >
     </div>
   </section>
 </template>
@@ -82,6 +87,12 @@
   color: var(--black-100);
   font-size: 1.5rem;
   font-weight: 400;
+}
+
+.cta {
+  color: var(--hemo-color-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--hemo-color-primary);
 }
 
 @media screen and (min-width: 768px) {
