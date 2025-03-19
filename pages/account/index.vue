@@ -335,4 +335,16 @@ watch(() => form.address_state, (newVal) => {
   debouncedSearchCities(newVal);
 });
  
+
+watch(() => form.bloodType, (newVal) => {
+  if (unknownBloodType.value && newVal !== "-") {
+    unknownBloodType.value = false;
+  }
+});
+
+watch(() => unknownBloodType.value, (newVal) => {
+  if (newVal) {
+    form.bloodType = "-";
+  }
+});
 </script>
