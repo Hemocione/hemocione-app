@@ -2,56 +2,58 @@
   <div class="main">
     <CommonBackHeader title="Minha conta" icon-direction="left" />
     <ElForm :model="form" class="form" label-position="top" size="large">
-      <ElFormItem class="item" label="Nome" prop="givenName" required>
+      <ElFormItem :show-message="false" class="item" label="Nome" prop="givenName" required>
         <ElInput v-model="form.givenName" placeholder="Nome" />
-      </ElFormItem class="item">
-      <ElFormItem class="item" label="Sobrenome" prop="surName" required>
+      </ElFormItem :show-message="false" class="item">
+      <ElFormItem :show-message="false" class="item" label="Sobrenome" prop="surName" required>
         <ElInput v-model="form.surName" placeholder="Sobrenome" />
-      </ElFormItem class="item">
-      <ElFormItem class="item" label="Email" prop="email" required>
+      </ElFormItem :show-message="false" class="item">
+      <ElFormItem :show-message="false" class="item" label="Email" prop="email" required>
         <ElInput v-model="form.email" placeholder="Email" />
-      </ElFormItem class="item">
-      <ElFormItem class="item" label="CPF" prop="document" required>
+      </ElFormItem :show-message="false" class="item">
+      <ElFormItem :show-message="false" class="item" label="CPF" prop="document" required>
         <CommonMaskedInput mask="###.###.###-##" v-model="form.document" placeholder="123.456.789-10" />
-      </ElFormItem class="item">
+      </ElFormItem :show-message="false" class="item">
       <ElDivider />
-      <ElFormItem class="item" label="Tipo sanguíneo" prop="bloodType" required>
+      <ElFormItem :show-message="false" class="item" label="Tipo sanguíneo" prop="bloodType" required>
         <AccountBloodTypeSelector v-model="form.bloodType" />
         <ElCheckbox
           v-model="unknownBloodType"
           label="Não sei meu tipo sanguíneo"
         />
-      </ElFormItem class="item">
+      </ElFormItem :show-message="false" class="item">
       <ElDivider />
       <div class="two-columns">
-        <ElFormItem class="item" label="Gênero" prop="gender" required>
+        <ElFormItem :show-message="false" class="item" label="Gênero" prop="gender" required>
           <ElSelect v-model="form.gender" placeholder="Gênero">
             <ElOption label="Masculino" value="M" />
             <ElOption label="Feminino" value="F" />
             <ElOption label="Prefiro não informar" value="O" />
           </ElSelect>
-        </ElFormItem class="item">
-        <ElFormItem class="item" label="Data de nascimento" prop="birthDate" required>
+        </ElFormItem :show-message="false" class="item">
+        <ElFormItem :show-message="false" class="item" label="Data de nascimento" prop="birthDate" required>
           <ElDatePicker
             v-model="form.birthDate"
             type="date"
             format="DD/MM/YYYY"
           />
-        </ElFormItem class="item">
+        </ElFormItem :show-message="false" class="item">
       </div>
-      <ElFormItem class="item" label="Telefone" prop="phone" required>
+      <ElFormItem :show-message="false" class="item" label="Telefone" prop="phone" required>
         <CommonMaskedInput mask="(##) #####-####" v-model="form.phone" placeholder="(21) 99999-9999"/>
-      </ElFormItem class="item">
+      </ElFormItem :show-message="false" class="item">
       <ElDivider />
       <div class="two-columns">
-        <ElFormItem class="item" label="CEP" prop="address_postalCode" required>
+        <ElFormItem :show-message="false" class="item" label="CEP" prop="address_postalCode" required>
           <CommonMaskedInput mask="#####-###" v-model="form.address_postalCode" placeholder="CEP" />
-        </ElFormItem class="item">
-        <ElFormItem class="item" label="Estado" prop="address_state" required>
+        </ElFormItem :show-message="false" class="item">
+        <ElFormItem :show-message="false" class="item" label="Estado" prop="address_state" required>
           <ElSelect
             class="item"
             v-model="form.address_state"
             placeholder="Estado"
+            :disabled="loadingCepChange"
+            :loading="loadingCepChange"
             required
           >
             <ElOption
@@ -61,22 +63,36 @@
               :value="state.value"
             />
           </ElSelect>
-        </ElFormItem>
-        <ElFormItem class="item" label="Cidade" prop="address_city" required>
-          <ElInput v-model="form.address_city" placeholder="Cidade" />
-        </ElFormItem class="item">
-        <ElFormItem class="item" label="Bairro" prop="address_neighborhood" required>
+        </ElFormItem :show-message="false">
+        <ElFormItem :show-message="false" class="item" label="Cidade" prop="address_city" required>
+          <ElSelect
+            class="item"
+            v-model="form.address_city"
+            placeholder="Cidade"
+            :disabled="searchingCities || !form.address_state || !cities?.length || loadingCepChange"
+            :loading="searchingCities || loadingCepChange"
+            required
+          >
+            <ElOption
+              v-for="city in cities"
+              :key="city"
+              :label="city"
+              :value="city"
+            />
+          </ElSelect>
+        </ElFormItem :show-message="false">
+        <ElFormItem :show-message="false" class="item" label="Bairro" prop="address_neighborhood" required>
           <ElInput v-model="form.address_neighborhood" placeholder="Bairro" />
-        </ElFormItem class="item">
-        <ElFormItem class="item" label="Rua" prop="address_street" required>
-          <ElInput v-model="form.address_street" placeholder="Rua" />
-        </ElFormItem class="item">
-        <ElFormItem class="item" label="Número" prop="address_number" required>
+        </ElFormItem :show-message="false" class="item">
+        <ElFormItem :show-message="false" class="item" label="Rua" prop="address_street" required>
+          <ElInput v-model="form.address_street" placeholder="Rua" :disabled="loadingCepChange" />
+        </ElFormItem :show-message="false" class="item">
+        <ElFormItem :show-message="false" class="item" label="Número" prop="address_number" required>
           <ElInput v-model="form.address_number" placeholder="Número" />
-        </ElFormItem class="item">
-        <ElFormItem class="item" label="Complemento" prop="address_complement">
+        </ElFormItem :show-message="false" class="item">
+        <ElFormItem :show-message="false" class="item" label="Complemento" prop="address_complement">
           <ElInput v-model="form.address_complement" placeholder="Complemento" />
-        </ElFormItem class="item">
+        </ElFormItem :show-message="false" class="item">
       </div>
     </ElForm>
     <CommonCoolFooter hideToggle>
@@ -160,6 +176,17 @@ const phoneNoCountryCode = userCopy?.phone?.replace("+55", "");
 if (!userCopy) {
   throw new Error("User not found");
 }
+
+const cities = ref<string[]>([]);
+onMounted(async () => {
+  if (!form.address_state) {
+    return;
+  }
+
+  if (form.address_state) {
+    cities.value = await getCidadesFromEstado(form.address_state);
+  }
+});
 
 const form = reactive({
   id: userCopy.id,
@@ -258,6 +285,8 @@ const handleClick = async () => {
 
 const states = getEstadosListWithLabel();
 
+const unknownBloodType = ref(userStore.user?.bloodType === "-");
+
 // HANDLE ADDRESS IN THE END AGAIN
 /**
  * TODOS:
@@ -265,8 +294,55 @@ const states = getEstadosListWithLabel();
  * - [X] Handle submit (API call)
  * - [X] Add overall field validation (valid cpf and valid email, mostly.)
  * - [ ] Handle changes in CEP (reload address)
+ * - [ ] Handle changes in state (reload cities)
  */
- 
 
-const unknownBloodType = ref(userStore.user?.bloodType === "-");
+const loadingCepChange = ref(false);
+const debouncedHandleCepChange = useDebounceFn(async (cep: string) => {
+  try {
+    if (cep.length !== 8) {
+      throw new Error("CEP inválido");
+    }
+    const data = await getCepData(cep);
+    form.address_state = data.state ?? form.address_state;
+    form.address_city = data.city ?? form.address_city;
+    form.address_neighborhood = data.neighborhood ?? form.address_neighborhood;
+    form.address_street = data.street ?? form.address_street;
+  } catch (error) {
+    // do nothing
+  }
+  loadingCepChange.value = false;
+}, 300);
+
+const searchingCities = ref(false);
+const debouncedSearchCities = useDebounceFn(async (state: string) => {
+  const currentSelectedCity = form.address_city;
+  try {
+    cities.value = await getCidadesFromEstado(state);
+    if (cities.value.length === 1) {
+      form.address_city = cities.value[0];
+    }
+
+    if (currentSelectedCity && !cities.value.includes(currentSelectedCity)) {
+      form.address_city = "";
+    }
+  } catch (error) {
+    // do nothing
+  }
+  searchingCities.value = false;
+}, 300);
+
+watch(() => form.address_postalCode, (newVal) => {
+  loadingCepChange.value = true;
+  debouncedHandleCepChange(newVal);
+});
+
+watch(() => form.address_state, (newVal) => {
+  if (!newVal) {
+    return;
+  }
+  searchingCities.value = true;
+  debouncedSearchCities(newVal);
+});
+ 
 </script>

@@ -50,12 +50,44 @@ const getEstadosListWithLabel = () => {
   ];
 };
 
-const getCidadesFromEstado = async (estado: string) => {
+const prepositions = [
+  "de",
+  "da",
+  "do",
+  "das",
+  "dos",
+  "em",
+  "no",
+  "na",
+  "nos",
+  "nas",
+  "a",
+  "ao",
+  "à",
+  "às",
+  "e",
+  "ou",
+];
+
+const formatName = (name: string) => {
+  return name
+    .replace(/\s*\(.*?\)/g, "") // Remove tudo entre parênteses e o espaço antes
+    .toLowerCase()
+    .split(" ")
+    .map((word, index) =>
+      prepositions.includes(word) && index !== 0
+        ? word
+        : word.charAt(0).toUpperCase() + word.slice(1)
+    )
+    .join(" ");
+};
+
+const getCidadesFromEstado = async (estado: string): Promise<string[]> => {
   try {
     const { data } = await apiClient.get(
       `/ibge/municipios/v1/${estado}?providers=dados-abertos-br,gov,wikipedia`
     );
-    return data.map((c: { nome: string }) => c.nome);
+    return data.map((c: { nome: string }) => formatName(c.nome));
   } catch (error) {
     return [];
   }
@@ -81,11 +113,19 @@ const getCepDataViaCep = async (cep: string) => {
   return res;
 };
 
-const getCepData = async (cep: string) => {
+interface CepData {
+  cep?: string;
+  neighborhood?: string;
+  street?: string;
+  city?: string;
+  state?: string;
+}
+
+const getCepData = async (cep: string): Promise<CepData> => {
   const brasilApiRes = getCepDataBrazilApi(cep);
   const viaCepRes = getCepDataViaCep(cep);
   const res = await Promise.any([brasilApiRes, viaCepRes]);
-  return res;
+  return res.data;
 };
 
 export { getCepData, getEstadosListWithLabel, getCidadesFromEstado };
