@@ -61,4 +61,6 @@ const navigate = async () => {
     await navigateTo(props.fallBack);
   }
 };
+
+defineExpose({ navigate });
 </script>

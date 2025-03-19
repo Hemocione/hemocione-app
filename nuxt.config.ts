@@ -53,6 +53,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-vercel-analytics",
     "@zadigetvoltaire/nuxt-well-known",
+    "@vueuse/nuxt"
   ],
 
   googleFonts: {

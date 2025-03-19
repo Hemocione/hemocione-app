@@ -30,7 +30,7 @@ const iframedLoaded = ref(false);
 const setLoaded = () => {
   setTimeout(() => {
     iframedLoaded.value = true;
-  }, 300);
+  }, 500);
 };
 
 const routeSlug = props.route.params.slug;
