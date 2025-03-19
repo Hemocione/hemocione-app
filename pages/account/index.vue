@@ -168,14 +168,10 @@ definePageMeta({
 });
 
 const userStore = useUserStore();
-const userCopy = cloneDeep(userStore.user);
+const userCopy = cloneDeep(userStore.user)!;
 const addressCopy = userCopy?.addresses?.[0];
 
 const phoneNoCountryCode = userCopy?.phone?.replace("+55", "");
-
-if (!userCopy) {
-  throw new Error("User not found");
-}
 
 const cities = ref<string[]>([]);
 onMounted(async () => {
