@@ -104,6 +104,8 @@ import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import OneSignal from "onesignal-cordova-plugin";
 
+// TODO: add composable to handle token usage in the API calls
+
 export const useUserStore = defineStore("user", {
   state: () => ({
     user: null as User | null,
