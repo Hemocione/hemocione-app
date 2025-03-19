@@ -287,16 +287,6 @@ const states = getEstadosListWithLabel();
 
 const unknownBloodType = ref(userStore.user?.bloodType === "-");
 
-// HANDLE ADDRESS IN THE END AGAIN
-/**
- * TODOS:
- * - [X] Handle address in the end of the call
- * - [X] Handle submit (API call)
- * - [X] Add overall field validation (valid cpf and valid email, mostly.)
- * - [ ] Handle changes in CEP (reload address)
- * - [ ] Handle changes in state (reload cities)
- */
-
 const loadingCepChange = ref(false);
 const debouncedHandleCepChange = useDebounceFn(async (cep: string) => {
   try {
