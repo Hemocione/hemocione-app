@@ -36,6 +36,8 @@ export default defineNuxtConfig({
       whereToDonateUrl:
         process.env.NUXT_WHERE_TO_DONATE_URL ||
         "https://ondedoar.hemocione.com.br",
+      canDonateUrl:
+        process.env.NUXT_CAN_DONATE_URL || "https://possodoar.hemocione.com.br",
     },
   },
 
@@ -53,7 +55,7 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "nuxt-vercel-analytics",
     "@zadigetvoltaire/nuxt-well-known",
-    "@vueuse/nuxt"
+    "@vueuse/nuxt",
   ],
 
   googleFonts: {

@@ -6,8 +6,22 @@
     <NuxtLink to="/events" class="cta">
       <CommonSecondaryButton>Ver próximos eventos</CommonSecondaryButton>
     </NuxtLink>
+    <NuxtLink to="/can-donate" class="cta" v-if="ableToDonate">
+      <CommonSecondaryButton
+        >Quero saber se posso doar sangue</CommonSecondaryButton
+      >
+    </NuxtLink>
   </section>
 </template>
+
+<script setup lang="ts">
+import { useUserStore } from "~/stores/user";
+const userStore = useUserStore();
+
+const ableToDonate = computed(
+  () => userStore.userDonationStatus.status === "able-to-donate"
+);
+</script>
 
 <style scoped>
 .cta {
