@@ -183,6 +183,18 @@ const internalPages: InternalPage[] = [
     priority: 1,
     icon: "location",
   },
+  {
+    path: "/can-donate",
+    name: "Posso Doar?",
+    priority: 1,
+    icon: "question",
+  },
+  {
+    path: "/account",
+    name: "Minha Conta",
+    priority: 1,
+    icon: "account",
+  },
 ];
 
 const donationPages = computed((): InternalPage => {

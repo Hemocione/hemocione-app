@@ -5,7 +5,7 @@ definePageMeta({
   allowFullscreen: true,
 });
 
-const iframeId = "events-iframe";
+const iframeId = "can-donate-iframe";
 
-usePersistentIframe(iframeId, useRuntimeConfig().public.eventsUrl, true);
+usePersistentIframe(iframeId, useRuntimeConfig().public.canDonateUrl, true);
 </script>

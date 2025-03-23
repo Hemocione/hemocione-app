@@ -1,10 +1,18 @@
 <template>
-  <CommonIframeWrapper :src="'https://ondedoar.hemocione.com.br'" />
+  <div style="display: none" />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
-  layout: "external-page",
-  keepalive: true,
+  keepalive: false,
+  allowFullscreen: true,
 });
+
+const iframeId = "where-iframe";
+
+usePersistentIframe(
+  iframeId,
+  useRuntimeConfig().public.whereToDonateUrl,
+  false
+);
 </script>

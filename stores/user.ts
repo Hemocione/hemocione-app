@@ -25,11 +25,11 @@ const getUserDonationsByStatus = (
 };
 
 export interface Donation {
-  id: Number;
-  label: String;
-  donationDate: String;
+  id: number;
+  label: string;
+  donationDate: string;
   donationProvider?: {
-    id: Number;
+    id: number;
     name: string;
     logo: string;
   } | null;
@@ -40,22 +40,22 @@ export interface Donation {
 
 interface UserWithMetrics extends User {
   donations: Donation[];
-  name: String;
-  totalDonations: Number;
-  livesSaved: Number;
+  name: string;
+  totalDonations: number;
+  livesSaved: number;
 }
 export interface Address {
-  id: Number;
-  userId: String;
-  postalCode: String;
-  state: String;
-  city: String;
-  neighborhood: String;
-  street: String;
-  number: String;
-  complement: String;
-  createdAt: String;
-  updatedAt: String;
+  id: number;
+  userId: string;
+  postalCode: string;
+  state: string;
+  city: string;
+  neighborhood: string;
+  street: string;
+  number: string;
+  complement: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const genderToReadable = {
@@ -83,21 +83,28 @@ const genders = ["M", "F", "O"] as const;
 type Gender = (typeof genders)[number];
 
 interface User {
-  id: String;
-  givenName: String;
-  surName: String;
-  email: String;
+  id: string;
+  givenName: string;
+  surName: string;
+  email: string;
   gender: Gender;
-  birthDate: String;
-  bloodType: String;
-  phone: String;
+  document: string;
+  birthDate: string;
+  bloodType: string;
+  phone: string;
   donations: Donation[];
   addresses: Address[];
 }
 
+export type UserUpdate = Omit<User, "donations" | "addresses"> & {
+  addresses?: Partial<Address>[];
+};
+
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import OneSignal from "onesignal-cordova-plugin";
+
+// TODO: add composable to handle token usage in the API calls
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -178,6 +185,20 @@ export const useUserStore = defineStore("user", {
         }
       );
       this.user?.donations.push(data.donation);
+    },
+    async updateUser(user: UserUpdate) {
+      const config = useRuntimeConfig();
+      await $fetch(config.public.hemocioneIdApiUrl + `/users/${user.id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+        body: JSON.stringify(user),
+      });
+      this.setUser({
+        ...this.user, // keep the rest of the user data (derived from /me, for example donations)
+        ...user,
+      });
     },
     async logout() {
       const config = useRuntimeConfig();
