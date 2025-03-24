@@ -24,12 +24,16 @@ export const useBloodBanksStore = defineStore("bloodBanks", {
       this.setBloodBanks(bloodBanksLocations);
     },
     async getBloodBanks(token: string) {
-      if (!this.bloodBanks.length) {
-        // fetch bloodBanks if not loaded yet
-        await this.fetchBloodBanksLocations(token);
-      }
+      try {
+        if (!this.bloodBanks.length) {
+          // fetch bloodBanks if not loaded yet
+          await this.fetchBloodBanksLocations(token);
+        }
 
-      return this.bloodBanks;
+        return this.bloodBanks;
+      } catch (e) {
+        return [];
+      }
     },
   },
 });

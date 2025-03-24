@@ -15,31 +15,36 @@
           size="large"
         >
           <ElFormItem label="Banco de Sangue" required>
-            <ElSelect
-              placeholder="Selecione o banco de sangue"
-              v-model="form.bloodBanksLocationId"
-              filterable
-              clearable
-              key="blood-bank-select"
-            >
-              <ElOption
-                v-for="bank in bloodBanks"
-                :key="bank.id"
-                :label="bank.name"
-                :value="bank.id"
-              />
-            </ElSelect>
-            <ElCheckbox v-model="bloodbankNotFound" key="blood-bank-checkbox">
-              Não encontrei meu banco de sangue 😔
-            </ElCheckbox>
-            <Transition name="slide-fade-down" mode="out-in" appear>
+            <TransitionGroup name="slide-fade-down" mode="out-in" appear>
+              <ElSelect
+                placeholder="Selecione o banco de sangue"
+                v-model="form.bloodBanksLocationId"
+                filterable
+                clearable
+                key="blood-bank-select"
+                v-if="bloodBanks.length"
+              >
+                <ElOption
+                  v-for="bank in bloodBanks"
+                  :key="bank.id"
+                  :label="bank.name"
+                  :value="bank.id"
+                />
+              </ElSelect>
+              <ElCheckbox
+                v-model="bloodbankNotFound"
+                key="blood-bank-checkbox"
+                v-if="bloodBanks.length"
+              >
+                Não encontrei meu banco de sangue 😔
+              </ElCheckbox>
               <ElInput
                 v-model="form.bloodBankName"
                 placeholder="Nome do banco de sangue"
                 key="blood-bank-input"
                 v-if="bloodbankNotFound"
               />
-            </Transition>
+            </TransitionGroup>
           </ElFormItem>
           <ElFormItem label="Data da Doação" required>
             <ElDatePicker
@@ -114,7 +119,7 @@ if (lastDonationBloodBankLocationId) {
 
 const bloodBanks = await bloodBanksStore.getBloodBanks(token);
 
-const bloodbankNotFound = ref(false);
+const bloodbankNotFound = ref(!bloodBanks.length);
 
 const isDateInvalid = computed(() => {
   return form.date > new Date();
