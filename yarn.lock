@@ -618,6 +618,11 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.1.tgz#16308cea045f0fc777b6ff20a9f25474dd8293d2"
   integrity sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==
 
+"@formkit/auto-animate@^0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@formkit/auto-animate/-/auto-animate-0.8.2.tgz#24a56e816159fd5585405dcee6bb992f81c27585"
+  integrity sha512-SwPWfeRa5veb1hOIBMdzI+73te5puUBHmqqaF1Bu7FjvxlYSz/kJcZKSa9Cg60zL0uRNeJL2SbRxV6Jp6Q1nFQ==
+
 "@hutson/parse-repository-url@^3.0.0":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"

@@ -34,6 +34,7 @@ export interface Donation {
     logo: string;
   } | null;
   reviewStatus: ReviewStatus;
+  bloodBanksLocationId: string | null;
   reviewedAt: Date | null;
   metadata: Record<string, unknown> | null;
 }
@@ -170,7 +171,8 @@ export const useUserStore = defineStore("user", {
       this.user = user;
     },
     async createUserDonation(donationData: {
-      bloodbankName: string;
+      label: string;
+      bloodBanksLocationId?: string;
       donationDate: string;
     }) {
       const config = useRuntimeConfig();
@@ -340,6 +342,21 @@ export const useUserStore = defineStore("user", {
       });
 
       return orderedDonationsByDateDesc[0];
+    },
+    lastDonationBloodBankLocationId(state) {
+      const donationsWithBloodBank = state.user?.donations.filter(
+        (donation) => donation.bloodBanksLocationId
+      );
+      const orderedDonationsByDateDesc = donationsWithBloodBank?.sort(
+        (a, b) => {
+          const dateA = new Date(Date.parse(String(a.donationDate)));
+          const dateB = new Date(Date.parse(String(b.donationDate)));
+
+          return dateB.getTime() - dateA.getTime();
+        }
+      );
+
+      return orderedDonationsByDateDesc?.[0]?.bloodBanksLocationId;
     },
   },
 });
