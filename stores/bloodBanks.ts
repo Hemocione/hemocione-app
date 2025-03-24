@@ -1,24 +1,35 @@
+interface BloodBankLocation {
+  id: string;
+  name: string;
+}
+
 export const useBloodBanksStore = defineStore("bloodBanks", {
-    state: () => ({
-        bloodBanks: [] as any
-
-    }),
-    actions: {
-        async fetchBloodBanksLocations(token: string) {
-            const config = useRuntimeConfig();
-            const bloodBanksLocations = await $fetch (`${config.public.hemocioneIdApiUrl}/bloodBanks`)
-            this.setBloodBanks(bloodBanksLocations)
-        },
-        setBloodBanks(bloodBanks: any) {
-            this.bloodBanks = bloodBanks;
-        }
+  state: () => ({
+    bloodBanks: [] as BloodBankLocation[],
+  }),
+  actions: {
+    setBloodBanks(bloodBanks: any) {
+      this.bloodBanks = bloodBanks;
     },
-    getters: {
-        bloodBanks(state){
-            return state.bloodBanks
+    async fetchBloodBanksLocations(token: string) {
+      const config = useRuntimeConfig();
+      const bloodBanksLocations = await $fetch(
+        `${config.public.hemocioneIdApiUrl}/bloodBanks`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-    }
+      );
+      this.setBloodBanks(bloodBanksLocations);
+    },
+    async getBloodBanks(token: string) {
+      if (!this.bloodBanks.length) {
+        // fetch bloodBanks if not loaded yet
+        await this.fetchBloodBanksLocations(token);
+      }
 
-})
-
-    
+      return this.bloodBanks;
+    },
+  },
+});

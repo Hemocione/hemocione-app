@@ -56,6 +56,7 @@ export default defineNuxtConfig({
     "nuxt-vercel-analytics",
     "@zadigetvoltaire/nuxt-well-known",
     "@vueuse/nuxt",
+    "@formkit/auto-animate/nuxt",
   ],
 
   googleFonts: {

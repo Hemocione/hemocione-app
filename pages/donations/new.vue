@@ -7,26 +7,50 @@
           <p>Olá, {{ userName ?? "doador" }}!</p>
           <p>Adicione mais informações para registrarmos sua doação</p>
         </div>
-        <ElForm :model="form" class="form" label-width="auto" label-position="top" size="large">
-          <ElFormItem label="Banco de Sangue">
-            <ElAutocomplete
-              v-model="form.bloodBank"
-              :fetch-suggestions="searchBloodBanks"
-              placeholder="Digite o nome do banco de sangue"
-              @select="handleSelect"
-            />
+        <ElForm
+          :model="form"
+          class="form"
+          label-width="auto"
+          label-position="top"
+          size="large"
+        >
+          <ElFormItem label="Banco de Sangue" required>
+            <ElSelect
+              placeholder="Selecione o banco de sangue"
+              v-model="form.bloodBanksLocationId"
+              filterable
+              clearable
+              key="blood-bank-select"
+            >
+              <ElOption
+                v-for="bank in bloodBanks"
+                :key="bank.id"
+                :label="bank.name"
+                :value="bank.id"
+              />
+            </ElSelect>
+            <ElCheckbox v-model="bloodbankNotFound" key="blood-bank-checkbox">
+              Não encontrei meu banco de sangue 😔
+            </ElCheckbox>
+            <Transition name="slide-fade-down" mode="out-in" appear>
+              <ElInput
+                v-model="form.bloodBankName"
+                placeholder="Nome do banco de sangue"
+                key="blood-bank-input"
+                v-if="bloodbankNotFound"
+              />
+            </Transition>
           </ElFormItem>
-          <ElFormItem label="Data da Doação">
+          <ElFormItem label="Data da Doação" required>
             <ElDatePicker
               v-model="form.date"
               type="date"
               format="DD/MM/YYYY"
               placeholder="Selecione a data"
+              large
+              style="width: 100%"
+              :disabled-date="disabledDate"
             />
-          </ElFormItem>
-          <ElFormItem>
-            <ElButton type="primary" @click="onSubmit">Registrar</ElButton>
-            <ElButton @click="navigateTo('/donations')">Voltar</ElButton>
           </ElFormItem>
         </ElForm>
       </div>
@@ -46,8 +70,7 @@
         type="primary"
         size="large"
         :disabled="
-          !donationRegistered &&
-          (!form.bloodBank || !form.date || isDateInvalid)
+          !donationRegistered && (!donationLabel || !form.date || isDateInvalid)
         "
         :loading="loading"
         @click="handleClick"
@@ -59,11 +82,16 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
+import { useBloodBanksStore } from "@/stores/bloodBanks";
 import { ref, reactive, computed } from "vue";
 import { ElMessage } from "element-plus";
 
 const userStore = useUserStore();
-const userName = userStore.userWithMetrics?.name;
+const userName = userStore.userWithMetrics!.name;
+const token = userStore.token!;
+const lastDonationBloodBankLocationId =
+  userStore.lastDonationBloodBankLocationId;
+const bloodBanksStore = useBloodBanksStore();
 const donationRegistered = ref(false);
 const loading = ref(false);
 
@@ -75,45 +103,18 @@ definePageMeta({
 });
 
 const form = reactive({
-  bloodBank: "",
+  bloodBankName: "",
+  bloodBanksLocationId: "",
   date: new Date(),
 });
 
-const bloodBanks = ref([
-  { value: "Hemorio" },
-  { value: "Hemocentro de São Paulo" },
-  { value: "Hemominas" },
-  { value: "Hemope" },
-  { value: "Outro Banco" },
-  { value: "Hemonorte" },
-  { value: "Hemoce" },
-  { value: "Hemoba" },
-  { value: "Hemopa" },
-  { value: "Hemocentro do Rio Grande do Sul" },
-  { value: "Hemocentro de Campinas" },
-  { value: "Hemocentro de Ribeirão Preto" },
-  { value: "Hemocentro de Brasília" },
-  { value: "Hemocentro de Santa Catarina" },
-  { value: "Hemocentro de Pernambuco" },
-  { value: "Hemocentro de Goiás" },
-  { value: "Hemocentro do Amazonas" },
-  { value: "Hemocentro do Maranhão" },
-  { value: "Hemocentro do Paraná" },
-  { value: "Hemocentro do Espírito Santo" },
-]);
+if (lastDonationBloodBankLocationId) {
+  form.bloodBanksLocationId = lastDonationBloodBankLocationId;
+}
 
-const searchBloodBanks = (query: string, cb: (suggestions: { value: string }[]) => void) => {
-  const results = query
-    ? bloodBanks.value.filter((bank) =>
-        bank.value.toLowerCase().includes(query.toLowerCase())
-      )
-    : bloodBanks.value;
-  cb(results);
-};
+const bloodBanks = await bloodBanksStore.getBloodBanks(token);
 
-const handleSelect = (item: { value: string }) => {
-  form.bloodBank = item.value;
-};
+const bloodbankNotFound = ref(false);
 
 const isDateInvalid = computed(() => {
   return form.date > new Date();
@@ -131,6 +132,24 @@ const handleClick = () => {
   }
 };
 
+const donationLabel = computed(() => {
+  let bloodBankName = bloodbankNotFound.value
+    ? form.bloodBankName.trim()
+    : null;
+  if (form.bloodBanksLocationId) {
+    bloodBankName =
+      bloodBanks
+        .find((bank) => bank.id === form.bloodBanksLocationId)
+        ?.name?.trim() || bloodBankName;
+  }
+
+  if (!bloodBankName) {
+    return null;
+  }
+
+  return "Doação para " + bloodBankName;
+});
+
 const submitForm = async () => {
   if (loading.value) return;
   loading.value = true;
@@ -139,16 +158,17 @@ const submitForm = async () => {
     return ElMessage.error("Por favor, informe a data da doação.");
   }
 
-  if (!form.bloodBank) {
-    return ElMessage.error("Por favor, informe o banco de sangue.");
-  }
-
   if (isDateInvalid.value) {
     return ElMessage.error("A data da doação não pode ser no futuro.");
   }
 
+  if (!donationLabel.value) {
+    return ElMessage.error("Por favor, informe o banco de sangue.");
+  }
+
   const donationData = {
-    bloodbankName: form.bloodBank,
+    bloodBanksLocationId: form.bloodBanksLocationId || null,
+    label: donationLabel.value,
     donationDate: new Date(form.date.setHours(12)).toISOString(),
   };
 
@@ -176,6 +196,28 @@ const submitForm = async () => {
 const onSubmit = () => {
   submitForm();
 };
+
+watch(
+  () => bloodbankNotFound.value,
+  (value) => {
+    if (value) {
+      form.bloodBanksLocationId = "";
+    }
+  }
+);
+
+watch(
+  () => form.bloodBanksLocationId,
+  (value) => {
+    if (value) {
+      bloodbankNotFound.value = false;
+    }
+  }
+);
+
+const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now();
+};
 </script>
 
 <style scoped>
@@ -198,7 +240,8 @@ const onSubmit = () => {
 
 .confirm-button {
   height: 100%;
-  border-radius: 12px;
+  width: 100%;
+  margin-top: 0px !important;
 }
 
 p {
@@ -209,7 +252,6 @@ p {
 
 .form {
   width: 100%;
-  max-width: 500px;
 }
 
 .content {
