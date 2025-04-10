@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>pt-BR</string>
 	<key>CFBundleDisplayName</key>
 	<string>Hemocione</string>
 	<key>CFBundleExecutable</key>
@@ -35,6 +35,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Use the camera for taking pictures of blood donation documents or selfies of the person donating blood</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
