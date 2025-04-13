@@ -1,21 +1,21 @@
 PODS:
-  - Capacitor (6.0.0):
+  - Capacitor (7.2.0):
     - CapacitorCordova
-  - CapacitorApp (6.0.0):
+  - CapacitorApp (7.0.1):
     - Capacitor
-  - CapacitorAppLauncher (6.0.0):
+  - CapacitorAppLauncher (7.0.1):
     - Capacitor
-  - CapacitorBrowser (6.0.0):
+  - CapacitorBrowser (7.0.1):
     - Capacitor
-  - CapacitorCordova (6.0.0)
-  - CapacitorPreferences (6.0.0):
+  - CapacitorCordova (7.2.0)
+  - CapacitorPreferences (7.0.1):
     - Capacitor
-  - CordovaPluginsStatic (6.0.0):
+  - CordovaPluginsStatic (7.2.0):
     - CapacitorCordova
-    - OneSignalXCFramework (= 5.2.0)
-  - OneSignalXCFramework (5.2.0):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.0)
-  - OneSignalXCFramework/OneSignal (5.2.0):
+    - OneSignalXCFramework (= 5.2.10)
+  - OneSignalXCFramework (5.2.10):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
+  - OneSignalXCFramework/OneSignal (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -23,38 +23,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.0):
+  - OneSignalXCFramework/OneSignalComplete (5.2.10):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.0)
-  - OneSignalXCFramework/OneSignalExtension (5.2.0):
+  - OneSignalXCFramework/OneSignalCore (5.2.10)
+  - OneSignalXCFramework/OneSignalExtension (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.0):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.0):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.0):
+  - OneSignalXCFramework/OneSignalLocation (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.0):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.0):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.10):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.0):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.10):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.0):
+  - OneSignalXCFramework/OneSignalUser (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -91,15 +91,15 @@ EXTERNAL SOURCES:
     :path: "../capacitor-cordova-ios-plugins"
 
 SPEC CHECKSUMS:
-  Capacitor: c527d208447590a004f0a4a2c42a5f361848fa8a
-  CapacitorApp: 30145f2ea2311e4f3744472119ec87d2ddf4c0a7
-  CapacitorAppLauncher: 2ca6b4985700783c5c47b9a1d4da21093d31ecd2
-  CapacitorBrowser: 2c55e9f586ba5a825f09fe7abb51110adf1cd448
-  CapacitorCordova: 8c4bfdf69368512e85b1d8b724dd7546abeb30af
-  CapacitorPreferences: b2634203fb3c3a380a8eb01c0e25e4a10a91e522
-  CordovaPluginsStatic: 8f47aa3a806a26601f65e67d5409d36b3cd296e1
-  OneSignalXCFramework: bdf74fdc06888f9466dc21e826fe1549ed143095
+  Capacitor: 03bc7cbdde6a629a8b910a9d7d78c3cc7ed09ea7
+  CapacitorApp: febecbb9582cb353aed037e18ec765141f880fe9
+  CapacitorAppLauncher: bab4ca931a308252d2bafcb78ca6a364bd1d4c4e
+  CapacitorBrowser: 6299776d496e968505464884d565992faa20444a
+  CapacitorCordova: 5967b9ba03915ef1d585469d6e31f31dc49be96f
+  CapacitorPreferences: 6c98117d4d7508034a4af9db64d6b26fc75d7b94
+  CordovaPluginsStatic: d39f5abacfc5a78150f4d0005ffa6ae9a55725d2
+  OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
 
-PODFILE CHECKSUM: be3095cbc6bc3db31041d5fc2a0233b76ca4349f
+PODFILE CHECKSUM: b3197c69396af830f3c31fe917ad19483e12f2cb
 
 COCOAPODS: 1.16.2
