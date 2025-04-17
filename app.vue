@@ -1,7 +1,6 @@
 <template>
   <ElConfigProvider :locale="ptBr">
     <HemocioneHeader class="header" v-show="userStore.loggedIn" size="10" />
-    <NuxtLoadingIndicator color="#bb0a08" />
     <NuxtLayout v-if="userStore.loggedIn">
       <div id="iframe-page-wrapper" style="display: none" />
       <NuxtPage />
@@ -59,17 +58,18 @@ if (Capacitor.isNativePlatform() && config.public.oneSignalAppId) {
   OneSignal.initialize(config.public.oneSignalAppId);
 }
 
-const navigateAfterLogin = ref<string | null>(null);
-const confirmLogin = async () => {
-  await Browser.removeAllListeners();
-  if (navigateAfterLogin.value) {
-    navigateTo(navigateAfterLogin.value);
+OneSignal.Notifications.addEventListener("click", async (event) => {
+  const url = event.notification.launchURL;
+  if (url) {
+    const parsedUrl = new URL(url);
+    await handleLoginFlowForUrl(parsedUrl);
   }
-};
+});
 
-App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
-  await Browser.close(); // ensure browser is closed. IOS doesn't close it automatically as android does
-  const url = new URL(event.url);
+const navigateAfterLogin = ref<string | null>(null);
+
+let loginEvaluatedOnLoginFlow = false;
+const handleLoginFlowForUrl = async (url: URL) => {
   if (url.protocol.includes("http")) {
     // deep link origin
     const path = url.pathname;
@@ -79,11 +79,41 @@ App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
 
   // TODO: handle own app deeplinks in the future maybe
   const token = url.searchParams.get("token");
-  if (token) {
+  if (token && !loginEvaluatedOnLoginFlow) {
     executingLogin.value = true;
     attemptedLogin.value = false;
+    loginEvaluatedOnLoginFlow = true;
     await evaluateCurrentLogin(token);
   }
+};
+
+const recheckAppOpenedUrl = async () => {
+  if (navigateAfterLogin.value) {
+    return;
+  }
+
+  const appLaunchUrl = await App.getLaunchUrl();
+
+  if (appLaunchUrl?.url) {
+    const url = appLaunchUrl.url;
+    const parsedUrl = new URL(url);
+    await handleLoginFlowForUrl(parsedUrl);
+  }
+};
+
+const confirmLogin = async () => {
+  await Browser.removeAllListeners();
+  await recheckAppOpenedUrl();
+  if (navigateAfterLogin.value) {
+    navigateTo(navigateAfterLogin.value);
+  }
+};
+
+App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
+  // IOS NEVER GETS HERE :((
+  await Browser.close(); // ensure browser is closed. IOS doesn't close it automatically as android does
+  const url = new URL(event.url);
+  await handleLoginFlowForUrl(url);
 });
 
 const evaluateCurrentLogin = async (enforcedToken?: string) => {
