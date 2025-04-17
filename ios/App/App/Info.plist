@@ -37,6 +37,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Use the camera for taking pictures of blood donation documents or selfies of the person donating blood</string>
+	<key>OneSignal_suppress_launch_urls</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
