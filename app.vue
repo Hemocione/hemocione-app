@@ -58,9 +58,15 @@ if (Capacitor.isNativePlatform() && config.public.oneSignalAppId) {
   OneSignal.initialize(config.public.oneSignalAppId);
 }
 
-const navigateAfterLogin = ref<string | null>(null);
+OneSignal.Notifications.addEventListener("click", async (event) => {
+  const url = event.notification.launchURL;
+  if (url) {
+    const parsedUrl = new URL(url);
+    await handleLoginFlowForUrl(parsedUrl);
+  }
+});
 
-const debugText = ref("");
+const navigateAfterLogin = ref<string | null>(null);
 
 let loginEvaluatedOnLoginFlow = false;
 const handleLoginFlowForUrl = async (url: URL) => {
@@ -87,11 +93,8 @@ const recheckAppOpenedUrl = async () => {
   }
 
   const appLaunchUrl = await App.getLaunchUrl();
-  debugText.value = `${debugText.value}, APP_LAUNCH_URL: ${JSON.stringify(
-    appLaunchUrl
-  )}`;
 
-  if (appLaunchUrl) {
+  if (appLaunchUrl?.url) {
     const url = appLaunchUrl.url;
     const parsedUrl = new URL(url);
     await handleLoginFlowForUrl(parsedUrl);
@@ -106,10 +109,9 @@ const confirmLogin = async () => {
   }
 };
 
-// IOS NEVER GETS HERE :((
 App.addListener("appUrlOpen", async function (event: URLOpenListenerEvent) {
+  // IOS NEVER GETS HERE :((
   await Browser.close(); // ensure browser is closed. IOS doesn't close it automatically as android does
-  debugText.value = `${debugText.value}, EVENT_URL: ${event.url}`;
   const url = new URL(event.url);
   await handleLoginFlowForUrl(url);
 });
