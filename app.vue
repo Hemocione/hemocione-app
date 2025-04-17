@@ -58,7 +58,7 @@ if (Capacitor.isNativePlatform() && config.public.oneSignalAppId) {
   OneSignal.initialize(config.public.oneSignalAppId);
 }
 
-OneSignal.Notifications.addEventListener("click", async (event) => {
+OneSignal?.Notifications?.addEventListener("click", async (event) => {
   const url = event.notification.launchURL;
   if (url) {
     const parsedUrl = new URL(url);
