@@ -49,6 +49,7 @@
       <div class="menu-item out">
         <img src="/icons/logout.svg" class="icon" />
         <span @click="toggleOutDialog">{{ logoutText }}</span>
+        <span class="version" @click="handleVersionClick">v{{ version }}</span>
       </div>
     </div>
   </ElDrawer>
@@ -125,12 +126,22 @@ span[active="true"] {
 .dialog-actions > * {
   width: 100%;
 }
+
+.version {
+  margin-top: 0.5rem;
+  color: var(--black-40);
+  font-size: 0.6rem;
+  justify-content: center;
+  margin-left: auto;
+}
 </style>
 
 <script setup lang="ts">
 import { AppLauncher } from "@capacitor/app-launcher";
 import { useUserStore } from "~/stores/user";
 import { storeToRefs } from "pinia";
+import pkg from "~/package.json";
+
 const drawer = ref(false);
 const confirmOutDialog = ref(false);
 const userStore = useUserStore();
@@ -299,4 +310,22 @@ watch(drawer, (newValue) => {
     window.removeEventListener("popstate", handlePopState);
   }
 });
+
+const version = ref(pkg.version);
+const CLICKS_REQUIRED = 5;
+const TIME_WINDOW = 3000; // 3 seconds
+const clicks = ref<number[]>([]);
+
+const handleVersionClick = () => {
+  const now = Date.now();
+  clicks.value = clicks.value.filter((time) => now - time < TIME_WINDOW);
+  clicks.value.push(now);
+
+  if (clicks.value.length >= CLICKS_REQUIRED) {
+    // Reset clicks
+    clicks.value = [];
+    // Navigate to test page
+    navigateTo("/test");
+  }
+};
 </script>

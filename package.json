@@ -24,6 +24,7 @@
     "@capacitor/preferences": "^7.0.0",
     "@element-plus/nuxt": "^1.0.7",
     "@formkit/auto-animate": "^0.8.2",
+    "@hemocione/sdk": "^0.0.3",
     "@nuxtjs/google-fonts": "^3.0.1",
     "@pinia/nuxt": "^0.5.1",
     "@vercel/analytics": "^1.1.2",
