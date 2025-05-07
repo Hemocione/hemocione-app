@@ -23,10 +23,10 @@ export default defineNuxtConfig({
       cookieDomain: process.env.NUXT_COOKIE_DOMAIN || "hemocione.com.br",
       hemocioneIdApiUrl:
         process.env.NUXT_HEMOCIONE_ID_API_URL ||
-        "https://hemocione-id-dev.cpt.hemocione.com.br",
+        "https://hemocione-id.cpt.hemocione.com.br",
       hemocioneIdUrl:
-        process.env.NUXT_HEMOCIONE_ID_URL || "https://id.d.hemocione.com.br",
-      authLocalKey: process.env.NUXT_AUTH_LOCAL_KEY || "devHemocioneId",
+        process.env.NUXT_HEMOCIONE_ID_URL || "https://id.hemocione.com.br",
+      authLocalKey: process.env.NUXT_AUTH_LOCAL_KEY || "hemocioneId",
       userDataLocalKey: "userData",
       siteUrl: getSiteUrl(),
       eventsUrl:
@@ -133,4 +133,6 @@ export default defineNuxtConfig({
       },
     ],
   },
+
+  compatibilityDate: "2025-05-07",
 });
