@@ -51,6 +51,7 @@ const iframeSrc = computed(() => {
     // build url correctly with token
     src.searchParams.set("token", userStore.token); // add token to query params
   }
+  src.searchParams.set("iframed", "true");
   return src.toString();
 });
 </script>
