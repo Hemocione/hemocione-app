@@ -19,11 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     iframeListener.on("hemocione:share", async (data: ShareData) => {
       if (navigator.share) {
         try {
-          await navigator.share({
-            title: data.title,
-            text: data.text,
-            url: data.url,
-          });
+          await navigator.share(data);
         } catch (error) {
           console.error("Error sharing:", error);
         }
