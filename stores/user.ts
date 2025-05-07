@@ -95,6 +95,7 @@ interface User {
   phone: string;
   donations: Donation[];
   addresses: Address[];
+  firstAppAccessAt: string | null;
 }
 
 export type UserUpdate = Omit<User, "donations" | "addresses"> & {
@@ -138,6 +139,23 @@ export const useUserStore = defineStore("user", {
         userMatchingDonation.reviewedAt = new Date(); // update user donation reviewedAt on the store
       }
     },
+    setFirstAppAccessAt() {
+      const config = useRuntimeConfig();
+
+      $fetch(config.public.hemocioneIdApiUrl + "/users/set-first-app-access", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+          "Content-Type": "application/json",
+        },
+      }).then((_data) => {
+        if (!this.user) {
+          return;
+        }
+
+        this.user.firstAppAccessAt = new Date().toISOString();
+      });
+    },
     async fetchMe() {
       const config = useRuntimeConfig();
 
@@ -149,7 +167,11 @@ export const useUserStore = defineStore("user", {
           },
         }
       );
-      const donations = data.donations;
+
+      if (!this.user?.firstAppAccessAt) {
+        this.setFirstAppAccessAt();
+      }
+
       this.setUser(data);
     },
     async setToken(token: string) {
