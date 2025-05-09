@@ -105,6 +105,7 @@ export type UserUpdate = Omit<User, "donations" | "addresses"> & {
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
 import OneSignal from "onesignal-cordova-plugin";
+import { usePosthog } from "~/composables/usePosthog";
 
 // TODO: add composable to handle token usage in the API calls
 
@@ -191,6 +192,13 @@ export const useUserStore = defineStore("user", {
     },
     setUser(user: any) {
       this.user = user;
+      usePosthog().identify(user.id, {
+        email: user.email,
+        name: user.givenName,
+        gender: user.gender,
+        bloodType: user.bloodType,
+        phone: user.phone,
+      });
     },
     async createUserDonation(donationData: {
       label: string;

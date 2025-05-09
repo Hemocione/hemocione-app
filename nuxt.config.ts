@@ -39,6 +39,8 @@ export default defineNuxtConfig({
       canDonateUrl:
         process.env.NUXT_CAN_DONATE_URL || "https://possodoar.hemocione.com.br",
       testUrl: process.env.NUXT_TEST_URL || "https://wxmmdm-5173.csb.app",
+      posthogPublicKey: process.env.NUXT_POSTHOG_PUBLIC_KEY || "",
+      posthogHost: process.env.NUXT_POSTHOG_HOST || "https://us.i.posthog.com",
     },
   },
 
