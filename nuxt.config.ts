@@ -127,7 +127,7 @@ export default defineNuxtConfig({
               namespace: "android_app",
               package_name: "br.com.hemocione.app",
               sha256_cert_fingerprints: [
-                "C3:04:BD:47:17:D4:29:76:D1:6D:CC:F1:FC:F3:99:A1:40:04:AA:DE:41:A7:A0:53:7F:20:65:1A:29:8C:16:1D",
+                "14:05:77:CA:7C:70:36:FA:58:45:05:80:7D:C7:87:AC:C7:C4:49:B3:CB:79:C6:BC:56:6E:97:42:9D:D1:2C:4D",
               ],
             },
           },
