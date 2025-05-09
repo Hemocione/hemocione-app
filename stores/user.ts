@@ -315,7 +315,7 @@ export const useUserStore = defineStore("user", {
         (now.getTime() - donationDate.getTime()) / (1000 * 3600 * 24)
       );
 
-      if (daysSinceLastDonation < 0) {
+      if (daysSinceLastDonation <= 0) {
         todayDonation = true;
       }
 
