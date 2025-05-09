@@ -168,7 +168,7 @@ export const useUserStore = defineStore("user", {
         }
       );
 
-      if (!this.user?.firstAppAccessAt) {
+      if (!this.user?.firstAppAccessAt && Capacitor.isNativePlatform()) {
         this.setFirstAppAccessAt();
       }
 
