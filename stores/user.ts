@@ -309,9 +309,15 @@ export const useUserStore = defineStore("user", {
         Date.parse(String(newestDonation?.donationDate))
       );
       const now = new Date();
-      const daysSinceLastDonation = Math.ceil(
+
+      let todayDonation = false;
+      const daysSinceLastDonation = Math.floor(
         (now.getTime() - donationDate.getTime()) / (1000 * 3600 * 24)
       );
+
+      if (daysSinceLastDonation < 0) {
+        todayDonation = true;
+      }
 
       const genderConfig = GENDER_CONFIG[state?.user?.gender || "O"];
       const surpassedLimitDaysInterval =
@@ -332,15 +338,17 @@ export const useUserStore = defineStore("user", {
           status: "able-to-donate",
           label: `Última doação há ${daysSinceLastDonation} ${
             daysSinceLastDonation === 1 ? "dia" : "dias"
-          } - você já pode doar novamente!`,
+          } - você já pode doar novamente! 🎉`,
         };
       }
 
       let unableLabel = alreadyDonatedMaxTimesOnCurrentYear
-        ? `Você já doou ${genderConfig.limitPerYear} vezes no período de 1 ano - você ainda não pode doar novamente.`
+        ? `Você já doou ${genderConfig.limitPerYear} vezes no período de 1 ano - você ainda não pode doar novamente. 💔`
+        : todayDonation
+        ? "Você doou sangue nas últimas 24 horas. Obrigado por ajudar a salvar vidas! 💖"
         : `Última doação há ${daysSinceLastDonation} ${
             daysSinceLastDonation === 1 ? "dia" : "dias"
-          } - você ainda não pode doar novamente`;
+          } - você ainda não pode doar novamente. 💔`;
       return {
         status: "unable-to-donate",
         label: unableLabel,
