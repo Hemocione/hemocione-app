@@ -196,8 +196,6 @@ export const useUserStore = defineStore("user", {
         email: user.email,
         name: user.givenName,
         gender: user.gender,
-        bloodType: user.bloodType,
-        phone: user.phone,
       });
     },
     async createUserDonation(donationData: {
