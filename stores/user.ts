@@ -168,11 +168,11 @@ export const useUserStore = defineStore("user", {
         }
       );
 
+      this.setUser(data);
+
       if (!this.user?.firstAppAccessAt && Capacitor.isNativePlatform()) {
         this.setFirstAppAccessAt();
       }
-
-      this.setUser(data);
     },
     async setToken(token: string) {
       try {
