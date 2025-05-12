@@ -29,7 +29,6 @@
     "@pinia/nuxt": "^0.5.1",
     "@vercel/analytics": "^1.1.2",
     "@vueuse/nuxt": "13.0.0",
-    "@zadigetvoltaire/nuxt-well-known": "^0.0.13",
     "axios": "^1.8.3",
     "dayjs": "^1.11.10",
     "element-plus": "^2.5.2",
