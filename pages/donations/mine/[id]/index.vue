@@ -21,6 +21,12 @@
             <span class="donation-date">{{ readableDate }}</span>
             <span class="donation-label">{{ donation.label }}</span>
           </div>
+          <ElButton
+            :icon="ElIconDelete"
+            circle
+            @click="showDeleteModal = true"
+            class="delete-button"
+          />
         </div>
         <div class="donation-status" :class="donation.reviewStatus">
           {{ statusText }}
@@ -128,6 +134,28 @@
             @click="() => (showCancelActionModal = false)"
           >
             Mudei de ideia
+          </ElButton>
+        </div>
+      </template>
+    </ElDialog>
+
+    <ElDialog
+      v-model="showDeleteModal"
+      title="Excluir doação"
+      align-center
+      width="300px"
+    >
+      <span
+        >Tem certeza que deseja excluir esta doação? Esta ação é
+        irreversível.</span
+      >
+      <template #footer>
+        <div class="buttons-wrapper">
+          <ElButton type="danger" @click="handleDelete" :loading="deleting">
+            Excluir doação
+          </ElButton>
+          <ElButton type="default" @click="() => (showDeleteModal = false)">
+            Cancelar
           </ElButton>
         </div>
       </template>
@@ -322,6 +350,10 @@
   width: 100%;
   height: 2.5rem;
 }
+
+.delete-button {
+  margin-left: auto;
+}
 </style>
 
 <script setup lang="ts">
@@ -388,6 +420,8 @@ const statusText = computed(() => {
 
 const showConfirmActionModal = ref(false);
 const showCancelActionModal = ref(false);
+const showDeleteModal = ref(false);
+const deleting = ref(false);
 
 const handleDonationConfirmation = async () => {
   if (!donation.value) return;
@@ -417,5 +451,20 @@ const handleDonationCancel = async () => {
     );
   }
   updatingDonationStatus.value = false;
+};
+
+const handleDelete = async () => {
+  if (!donation.value) return;
+  deleting.value = true;
+  try {
+    await userStore.deleteDonation(donation.value.id);
+    ElMessage.success("Doação excluída com sucesso!");
+    await navigateTo("/donations");
+  } catch (error) {
+    ElMessage.error(
+      "Erro ao excluir a doação - por favor, tente novamente mais tarde."
+    );
+  }
+  deleting.value = false;
 };
 </script>

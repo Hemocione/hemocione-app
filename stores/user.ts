@@ -245,6 +245,19 @@ export const useUserStore = defineStore("user", {
     getDonationById(id: number) {
       return this.user?.donations.find((d) => d.id === id);
     },
+    async deleteDonation(id: number) {
+      const config = useRuntimeConfig();
+      await $fetch(config.public.hemocioneIdApiUrl + `/donations/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      });
+      // Remove donation from store
+      if (this.user) {
+        this.user.donations = this.user.donations.filter((d) => d.id !== id);
+      }
+    },
   },
   getters: {
     userAge(state) {
