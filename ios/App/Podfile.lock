@@ -8,6 +8,8 @@ PODS:
   - CapacitorBrowser (7.0.1):
     - Capacitor
   - CapacitorCordova (7.2.0)
+  - CapacitorPluginSafeArea (4.0.0):
+    - Capacitor
   - CapacitorPreferences (7.0.1):
     - Capacitor
   - CordovaPluginsStatic (7.2.0):
@@ -66,6 +68,7 @@ DEPENDENCIES:
   - "CapacitorAppLauncher (from `../../node_modules/@capacitor/app-launcher`)"
   - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - CapacitorPluginSafeArea (from `../../node_modules/capacitor-plugin-safe-area`)
   - "CapacitorPreferences (from `../../node_modules/@capacitor/preferences`)"
   - CordovaPluginsStatic (from `../capacitor-cordova-ios-plugins`)
   - OneSignalXCFramework (< 6.0, >= 5.0)
@@ -85,6 +88,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor/browser"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorPluginSafeArea:
+    :path: "../../node_modules/capacitor-plugin-safe-area"
   CapacitorPreferences:
     :path: "../../node_modules/@capacitor/preferences"
   CordovaPluginsStatic:
@@ -96,10 +101,11 @@ SPEC CHECKSUMS:
   CapacitorAppLauncher: bab4ca931a308252d2bafcb78ca6a364bd1d4c4e
   CapacitorBrowser: 6299776d496e968505464884d565992faa20444a
   CapacitorCordova: 5967b9ba03915ef1d585469d6e31f31dc49be96f
+  CapacitorPluginSafeArea: 22031c3436269ca80fac90ec2c94bc7c1e59a81d
   CapacitorPreferences: 6c98117d4d7508034a4af9db64d6b26fc75d7b94
   CordovaPluginsStatic: d39f5abacfc5a78150f4d0005ffa6ae9a55725d2
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
 
-PODFILE CHECKSUM: b3197c69396af830f3c31fe917ad19483e12f2cb
+PODFILE CHECKSUM: 405ab1597583a821d9cb3417e2c704ee201133a6
 
 COCOAPODS: 1.16.2

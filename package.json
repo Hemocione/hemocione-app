@@ -30,6 +30,7 @@
     "@vercel/analytics": "^1.1.2",
     "@vueuse/nuxt": "13.0.0",
     "axios": "^1.8.3",
+    "capacitor-plugin-safe-area": "^4.0.0",
     "dayjs": "^1.11.10",
     "element-plus": "^2.5.2",
     "maska": "^3.1.0",

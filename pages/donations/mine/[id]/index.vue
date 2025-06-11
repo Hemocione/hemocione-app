@@ -428,12 +428,14 @@ const handleDonationConfirmation = async () => {
   updatingDonationStatus.value = true;
   try {
     await userStore.reviewDonation(donation.value, "confirmed");
-    ElMessage.success("Doação confirmada com sucesso!");
+    HemoMessage({ type: "success", message: "Doação confirmada com sucesso!" });
     showConfirmActionModal.value = false;
   } catch (error) {
-    ElMessage.error(
-      "Erro ao confirmar a doação - por favor, tente novamente mais tarde."
-    );
+    HemoMessage({
+      type: "error",
+      message:
+        "Erro ao confirmar a doação - por favor, tente novamente mais tarde.",
+    });
   }
   updatingDonationStatus.value = false;
 };
@@ -443,12 +445,14 @@ const handleDonationCancel = async () => {
   updatingDonationStatus.value = true;
   try {
     await userStore.reviewDonation(donation.value, "rejected");
-    ElMessage.success("Doação cancelada com sucesso!");
+    HemoMessage({ type: "success", message: "Doação cancelada com sucesso!" });
     showCancelActionModal.value = false;
   } catch (error) {
-    ElMessage.error(
-      "Erro ao cancelar a doação - por favor, tente novamente mais tarde."
-    );
+    HemoMessage({
+      type: "error",
+      message:
+        "Erro ao cancelar a doação - por favor, tente novamente mais tarde.",
+    });
   }
   updatingDonationStatus.value = false;
 };
@@ -458,12 +462,14 @@ const handleDelete = async () => {
   deleting.value = true;
   try {
     await userStore.deleteDonation(donation.value.id);
-    ElMessage.success("Doação excluída com sucesso!");
+    HemoMessage({ type: "success", message: "Doação excluída com sucesso!" });
     await navigateTo("/donations");
   } catch (error) {
-    ElMessage.error(
-      "Erro ao excluir a doação - por favor, tente novamente mais tarde."
-    );
+    HemoMessage({
+      type: "error",
+      message:
+        "Erro ao excluir a doação - por favor, tente novamente mais tarde.",
+    });
   }
   deleting.value = false;
 };

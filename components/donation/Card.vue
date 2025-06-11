@@ -132,9 +132,11 @@ const handleDonationConfirmation = async () => {
   try {
     await userStore.reviewDonation(props.donation, "confirmed");
   } catch (error) {
-    ElNotification.error(
-      "Erro ao confirmar a doação - por favor, tente novamente mais tarde."
-    );
+    HemoNotification({
+      type: "error",
+      message:
+        "Erro ao confirmar a doação - por favor, tente novamente mais tarde.",
+    });
   }
   updatingDonationStatus.value = false;
 };
@@ -144,9 +146,11 @@ const handleDonationCancel = async () => {
   try {
     await userStore.reviewDonation(props.donation, "rejected");
   } catch (error) {
-    ElNotification.error(
-      "Erro ao cancelar a doação - por favor, tente novamente mais tarde."
-    );
+    HemoNotification({
+      type: "error",
+      message:
+        "Erro ao cancelar a doação - por favor, tente novamente mais tarde.",
+    });
   }
   updatingDonationStatus.value = false;
 };

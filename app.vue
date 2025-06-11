@@ -65,6 +65,8 @@ if (Capacitor.isNativePlatform() && config.public.oneSignalAppId) {
   });
 }
 
+useTopSafeAreaInset();
+
 const navigateAfterLogin = ref<string | null>(null);
 
 let loginEvaluatedOnLoginFlow = false;

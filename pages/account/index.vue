@@ -269,12 +269,18 @@ const handleClick = async () => {
   // in the future, use the persisted state hash for adding a confirmation thing
   try {
     await userStore.updateUser(getUserUpdatePayload());
-    ElMessage.success("Alterações salvas com sucesso.");
+    HemoMessage({
+      type: 'success',
+      message: "Alterações salvas com sucesso."
+    })
     nextTick(async () => {
       await navigateTo("/") // go to home after successfull update
     });
   } catch (error) {
-    ElMessage.error("Erro ao salvar alterações.");
+    HemoMessage({
+      type: 'error',
+      message: "Erro ao salvar alterações."
+    })
   }
   loading.value = false;
 };

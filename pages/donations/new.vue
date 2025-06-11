@@ -89,7 +89,6 @@
 import { useUserStore } from "@/stores/user";
 import { useBloodBanksStore } from "@/stores/bloodBanks";
 import { ref, reactive, computed } from "vue";
-import { ElMessage } from "element-plus";
 
 const userStore = useUserStore();
 const userName = userStore.userWithMetrics!.name;
@@ -160,19 +159,30 @@ const submitForm = async () => {
   loading.value = true;
 
   if (!form.date) {
-    return ElMessage.error("Por favor, informe a data da doação.");
+    return HemoMessage({
+      type: "error",
+      message: "Por favor, informe a data da doação.",
+    });
   }
 
   if (isDateInvalid.value) {
-    return ElMessage.error("A data da doação não pode ser no futuro.");
+    return HemoMessage({
+      type: "error",
+      message: "A data da doação não pode ser no futuro.",
+    });
   }
 
   if (!donationLabel.value) {
-    return ElMessage.error("Por favor, informe o banco de sangue.");
+    return HemoMessage({
+      type: "error",
+      message: "Por favor, informe o banco de sangue.",
+    });
   }
 
   const donationData = {
-    bloodBanksLocationId: form.bloodBanksLocationId || null,
+    ...(form.bloodBanksLocationId
+      ? { bloodBanksLocationId: form.bloodBanksLocationId }
+      : {}),
     label: donationLabel.value,
     donationDate: new Date(form.date.setHours(12)).toISOString(),
   };
@@ -186,7 +196,7 @@ const submitForm = async () => {
     if ((error as any).statusCode === 409) {
       errorMessage = (error as any).data?.message || errorMessage;
     }
-    ElMessage({
+    HemoMessage({
       message: errorMessage,
       type: "error",
       duration: 5000,
