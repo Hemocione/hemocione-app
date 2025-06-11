@@ -242,6 +242,9 @@ export const useUserStore = defineStore("user", {
       });
       cookie.value = undefined;
     },
+    getDonationById(id: number) {
+      return this.user?.donations.find((d) => d.id === id);
+    },
   },
   getters: {
     userAge(state) {

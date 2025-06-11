@@ -1,6 +1,9 @@
-interface BloodBankLocation {
+export interface BloodBankLocation {
   id: string;
   name: string;
+  latitude: number;
+  longitude: number;
+  address: string;
 }
 
 export const useBloodBanksStore = defineStore("bloodBanks", {
@@ -34,6 +37,13 @@ export const useBloodBanksStore = defineStore("bloodBanks", {
       } catch (e) {
         return [];
       }
+    },
+    async getBloodBankById(id: string, token: string) {
+      if (!this.bloodBanks?.length) {
+        await this.fetchBloodBanksLocations(token);
+      }
+
+      return this.bloodBanks.find((bloodBank) => bloodBank.id === id);
     },
   },
 });

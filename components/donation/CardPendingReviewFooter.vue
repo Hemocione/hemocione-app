@@ -7,13 +7,13 @@
     <div class="buttons-wrapper">
       <ElButton
         type="success"
-        @click="confirm"
+        @click.stop="confirm"
         :loading="loading"
         :disabled="loading"
         >Confirmar doação</ElButton
       >
       <CommonSecondaryButton
-        @click="cancel"
+        @click.stop="cancel"
         :loading="loading"
         :disabled="loading"
         >Não realizei a doação</CommonSecondaryButton
@@ -29,12 +29,12 @@
     <span>Tem certeza que deseja confirmar esta doação?</span>
     <template #footer>
       <div class="buttons-wrapper">
-        <ElButton type="success" @click="modalConfirm"
+        <ElButton type="success" @click.stop="modalConfirm"
           >Confirmar doação</ElButton
         >
         <ElButton
           type="secondary"
-          @click="() => (showConfirmActionModal = false)"
+          @click.stop="() => (showConfirmActionModal = false)"
           >Cancelar</ElButton
         >
       </div>
@@ -49,10 +49,12 @@
     <span>Tem certeza que deseja rejeitar esta doação?</span>
     <template #footer>
       <div class="buttons-wrapper">
-        <ElButton type="primary" @click="modalCancel">Rejeitar doação</ElButton>
+        <ElButton type="primary" @click.stop="modalCancel"
+          >Rejeitar doação</ElButton
+        >
         <ElButton
           type="secondary"
-          @click="() => (showCancelActionModal = false)"
+          @click.stop="() => (showCancelActionModal = false)"
           >Mudei de ideia</ElButton
         >
       </div>

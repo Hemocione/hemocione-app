@@ -1,5 +1,5 @@
 <template>
-  <div class="donation-card">
+  <div class="donation-card" @click="goToDonation">
     <div class="donation-card-content">
       <div class="donation-provider-logo">
         <img :src="logoSrc" />
@@ -11,10 +11,11 @@
         </span>
       </div>
       <!-- TODO: uncomment when donation has a detail page -->
-      <!-- <ElIcon :size="20">
+      <ElIcon :size="20">
         <ElIconArrowRightBold />
-      </ElIcon> -->
+      </ElIcon>
     </div>
+    <!-- any click in the footers should prevent the whole click-->
     <DonationCardRejectedReviewFooter
       v-if="donation.reviewStatus === 'rejected'"
     />
@@ -148,5 +149,9 @@ const handleDonationCancel = async () => {
     );
   }
   updatingDonationStatus.value = false;
+};
+
+const goToDonation = () => {
+  navigateTo(`/donations/mine/${props.donation.id}`);
 };
 </script>
