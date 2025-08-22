@@ -189,6 +189,12 @@ const internalPages: InternalPage[] = [
     icon: "trophy",
   },
   {
+    path: "/ask-for-help",
+    name: "Pedir Ajuda",
+    priority: 1,
+    icon: "help",
+  },
+  {
     path: "/where",
     name: "Onde Doar",
     priority: 1,

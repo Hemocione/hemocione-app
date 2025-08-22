@@ -36,6 +36,7 @@ export default defineNuxtConfig({
       whereToDonateUrl:
         process.env.NUXT_WHERE_TO_DONATE_URL ||
         "https://ondedoar.hemocione.com.br",
+      askForHelpUrl: process.env.NUXT_ASK_FOR_HELP_URL || "http://localhost:3001/",
       canDonateUrl:
         process.env.NUXT_CAN_DONATE_URL || "https://possodoar.hemocione.com.br",
       testUrl: process.env.NUXT_TEST_URL || "https://wxmmdm-5173.csb.app",
