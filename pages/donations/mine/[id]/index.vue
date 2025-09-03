@@ -22,6 +22,7 @@
             <span class="donation-label">{{ donation.label }}</span>
           </div>
           <ElButton
+            v-if="!donation.isVirtual"
             :icon="ElIconDelete"
             circle
             @click="showDeleteModal = true"
