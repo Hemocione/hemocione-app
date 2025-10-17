@@ -17,6 +17,9 @@
         {{ loginButtonText }}
       </ElButton>
     </div>
+    
+    <!-- Modal de avaliação do app -->
+    <CommonAppReviewDialog />
   </ElConfigProvider>
 </template>
 
