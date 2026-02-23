@@ -89,8 +89,10 @@
 import { useUserStore } from "@/stores/user";
 import { useBloodBanksStore } from "@/stores/bloodBanks";
 import { ref, reactive, computed } from "vue";
+import { useAppReview } from "@/composables/useAppReview";
 
 const userStore = useUserStore();
+const { requestReview } = useAppReview();
 const userName = userStore.userWithMetrics!.name;
 const token = userStore.token!;
 const lastDonationBloodBankLocationId =
@@ -190,6 +192,8 @@ const submitForm = async () => {
   try {
     await userStore.createUserDonation(donationData);
     donationRegistered.value = true;
+    // Request in-app review after a short delay (let the user see the success state first)
+    setTimeout(requestReview, 2000);
   } catch (error) {
     let errorMessage =
       "Erro ao registrar doação. Por favor, tente novamente mais tarde.";

@@ -231,6 +231,11 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
+"@capacitor-community/in-app-review@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/in-app-review/-/in-app-review-7.1.0.tgz"
+  integrity sha512-qB0Q+qvPxF03UWoryZubyMkOCRqJF5xEILjt+VC4768yyilyss4k6qDjT6x9x7T4T8o8kmGgbPBJgwf1fsLa1A==
+
 "@capacitor/android@^7.0.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-7.2.0.tgz#f30e313315ab92c500bd57d9f0c4716a46b42f40"
