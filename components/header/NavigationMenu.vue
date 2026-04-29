@@ -53,6 +53,11 @@
 </template>
 
 <style scoped>
+img {
+  width: 2em;
+  height: 2em;
+}
+
 .content {
   width: 100%;
   height: 100%;
