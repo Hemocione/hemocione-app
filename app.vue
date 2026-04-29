@@ -1,6 +1,15 @@
 <template>
   <ElConfigProvider :locale="ptBr">
-    <HemocioneHeader class="header" v-show="userStore.loggedIn" size="10" />
+    <HemocioneHeader
+      v-if="!isIframePage"
+      class="header"
+      v-show="userStore.loggedIn"
+      size="10"
+    />
+    <template v-else>
+      <ReducedHeader v-show="userStore.loggedIn" />
+      <IframeBottomBar v-show="userStore.loggedIn" />
+    </template>
     <NuxtLayout v-if="userStore.loggedIn">
       <div id="iframe-page-wrapper" style="display: none" />
       <NuxtPage />
@@ -27,6 +36,7 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const config = useRuntimeConfig();
 const route = useRoute();
+const isIframePage = computed(() => Boolean(route.meta.allowFullscreen));
 const { token: urlToken, noAuto } = route.query;
 
 const attemptedLogin = ref(Boolean(noAuto));
