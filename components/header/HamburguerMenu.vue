@@ -1,7 +1,7 @@
 <template>
   <img src="/icons/menu.svg" alt="Menu" @click="toggleDrawer" />
   <ElDrawer v-model="drawer" direction="rtl" size="300px">
-    <HeaderNavigationMenu @navigate="toggleDrawer" @logout="handleOut" />
+    <HeaderNavigationMenu @navigate="toggleDrawer" @logout="toggleOutDialog" />
   </ElDrawer>
   <ElDialog
     :title="logoutText"
@@ -12,7 +12,7 @@
     <span>Tem certeza que deseja sair?</span>
     <div class="dialog-actions">
       <ElButton @click="toggleOutDialog">Cancelar</ElButton>
-      <ElButton type="primary" @click="handleOut">Sair</ElButton>
+      <ElButton type="primary" @click="confirmLogout">Sair</ElButton>
     </div>
   </ElDialog>
 </template>
@@ -52,6 +52,11 @@ const toggleOutDialog = () => {
 const logoutText = userStore.user?.givenName
   ? `Sair (${userStore.user.givenName})`
   : "Sair";
+
+const confirmLogout = () => {
+  confirmOutDialog.value = false;
+  handleOut();
+};
 
 const handleOut = () => {
   userStore.logout();
