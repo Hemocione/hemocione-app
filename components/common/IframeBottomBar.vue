@@ -5,11 +5,11 @@
       <span>Voltar</span>
     </button>
     <button class="nav-button" @click="goHome">
-      <img src="/icons/house.svg" alt="Home" class="nav-icon" />
+      <img src="/icons/house.svg" alt="Home" />
       <span>Home</span>
     </button>
     <button class="nav-button" @click="toggleDrawer">
-      <img src="/icons/menu.svg" alt="Menu" class="nav-icon" />
+      <img src="/icons/menu.svg" alt="Menu" />
       <span>Menu</span>
     </button>
 
@@ -80,6 +80,7 @@
 </style>
 
 <script setup lang="ts">
+import { onUnmounted } from "vue";
 import { useUserStore } from "~/stores/user";
 
 const drawer = ref(false);
@@ -125,5 +126,9 @@ watch(drawer, (newValue) => {
   } else {
     window.removeEventListener("popstate", handlePopState);
   }
+});
+
+onUnmounted(() => {
+  window.removeEventListener("popstate", handlePopState);
 });
 </script>
