@@ -115,7 +115,7 @@ const pageStyle = computed(() => ({
 
 | Botão | Ação |
 |---|---|
-| Voltar | `navigateTo(-1)` |
+| Voltar | `useRouter().back()` |
 | Home | `navigateTo('/')` |
 | Menu | Emite evento ou abre drawer (reutiliza `HamburguerMenu`) |
 
@@ -141,8 +141,10 @@ const pageStyle = computed(() => ({
 - Modificação condicional de `layouts/default.vue`
 - Adição de CSS variables em `globals.css`
 
+### Inclui (continuação)
+- Refatoração leve de `HamburguerMenu.vue`: extrair o conteúdo do drawer (`ElDrawer`) para um componente reutilizável (ex: `MenuDrawer.vue`) ou tornar o trigger opcional via prop, permitindo que `IframeBottomBar` abra o mesmo drawer sem renderizar o ícone de menu duplicado.
+
 ### Não Inclui
-- Alterações no `HamburguerMenu.vue` (exceto possível extração do conteúdo do drawer se necessário)
 - Alterações nas páginas embedadas (`events`, `where`, etc.)
 - Alterações em páginas internas
 - Testes automatizados (fora do escopo atual)
