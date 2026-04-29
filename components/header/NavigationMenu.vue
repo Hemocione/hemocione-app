@@ -53,11 +53,6 @@
 </template>
 
 <style scoped>
-img {
-  width: 2em;
-  height: 2em;
-}
-
 .content {
   width: 100%;
   height: 100%;
@@ -84,6 +79,7 @@ img {
 .icon {
   object-fit: contain;
   width: 1.2rem;
+  height: 1.2rem;
 }
 
 .external-link-icon {
@@ -91,6 +87,7 @@ img {
   top: 0;
   right: 0;
   width: 0.6rem;
+  height: 0.6rem;
 }
 
 span[active="true"] {
@@ -123,9 +120,9 @@ const { pendingDonations, rejectedDonations } = storeToRefs(userStore);
 const pendingDonationsCount = computed(() => pendingDonations.value.length);
 const rejectedDonationsCount = computed(() => rejectedDonations.value.length);
 
-const logoutText = userStore.user?.givenName
-  ? `Sair (${userStore.user.givenName})`
-  : "Sair";
+const logoutText = computed(() =>
+  userStore.user?.givenName ? `Sair (${userStore.user.givenName})` : "Sair"
+);
 
 interface Page {
   name: string;
@@ -193,7 +190,11 @@ const isCurrentRoute = (
 };
 
 async function openExternalPage(externalPage: ExternalPage) {
-  await AppLauncher.openUrl({ url: externalPage.url });
+  try {
+    await AppLauncher.openUrl({ url: externalPage.url });
+  } catch {
+    window.open(externalPage.url, "_blank");
+  }
 }
 
 const version = ref(pkg.version);
