@@ -14,7 +14,7 @@
     </button>
 
     <ElDrawer v-model="drawer" direction="rtl" size="300px">
-      <HeaderNavigationMenu @navigate="toggleDrawer" @logout="handleOut" />
+      <HeaderNavigationMenu @navigate="toggleDrawer" @logout="toggleOutDialog" />
     </ElDrawer>
 
     <ElDialog
