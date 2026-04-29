@@ -8,22 +8,15 @@
 
 <script setup lang="ts">
 const route = useRoute();
-const allowFullscreen = computed(() => route.meta.allowFullscreen);
-const pageStyle = ref({
+const allowFullscreen = computed(() => Boolean(route.meta.allowFullscreen));
+
+const pageStyle = computed(() => ({
   maxWidth: allowFullscreen.value ? "100%" : "var(--app-max-width)",
-});
-
-const computePageStyle = () => {
-  pageStyle.value = {
-    maxWidth: allowFullscreen.value ? "100%" : "var(--app-max-width)",
-  };
-};
-
-watch(allowFullscreen, (value) => {
-  pageStyle.value = {
-    maxWidth: value ? "100%" : "var(--app-max-width)",
-  };
-});
+  paddingTop: allowFullscreen.value
+    ? "var(--reduced-navbar-size)"
+    : "var(--navbar-size)",
+  paddingBottom: allowFullscreen.value ? "var(--bottom-bar-size)" : "0",
+}));
 </script>
 
 <style scoped>
@@ -40,10 +33,10 @@ watch(allowFullscreen, (value) => {
 .page {
   background-color: white;
   width: 100%;
-  min-height: calc(var(--available-height) - var(--navbar-size));
-  margin-top: var(--navbar-size);
+  min-height: 100%;
   overflow-y: auto;
   scroll-behavior: smooth;
-  transition: max-width 0.3s ease-in-out; /* Adiciona a transição */
+  transition: max-width 0.3s ease-in-out;
+  box-sizing: border-box;
 }
 </style>
