@@ -112,7 +112,9 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
+import { useAppReview } from "@/composables/useAppReview";
 const userStore = useUserStore();
+const { scheduleReviewPrompt } = useAppReview();
 
 const props = defineProps<{
   donation: Donation;
@@ -131,6 +133,7 @@ const handleDonationConfirmation = async () => {
   updatingDonationStatus.value = true;
   try {
     await userStore.reviewDonation(props.donation, "confirmed");
+    scheduleReviewPrompt();
   } catch (error) {
     HemoNotification({
       type: "error",
