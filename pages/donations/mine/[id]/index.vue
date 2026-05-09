@@ -369,6 +369,7 @@ const route = useRoute();
 const donationId = parseInt(String(route.params.id));
 const userStore = useUserStore();
 const bloodBankStore = useBloodBanksStore();
+const { scheduleReviewPrompt } = useAppReview();
 const bloodBank = ref<BloodBankLocation | undefined>();
 const donation = ref(userStore.getDonationById(donationId));
 const updatingDonationStatus = ref(false);
@@ -431,6 +432,7 @@ const handleDonationConfirmation = async () => {
     await userStore.reviewDonation(donation.value, "confirmed");
     HemoMessage({ type: "success", message: "Doação confirmada com sucesso!" });
     showConfirmActionModal.value = false;
+    scheduleReviewPrompt();
   } catch (error) {
     HemoMessage({
       type: "error",
