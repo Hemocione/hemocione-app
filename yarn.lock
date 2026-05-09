@@ -233,10 +233,10 @@
   resolved "https://registry.yarnpkg.com/@bomb.sh/tab/-/tab-0.0.14.tgz#95e49c8d755c7ad4c09813d76cda89fb6acfae66"
   integrity sha512-cHMk2LI430MVoX1unTt9oK1iZzQS4CYDz97MSxKLNErW69T43Z2QLFTpdS/3jVOIKrIADWfuxQ+nQNJkNV7E4w==
 
-"@capacitor-community/in-app-review@^7.1.0":
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/@capacitor-community/in-app-review/-/in-app-review-7.1.0.tgz#d2b8589c52ba3021bab2ad68d2ebf3fd99dcbd5f"
-  integrity sha512-qB0Q+qvPxF03UWoryZubyMkOCRqJF5xEILjt+VC4768yyilyss4k6qDjT6x9x7T4T8o8kmGgbPBJgwf1fsLa1A==
+"@capacitor-community/in-app-review@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/in-app-review/-/in-app-review-8.0.0.tgz#5b643a7397ed2677fba4b4ab42a7d087956d7e6b"
+  integrity sha512-AYpEkIjdv27WGS3hnlc7xAQ1BhaBvD2svgQBfHF4P2Olw1N6a7MSCOQC6O4SuxmdBdJ2fM6uFeo1jyNjKLtIPw==
 
 "@capacitor/android@^8.0.0":
   version "8.3.3"
@@ -3059,10 +3059,10 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001782, caniuse-lite@^1.0.30001787:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001792.tgz#ca8bb9be244835a335e2018272ce7223691873c5"
   integrity sha512-hVLMUZFgR4JJ6ACt1uEESvQN1/dBVqPAKY0hgrV70eN3391K6juAfTjKZLKvOMsx8PxA7gsY1/tLMMTcfFLLpw==
 
-capacitor-plugin-safe-area@^4.0.0:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/capacitor-plugin-safe-area/-/capacitor-plugin-safe-area-4.0.3.tgz#482db89aac1bc1dbd250f76504e9d02f61c8f64d"
-  integrity sha512-RteQU+EcwfQFup66fOrlfYNfkGi3jSVwD8YimUAdyZlelriiqRctmKK5ONYXyt+Wd2e5y5F1A081kB9SRHGg2Q==
+capacitor-plugin-safe-area@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/capacitor-plugin-safe-area/-/capacitor-plugin-safe-area-5.0.0.tgz#c4df42eba08e0d87ae18f16b0c8f7c71c4487be1"
+  integrity sha512-Q7+mV7oxGGDB4qPPGXFwS/dexR2/bo/uwkoBRTeR3d/rCzboi3Rnylw18MxSFx/mbQHD9BB7gSDWl+YnncJohQ==
 
 chalk@2.4.2:
   version "2.4.2"
