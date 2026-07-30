@@ -89,7 +89,8 @@ interface User {
   givenName: string;
   surName: string;
   email: string;
-  gender: Gender;
+  // Null for Google signups until the donor completes their profile here.
+  gender: Gender | null;
   document: string;
   birthDate: string;
   bloodType: string;
@@ -301,6 +302,10 @@ export const useUserStore = defineStore("user", {
 
     userReadableGender(state) {
       return genderToReadable[state.user?.gender || "O"];
+    },
+
+    missingProfileFields(state) {
+      return getMissingProfileFields(state.user);
     },
 
     userDonations(state) {
