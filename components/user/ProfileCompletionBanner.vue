@@ -27,18 +27,22 @@ const LABELS: Record<string, string> = {
 const userStore = useUserStore();
 const dismissedAt = ref<number | null>(null);
 const loaded = ref(false);
+// Date.now() is not reactive, so the expiry is driven by this ref instead.
+const now = ref(Date.now());
+let expiryTimer: ReturnType<typeof setTimeout> | null = null;
 
+const userId = computed(() => userStore.user?.id ?? null);
 const missingFields = computed(() => userStore.missingProfileFields);
 
-// Only render once Preferences has been read, otherwise the banner flashes for
-// a frame before a previous dismissal is known.
+// Held back until Preferences has been read, otherwise the banner flashes for a
+// frame before a previous dismissal is known.
 const visible = computed(
   () =>
     loaded.value &&
     shouldShowBanner({
       missingFields: missingFields.value,
       dismissedAt: dismissedAt.value,
-      now: Date.now(),
+      now: now.value,
     })
 );
 
@@ -49,19 +53,55 @@ const readableMissingFields = computed(() => {
   return `${labels.slice(0, -1).join(", ")} e ${labels[labels.length - 1]}`;
 });
 
-async function dismiss() {
-  dismissedAt.value = Date.now();
-  await Preferences.set({
-    key: PROFILE_BANNER_DISMISSED_KEY,
-    value: String(dismissedAt.value),
-  });
+function clearExpiryTimer() {
+  if (expiryTimer) {
+    clearTimeout(expiryTimer);
+    expiryTimer = null;
+  }
 }
 
-onMounted(async () => {
-  const { value } = await Preferences.get({ key: PROFILE_BANNER_DISMISSED_KEY });
+// Brings the banner back the moment the window ends, without waiting for a
+// remount — mobile keeps this screen alive across days of suspend/resume.
+function scheduleExpiry() {
+  clearExpiryTimer();
+  const delay = nextDismissalExpiry({
+    dismissedAt: dismissedAt.value,
+    now: Date.now(),
+  });
+  if (delay === null) return;
+
+  expiryTimer = setTimeout(() => {
+    now.value = Date.now();
+    scheduleExpiry();
+  }, delay + 1);
+}
+
+async function loadDismissal() {
+  loaded.value = false;
+  const { value } = await Preferences.get({
+    key: getDismissalKey(userId.value),
+  });
   dismissedAt.value = value ? Number(value) : null;
+  now.value = Date.now();
   loaded.value = true;
-});
+  scheduleExpiry();
+}
+
+async function dismiss() {
+  const at = Date.now();
+  dismissedAt.value = at;
+  now.value = at;
+  await Preferences.set({
+    key: getDismissalKey(userId.value),
+    value: String(at),
+  });
+  scheduleExpiry();
+}
+
+onMounted(loadDismissal);
+// A shared device can switch donors without a remount.
+watch(userId, loadDismissal);
+onUnmounted(clearExpiryTimer);
 </script>
 
 <style scoped>
