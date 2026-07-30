@@ -37,6 +37,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>Use the camera for taking pictures of blood donation documents or selfies of the person donating blood</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Usamos sua localização para encontrar bancos de sangue próximos de você e para confirmar sua participação em campanhas de doação</string>
 	<key>OneSignal_suppress_launch_urls</key>
 	<true/>
 	<key>UIBackgroundModes</key>

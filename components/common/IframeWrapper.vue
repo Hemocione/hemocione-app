@@ -5,7 +5,7 @@
       :src="iframeSrc"
       frameborder="0"
       allowfullscreen
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; geolocation; gyroscope; picture-in-picture"
       @load="setLoaded"
       class="iframe"
     ></iframe>
