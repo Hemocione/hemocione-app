@@ -41,4 +41,10 @@
     <!-- Permissions -->
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Geolocalizacao usada pelos sub-apps embarcados: ondedoar mostra bancos
+         de sangue proximos, e a copa confirma participacao perto de um banco.
+         O allow="geolocation" do iframe nao basta sem estas permissoes. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 </manifest>
