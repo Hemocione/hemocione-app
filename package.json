@@ -10,7 +10,11 @@
     "capacitor:sync": "yarn generate && cap sync",
     "capacitor:copy": "npx cap copy",
     "capacitor:open:ios": "npx cap open ios",
-    "capacitor:open:android": "npx cap open android"
+    "capacitor:open:android": "npx cap open android",
+    "test:unit": "vitest"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   },
   "devDependencies": {
     "@capacitor-community/in-app-review": "^8.0.0",
@@ -29,16 +33,20 @@
     "@nuxtjs/google-fonts": "^3.0.1",
     "@pinia/nuxt": "^0.5.1",
     "@vercel/analytics": "^1.1.2",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/test-utils": "^2.4.6",
     "@vueuse/nuxt": "13.0.0",
     "axios": "^1.8.3",
     "capacitor-plugin-safe-area": "^5.0.0",
     "dayjs": "^1.11.10",
     "element-plus": "^2.5.2",
+    "jsdom": "^26.1.0",
     "maska": "^3.1.0",
     "nuxt": "^3.11.1",
     "nuxt-vercel-analytics": "^1.0.0",
     "onesignal-cordova-plugin": "^5.2.11",
     "posthog-js": "^1.240.5",
+    "vitest": "^4.1.0",
     "vue": "^3.5.0"
   },
   "name": "hemocione.app",
