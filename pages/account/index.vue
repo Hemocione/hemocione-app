@@ -1,6 +1,7 @@
 <template>
   <div class="main">
     <CommonBackHeader title="Minha conta" icon-direction="left" />
+    <NuxtLink to="/avatar" class="avatar-link">🎨 Meu avatar</NuxtLink>
     <ElForm :model="form" class="form" label-position="top" size="large">
       <ElFormItem :show-message="false" class="item" label="Nome" prop="givenName" required>
         <ElInput v-model="form.givenName" placeholder="Nome" />
@@ -112,6 +113,14 @@
 <style scoped>
 .confirm-button {
   height: 100%;
+}
+
+.avatar-link {
+  align-self: flex-start;
+  margin: 0 1rem;
+  color: var(--hemo-color-primary);
+  font-weight: 700;
+  text-decoration: underline;
 }
 
 .two-columns {
