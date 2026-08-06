@@ -238,11 +238,11 @@ interface ExternalPage extends Page {
 }
 
 const externalPages: ExternalPage[] = [
-  {
-    url: "https://vista.hemocione.com.br",
-    name: "Vestir a Camisa",
-    icon: "shirt.svg",
-  },
+  // {
+  //   url: "https://vista.hemocione.com.br",
+  //   name: "Vestir a Camisa",
+  //   icon: "shirt.svg",
+  // },
   {
     url: "https://apoie.hemocione.com.br",
     name: "Apoiar o Hemocione",

@@ -37,6 +37,7 @@ export interface Donation {
   bloodBanksLocationId: string | null;
   reviewedAt: Date | null;
   metadata: Record<string, unknown> | null;
+  isVirtual?: boolean | null;
 }
 
 interface UserWithMetrics extends User {
@@ -104,6 +105,7 @@ export type UserUpdate = Omit<User, "donations" | "addresses"> & {
 
 import { Capacitor } from "@capacitor/core";
 import { Preferences } from "@capacitor/preferences";
+import type { VirtualDonationData } from "@hemocione/sdk";
 import OneSignal from "onesignal-cordova-plugin";
 import { usePosthog } from "~/composables/usePosthog";
 
@@ -196,6 +198,21 @@ export const useUserStore = defineStore("user", {
         email: user.email,
         name: user.givenName,
         gender: user.gender,
+      });
+    },
+    addVirtualDonation(donationData: VirtualDonationData) {
+      if (!this.user) return;
+      if (this.user.donations.some((d) => d.label === donationData.label))
+        return; // if the donation already exists, don't add it
+
+      const fakeId = Math.floor(Math.random() * 1000000000000);
+
+      this.user.donations.push({
+        id: fakeId,
+        reviewStatus: "confirmed",
+        reviewedAt: new Date(),
+        ...donationData,
+        isVirtual: true,
       });
     },
     async createUserDonation(donationData: {

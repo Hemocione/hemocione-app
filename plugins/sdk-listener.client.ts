@@ -3,6 +3,7 @@ import {
   type FinishLoadingData,
   type ShareData,
   type ShareInstagramData,
+  type VirtualDonationData,
 } from "@hemocione/sdk";
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -31,6 +32,14 @@ export default defineNuxtPlugin((nuxtApp) => {
       async (data: ShareInstagramData) => {
         console.log("Share Instagram:", data);
         console.log("not implemented");
+      }
+    );
+
+    iframeListener.on(
+      "hemocione:register-virtual-donation",
+      async (data: VirtualDonationData) => {
+        const store = useUserStore();
+        store.addVirtualDonation(data);
       }
     );
   });
