@@ -30,6 +30,8 @@ export const useAvatarStore = defineStore("avatar", {
   }),
   actions: {
     async fetchAvatar() {
+      if (this.items.length > 0) return;
+
       const config = useRuntimeConfig();
       const userStore = useUserStore();
 

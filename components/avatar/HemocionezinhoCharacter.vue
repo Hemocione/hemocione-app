@@ -1,5 +1,5 @@
 <template>
-  <div class="hemocionezinho">
+  <div class="hemocionezinho" :class="[size]">
     <img v-if="backgroundAssetRef" class="layer background" :src="assetUrl(backgroundAssetRef)" alt="" />
     <svg class="layer base" viewBox="0 0 200 300" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -22,12 +22,16 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  headAssetRef: string | null;
-  faceAssetRef: string | null;
-  bodyAssetRef: string | null;
-  backgroundAssetRef: string | null;
-}>();
+withDefaults(
+  defineProps<{
+    size?: "large" | "thumbnail";
+    headAssetRef: string | null;
+    faceAssetRef: string | null;
+    bodyAssetRef: string | null;
+    backgroundAssetRef: string | null;
+  }>(),
+  { size: "large" }
+);
 
 const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
 </script>
@@ -35,9 +39,15 @@ const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
 <style scoped>
 .hemocionezinho {
   position: relative;
+  margin: 0 auto;
+}
+.hemocionezinho.large {
   width: 220px;
   height: 320px;
-  margin: 0 auto;
+}
+.hemocionezinho.thumbnail {
+  width: 56px;
+  height: 82px;
 }
 .layer {
   position: absolute;
