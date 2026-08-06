@@ -64,6 +64,7 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       Lato: [100, 300, 400, 700, 900],
+      "Baloo 2": [700, 800],
     },
   },
 
