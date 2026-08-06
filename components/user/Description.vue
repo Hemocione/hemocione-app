@@ -1,7 +1,7 @@
 <template>
   <section class="header">
     <div class="wrapper">
-      <img class="user-image" :src="userImgSrc" alt="User Profile Image" />
+      <AvatarWidget />
       <div class="user-profile">
         <h4>{{ userData?.name }}</h4>
         <span>{{ description }}</span>
@@ -36,7 +36,7 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 4rem;
+  height: 5.25rem;
   gap: 1rem;
 }
 
@@ -59,15 +59,6 @@
 
 .greenBall {
   background-color: var(--hemo-color-success);
-}
-
-.user-image {
-  height: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid var(--hemo-color-primary);
-  background-color: var(--light-purple);
 }
 
 .user-profile {
@@ -109,15 +100,6 @@ const userData = userStore.userWithMetrics;
 
 const ableToDonate = computed(
   () => userStore.userDonationStatus.status === "able-to-donate"
-);
-
-const bloodType = computed(() => userData?.bloodType ?? "-");
-
-const userImgSrc = computed(
-  () =>
-    `/illustrations/bloodCharacters/${
-      bloodType.value === "-" ? "O-" : bloodType.value
-    }.svg`
 );
 
 const description = computed(() =>
