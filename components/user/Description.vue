@@ -7,6 +7,18 @@
         <span>{{ description }}</span>
       </div>
     </div>
+    <button
+      v-if="unseenItems.length > 0"
+      type="button"
+      class="avatar-unseen-cta"
+      @click="avatarStore.openEditor('ACHIEVEMENTS')"
+    >
+      <span class="avatar-unseen-cta__icon" aria-hidden="true">🎉</span>
+      <span>
+        Você desbloqueou {{ unseenItems.length }}
+        {{ unseenItems.length === 1 ? "item novo" : "itens novos" }}! Toque para ver ✨
+      </span>
+    </button>
     <div class="status">
       <div
         :class="{
@@ -46,6 +58,40 @@
   gap: 6px;
   width: 100%;
   font-size: 0.75rem;
+}
+
+.avatar-unseen-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 0;
+  border-radius: 1rem;
+  background: var(--hemo-color-primary);
+  box-shadow: 0 3px 0 var(--hemo-color-primary-dark);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: left;
+  animation: avatar-cta-breathe 2.8s ease-in-out infinite;
+}
+
+.avatar-unseen-cta:hover {
+  background: var(--hemo-color-primary-dark);
+}
+
+.avatar-unseen-cta:focus-visible {
+  outline: 3px solid var(--hemo-color-primary-light);
+  outline-offset: 3px;
+}
+
+.avatar-unseen-cta__icon {
+  flex: 0 0 auto;
+  font-size: 1.35rem;
 }
 .ball {
   height: 0.6rem;
@@ -91,12 +137,33 @@
     width: 80%;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-unseen-cta {
+    animation: none;
+  }
+}
+
+@keyframes avatar-cta-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+  }
+}
 </style>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
+import { useAvatarStore } from "~/stores/avatar";
 import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
+const avatarStore = useAvatarStore();
 const userData = userStore.userWithMetrics;
+const { unseenItems } = storeToRefs(avatarStore);
 
 const ableToDonate = computed(
   () => userStore.userDonationStatus.status === "able-to-donate"
