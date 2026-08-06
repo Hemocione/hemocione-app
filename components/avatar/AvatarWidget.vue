@@ -4,7 +4,7 @@
     class="avatar-widget"
     aria-haspopup="dialog"
     aria-label="Editar meu Hemocionezinho"
-    @click="isDialogOpen = true"
+    @click="avatarStore.openEditor()"
   >
     <span class="avatar-stage" aria-hidden="true">
       <HemocionezinhoCharacter
@@ -14,13 +14,12 @@
         :body-asset-ref="avatarStore.equippedAssetRef('BODY')"
         :background-asset-ref="avatarStore.equippedAssetRef('BACKGROUND')"
       />
-      <span class="snow-ledge"></span>
     </span>
     <span class="edit-badge" aria-hidden="true">🖌️</span>
   </button>
 
   <ElDialog
-    v-model="isDialogOpen"
+    v-model="isEditorOpen"
     fullscreen
     :show-close="false"
     class="avatar-dialog"
@@ -38,48 +37,63 @@
           type="button"
           class="close-btn"
           aria-label="Fechar editor do Hemocionezinho"
-          @click="isDialogOpen = false"
+          @click="avatarStore.closeEditor()"
         >
           ✕
         </button>
       </div>
 
       <div class="stage-wrap" aria-hidden="true">
-        <div class="cloud cloud-a"></div>
-        <div class="cloud cloud-b"></div>
-        <span class="sparkle sparkle-a">✦</span>
-        <span class="sparkle sparkle-b">✦</span>
+        <div class="stage-backdrop" :style="stageBackdropStyle"></div>
         <HemocionezinhoCharacter
           size="large"
           :head-asset-ref="avatarStore.equippedAssetRef('HEAD')"
           :face-asset-ref="avatarStore.equippedAssetRef('FACE')"
           :body-asset-ref="avatarStore.equippedAssetRef('BODY')"
-          :background-asset-ref="avatarStore.equippedAssetRef('BACKGROUND')"
+          :background-asset-ref="null"
         />
-        <div class="snow-mound"></div>
+      </div>
+
+      <div v-if="canShare" class="share-actions">
+        <button
+          type="button"
+          class="share-btn"
+          :disabled="!shareableImage || !canShare"
+          @click="shareHemocionezinho"
+        >
+          <span aria-hidden="true">📤</span>
+          Compartilhar
+        </button>
       </div>
 
       <div class="customization-sheet">
         <div class="tabs" role="tablist" aria-label="Categorias do avatar">
           <button
-            v-for="slot in slots"
-            :key="slot"
+            v-for="tab in tabs"
+            :key="tab"
             type="button"
             class="tab"
-            :class="{ active: activeSlot === slot }"
+            :class="{ active: activeTab === tab }"
             role="tab"
-            :aria-selected="activeSlot === slot"
-            :aria-pressed="activeSlot === slot"
-            @click="activeSlot = slot"
+            :aria-selected="activeTab === tab"
+            :aria-pressed="activeTab === tab"
+            :aria-controls="tab === 'ACHIEVEMENTS' ? 'avatar-achievements' : 'avatar-items-grid'"
+            @click="activeTab = tab"
           >
-            <span aria-hidden="true">{{ slotLabels[slot].emoji }}</span>
-            {{ slotLabels[slot].label }}
+            <span aria-hidden="true">{{ tabLabels[tab].emoji }}</span>
+            {{ tabLabels[tab].label }}
           </button>
         </div>
 
-        <div id="avatar-items-grid" class="items-grid" role="tabpanel">
+        <div
+          v-if="activeTab !== 'ACHIEVEMENTS'"
+          id="avatar-items-grid"
+          class="items-grid"
+          role="tabpanel"
+          aria-label="Itens do avatar"
+        >
           <button
-            v-for="item in avatarStore.itemsBySlot[activeSlot]"
+            v-for="item in activeItems"
             :key="item.id"
             type="button"
             class="item-card"
@@ -102,40 +116,134 @@
             <span v-if="!item.owned" class="locked-hint">Bloqueado</span>
           </button>
         </div>
+
+        <div
+          v-else
+          id="avatar-achievements"
+          class="achievements-list"
+          role="tabpanel"
+          aria-label="Conquistas"
+        >
+          <article
+            v-for="achievement in avatarStore.achievements"
+            :key="achievement.id"
+            class="achievement-card"
+            :class="{ unlocked: achievement.unlocked }"
+          >
+            <div class="achievement-card__topline">
+              <div>
+                <h3>{{ achievement.name }}</h3>
+                <p>{{ achievement.description }}</p>
+              </div>
+              <span
+                class="achievement-badge"
+                :class="achievement.unlocked ? 'is-unlocked' : 'is-locked'"
+              >
+                {{ achievement.unlocked ? "✓ Desbloqueada" : "🔒 Bloqueada" }}
+              </span>
+            </div>
+
+            <div v-if="achievement.unlocked" class="achievement-unlocked">
+              <time v-if="achievement.unlockedAt" :datetime="achievement.unlockedAt">
+                {{ formatAchievementDate(achievement.unlockedAt) }}
+              </time>
+              <div v-if="achievement.rewardItem" class="achievement-reward">
+                <img
+                  :src="`/illustrations/avatarItems/${achievement.rewardItem.assetRef}`"
+                  :alt="achievement.rewardItem.name"
+                />
+                <span>Destravou {{ achievement.rewardItem.name }}</span>
+              </div>
+            </div>
+
+            <div
+              v-else-if="achievement.progress"
+              class="achievement-progress"
+            >
+              <div
+                class="progress-bar"
+                role="progressbar"
+                :aria-valuenow="achievement.progress.current"
+                :aria-valuemin="0"
+                :aria-valuemax="achievement.progress.target"
+                :aria-label="`Progresso: ${achievement.progress.current} de ${achievement.progress.target}`"
+              >
+                <div
+                  class="progress-fill"
+                  :style="{ width: `${getProgressPercent(achievement.progress)}%` }"
+                ></div>
+              </div>
+              <span>
+                {{ achievement.progress.current }}/{{ achievement.progress.target }}
+              </span>
+            </div>
+          </article>
+
+          <p v-if="avatarStore.achievements.length === 0" class="empty-state">
+            Suas conquistas vão aparecer aqui. Continue participando para desbloquear novas recompensas!
+          </p>
+        </div>
       </div>
     </div>
   </ElDialog>
 </template>
 
 <script setup lang="ts">
-import { useAvatarStore, type AvatarSlot } from "~/stores/avatar";
+import { createHemocioneSdk } from "@hemocione/sdk";
+import { storeToRefs } from "pinia";
+import { onMounted, ref, shallowRef, watch, computed } from "vue";
+import { useAvatarStore, type AvatarTab } from "~/stores/avatar";
 import HemocionezinhoCharacter from "~/components/avatar/HemocionezinhoCharacter.vue";
 
 const avatarStore = useAvatarStore();
-const isDialogOpen = ref(false);
-const activeSlot = ref<AvatarSlot>("HEAD");
+const { isEditorOpen, activeTab } = storeToRefs(avatarStore);
 const topSafeAreaInset = shallowRef<{ value: number } | null>(null);
+const shareableImage = ref<File | null>(null);
+const canShare =
+  typeof navigator !== "undefined" && typeof navigator.share === "function";
 
-void avatarStore.fetchAvatar();
-void useTopSafeAreaInset().then((inset) => {
-  topSafeAreaInset.value = inset;
-});
-
-const slots: AvatarSlot[] = ["HEAD", "FACE", "BODY", "BACKGROUND"];
-const slotLabels: Record<AvatarSlot, { emoji: string; label: string }> = {
+const tabs: AvatarTab[] = [
+  "HEAD",
+  "FACE",
+  "BODY",
+  "BACKGROUND",
+  "ACHIEVEMENTS",
+];
+const tabLabels: Record<AvatarTab, { emoji: string; label: string }> = {
   HEAD: { emoji: "🎓", label: "Cabeça" },
   FACE: { emoji: "🕶️", label: "Rosto" },
   BODY: { emoji: "🎗️", label: "Corpo" },
   BACKGROUND: { emoji: "🖼️", label: "Fundo" },
+  ACHIEVEMENTS: { emoji: "🏆", label: "Conquistas" },
+};
+
+const activeItems = computed(() => {
+  if (activeTab.value === "ACHIEVEMENTS") return [];
+  return avatarStore.itemsBySlot[activeTab.value];
+});
+
+const stageBackdropStyle = computed(() => {
+  const assetRef = avatarStore.equippedAssetRef("BACKGROUND");
+  return assetRef
+    ? {
+        backgroundImage: `url("/illustrations/avatarItems/${assetRef}")`,
+      }
+    : {};
+});
+
+const formatAchievementDate = (date: string) =>
+  new Date(date).toLocaleDateString("pt-BR");
+
+const getProgressPercent = (progress: { current: number; target: number }) => {
+  if (progress.target <= 0) return 0;
+  return Math.min(100, Math.max(0, (progress.current / progress.target) * 100));
 };
 
 const handlePopState = (_event: Event) => {
-  if (isDialogOpen.value) {
-    isDialogOpen.value = false;
-  }
+  if (isEditorOpen.value) avatarStore.closeEditor();
 };
 
-watch(isDialogOpen, (newValue) => {
+watch(isEditorOpen, (newValue) => {
   if (newValue) {
     window.addEventListener("popstate", handlePopState);
     window.history.pushState({ avatarDialog: "open" }, "");
@@ -143,17 +251,139 @@ watch(isDialogOpen, (newValue) => {
     window.removeEventListener("popstate", handlePopState);
   }
 });
+
+const escapeSvgAttribute = (value: string) =>
+  value
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+
+const baseCharacterSvg = `
+  <g transform="scale(1.1 1.0666667)">
+    <path
+      d="M100 10 C 135 75, 180 125, 180 175 C 180 225, 144 260, 100 260 C 56 260, 20 225, 20 175 C 20 125, 65 75, 100 10 Z"
+      fill="#E4002B"
+    />
+    <line x1="22" y1="175" x2="-10" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
+    <line x1="178" y1="175" x2="210" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
+    <line x1="80" y1="255" x2="65" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
+    <line x1="120" y1="255" x2="135" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
+    <circle cx="80" cy="155" r="12" fill="#fff" />
+    <circle cx="120" cy="155" r="12" fill="#fff" />
+    <circle cx="82" cy="158" r="5" fill="#1a1a1a" />
+    <circle cx="122" cy="158" r="5" fill="#1a1a1a" />
+  </g>`;
+
+const svgLayer = (
+  assetRef: string | null,
+  top: number,
+  left: number,
+  width: number
+) => {
+  if (!assetRef) return "";
+
+  const x = (220 * left) / 100;
+  const y = (320 * top) / 100;
+  const size = (220 * width) / 100;
+  const href = escapeSvgAttribute(`/illustrations/avatarItems/${assetRef}`);
+
+  return `<image href="${href}" x="${x}" y="${y}" width="${size}" height="${size}" preserveAspectRatio="none" />`;
+};
+
+const svgBackgroundLayer = (assetRef: string | null) => {
+  if (!assetRef) return "";
+
+  const href = escapeSvgAttribute(`/illustrations/avatarItems/${assetRef}`);
+  return `<image href="${href}" x="0" y="0" width="220" height="320" preserveAspectRatio="xMidYMid slice" />`;
+};
+
+let shareGeneration = 0;
+
+const regenerateShareableImage = async () => {
+  const generation = ++shareGeneration;
+  shareableImage.value = null;
+
+  const backgroundAssetRef = avatarStore.equippedAssetRef("BACKGROUND");
+  const bodyAssetRef = avatarStore.equippedAssetRef("BODY");
+  const faceAssetRef = avatarStore.equippedAssetRef("FACE");
+  const headAssetRef = avatarStore.equippedAssetRef("HEAD");
+  const backgroundLayer = svgBackgroundLayer(backgroundAssetRef);
+  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="320" viewBox="0 0 220 320">${backgroundLayer}${baseCharacterSvg}${svgLayer(bodyAssetRef, 62, 12, 76)}${svgLayer(faceAssetRef, 42, 28, 44)}${svgLayer(headAssetRef, -4, 18, 64)}</svg>`;
+
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const loadedImage = new Image();
+    loadedImage.onload = () => resolve(loadedImage);
+    loadedImage.onerror = () => reject(new Error("Could not load avatar image"));
+    loadedImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+      svgString
+    )}`;
+  });
+
+  if (generation !== shareGeneration) return;
+
+  const canvas = document.createElement("canvas");
+  canvas.width = 440;
+  canvas.height = 640;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Could not create avatar canvas context");
+  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, "image/png");
+  });
+
+  if (!blob || generation !== shareGeneration) return;
+  shareableImage.value = new File([blob], "hemocionezinho.png", {
+    type: "image/png",
+  });
+};
+
+const refreshShareableImage = () => {
+  void regenerateShareableImage().catch(() => {
+    shareableImage.value = null;
+  });
+};
+
+const shareHemocionezinho = () => {
+  if (!canShare || !shareableImage.value) return;
+
+  const sdk = createHemocioneSdk();
+  sdk
+    .share({
+      files: [shareableImage.value],
+      title: "Meu Hemocionezinho",
+      text: "Olha meu hemocionezinho no app da Hemocione! 🩸",
+    })
+    .catch(() => {
+      // Cancelar a folha de compartilhamento é um fluxo normal.
+    });
+};
+
+watch(
+  () =>
+    (["HEAD", "FACE", "BODY", "BACKGROUND"] as const).map((slot) =>
+      avatarStore.equippedAssetRef(slot)
+    ),
+  refreshShareableImage
+);
+
+onMounted(() => {
+  void avatarStore.fetchAvatar();
+  void avatarStore.fetchAchievements();
+  void useTopSafeAreaInset().then((inset) => {
+    topSafeAreaInset.value = inset;
+  });
+  refreshShareableImage();
+});
 </script>
 
 <style scoped>
 .avatar-widget,
 :deep(.avatar-dialog) {
-  --cp-sky-top: #6fd0ff;
-  --cp-sky-mid: #bdecff;
-  --cp-sky-bottom: #f3fbff;
-  --cp-snow: #ffffff;
-  --cp-ice-line: #1f7cb4;
-  --cp-ice-line-soft: #59a8d6;
+  --cp-paper: #ffffff;
+  --cp-outline: #17324a;
+  --cp-outline-soft: #7c98aa;
   --cp-gold: #ffc635;
   --cp-gold-dark: #d99a00;
   --cp-ink: #17324a;
@@ -180,15 +410,14 @@ watch(isDialogOpen, (newValue) => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 3px solid var(--cp-ice-line);
+  border: 3px solid var(--hemo-color-primary-dark);
   border-radius: 1.1rem;
-  background: linear-gradient(
-    180deg,
-    var(--cp-sky-top) 0%,
-    var(--cp-sky-mid) 55%,
-    var(--cp-sky-bottom) 100%
+  background: radial-gradient(
+    circle at 50% 30%,
+    var(--hemo-color-primary-light),
+    var(--hemo-color-primary) 70%
   );
-  box-shadow: 0 3px 0 var(--cp-ice-line),
+  box-shadow: 0 3px 0 var(--hemo-color-primary-dark),
     inset 0 -6px 10px rgba(255, 255, 255, 0.5);
   transition: transform 160ms ease;
 }
@@ -204,17 +433,6 @@ watch(isDialogOpen, (newValue) => {
 .avatar-widget:focus-visible {
   outline: 3px solid var(--hemo-color-primary-light);
   outline-offset: 3px;
-}
-
-.snow-ledge {
-  position: absolute;
-  bottom: 6px;
-  left: 8%;
-  width: 84%;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--cp-snow);
-  box-shadow: 0 1px 0 rgba(31, 124, 180, 0.3);
 }
 
 .edit-badge {
@@ -242,7 +460,7 @@ watch(isDialogOpen, (newValue) => {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background: var(--cp-snow);
+  background: var(--cp-paper);
   box-shadow: none;
 }
 
@@ -268,13 +486,7 @@ watch(isDialogOpen, (newValue) => {
   padding-bottom: env(safe-area-inset-bottom);
   padding-left: 0;
   overflow: hidden;
-  background: linear-gradient(
-    180deg,
-    var(--cp-sky-top) 0%,
-    var(--cp-sky-mid) 28%,
-    var(--cp-snow) 46%,
-    var(--cp-snow) 100%
-  );
+  background: linear-gradient(180deg, #fff5f5 0%, var(--cp-paper) 46%);
   color: var(--cp-ink);
 }
 
@@ -312,10 +524,10 @@ watch(isDialogOpen, (newValue) => {
   flex: 0 0 2.1rem;
   place-items: center;
   padding: 0;
-  border: 2px solid var(--cp-ice-line);
+  border: 2px solid var(--cp-outline);
   border-radius: 50%;
-  background: var(--cp-snow);
-  box-shadow: 0 2px 0 var(--cp-ice-line-soft);
+  background: var(--cp-paper);
+  box-shadow: 0 2px 0 var(--cp-outline-soft);
   color: var(--cp-ink);
   cursor: pointer;
   font-family: "Baloo 2", sans-serif;
@@ -343,11 +555,24 @@ watch(isDialogOpen, (newValue) => {
   margin: 0 auto 0.6rem;
   overflow: hidden;
   border-radius: 1.5rem;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.35),
-    rgba(255, 255, 255, 0)
+  background: radial-gradient(
+    circle at 50% 30%,
+    var(--hemo-color-primary-light),
+    var(--hemo-color-primary) 70%
   );
+}
+
+.stage-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    circle at 50% 30%,
+    var(--hemo-color-primary-light),
+    var(--hemo-color-primary) 70%
+  );
+  background-position: center;
+  background-size: cover;
 }
 
 .stage-wrap :deep(.hemocionezinho) {
@@ -355,67 +580,42 @@ watch(isDialogOpen, (newValue) => {
   margin-bottom: 14px;
 }
 
-.cloud {
-  position: absolute;
+.share-actions {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 0.4rem;
+}
+
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  border: 2px solid var(--cp-outline);
   border-radius: 999px;
-  background: var(--cp-snow);
-  opacity: 0.9;
+  background: var(--cp-paper);
+  box-shadow: 0 2px 0 var(--cp-outline);
+  color: var(--cp-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  transition: transform 160ms ease, box-shadow 160ms ease;
 }
 
-.cloud-a {
-  top: 8%;
-  left: -10px;
-  width: 60px;
-  height: 22px;
+.share-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 var(--cp-outline);
 }
 
-.cloud-a::after {
-  position: absolute;
-  top: -12px;
-  left: 8px;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--cp-snow);
-  content: "";
+.share-btn:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 0 var(--cp-outline);
 }
 
-.cloud-b {
-  top: 22%;
-  right: -6px;
-  width: 44px;
-  height: 16px;
-}
-
-.sparkle {
-  position: absolute;
-  color: var(--cp-gold-dark);
-  font-size: 1.1rem;
-}
-
-.sparkle-a {
-  top: 10%;
-  left: 12%;
-  transform: rotate(-10deg);
-}
-
-.sparkle-b {
-  top: 40%;
-  right: 10%;
-  transform: rotate(15deg);
-}
-
-.snow-mound {
-  position: absolute;
-  bottom: -10px;
-  left: 50%;
-  z-index: 3;
-  width: 78%;
-  height: 34px;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  background: var(--cp-snow);
-  box-shadow: 0 2px 0 rgba(31, 124, 180, 0.25);
+.share-btn:disabled {
+  cursor: wait;
+  opacity: 0.55;
 }
 
 .customization-sheet {
@@ -423,9 +623,9 @@ watch(isDialogOpen, (newValue) => {
   flex: 1;
   padding: 0.85rem 0.9rem 1.1rem;
   overflow-y: auto;
-  border-top: 3px solid var(--cp-ice-line);
+  border-top: 3px solid var(--cp-outline);
   border-radius: 1.4rem 1.4rem 0 0;
-  background: var(--cp-snow);
+  background: var(--cp-paper);
   color: var(--cp-ink);
 }
 
@@ -449,9 +649,9 @@ watch(isDialogOpen, (newValue) => {
   align-items: center;
   gap: 0.3rem;
   padding: 0.4rem 0.7rem;
-  border: 2px solid var(--cp-ice-line-soft);
+  border: 2px solid var(--cp-outline-soft);
   border-radius: 999px;
-  background: var(--cp-snow);
+  background: var(--cp-paper);
   color: var(--cp-ink-soft);
   cursor: pointer;
   font: inherit;
@@ -465,7 +665,7 @@ watch(isDialogOpen, (newValue) => {
   border-color: var(--hemo-color-primary-dark);
   background: var(--hemo-color-primary);
   box-shadow: 0 2px 0 var(--hemo-color-primary-dark);
-  color: var(--cp-snow);
+  color: var(--cp-paper);
 }
 
 .tab:focus-visible,
@@ -509,8 +709,8 @@ watch(isDialogOpen, (newValue) => {
 }
 
 .item-card.owned {
-  border-color: var(--cp-ice-line-soft);
-  background: var(--cp-snow);
+  border-color: var(--cp-outline-soft);
+  background: var(--cp-paper);
   color: var(--cp-ink);
 }
 
@@ -528,10 +728,10 @@ watch(isDialogOpen, (newValue) => {
   width: 1.3rem;
   height: 1.3rem;
   place-items: center;
-  border: 2px solid var(--cp-snow);
+  border: 2px solid var(--cp-paper);
   border-radius: 50%;
   background: var(--hemo-color-primary);
-  color: var(--cp-snow);
+  color: var(--cp-paper);
   content: "✓";
   font-size: 0.7rem;
 }
@@ -569,6 +769,132 @@ watch(isDialogOpen, (newValue) => {
   cursor: not-allowed;
 }
 
+.achievements-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.achievement-card {
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.8rem;
+  border: 3px solid #d7e2e8;
+  border-radius: 1.1rem;
+  background: #fbfdfe;
+  box-shadow: 0 3px 0 #d7e2e8;
+}
+
+.achievement-card.unlocked {
+  border-color: var(--hemo-color-primary);
+  background: #fff5f6;
+  box-shadow: 0 3px 0 var(--hemo-color-primary-dark);
+}
+
+.achievement-card__topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.achievement-card h3 {
+  margin: 0;
+  color: var(--cp-ink);
+  font-family: "Baloo 2", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.achievement-card p {
+  margin: 0.2rem 0 0;
+  color: var(--cp-ink-soft);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.achievement-badge {
+  flex: 0 0 auto;
+  padding: 0.25rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.achievement-badge.is-unlocked {
+  background: var(--hemo-color-primary);
+  color: var(--cp-paper);
+}
+
+.achievement-badge.is-locked {
+  background: #e6edf1;
+  color: var(--cp-ink-soft);
+}
+
+.achievement-unlocked {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  color: var(--cp-ink-soft);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.achievement-reward {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--hemo-color-primary-dark);
+  font-size: 0.68rem;
+  font-weight: 900;
+  text-align: right;
+}
+
+.achievement-reward img {
+  width: 2rem;
+  height: 2rem;
+  object-fit: contain;
+}
+
+.achievement-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--cp-ink-soft);
+  font-size: 0.7rem;
+  font-weight: 900;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 0.65rem;
+  overflow: hidden;
+  border: 2px solid var(--cp-outline);
+  border-radius: 999px;
+  background: #e6edf1;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    var(--hemo-color-primary-light),
+    var(--hemo-color-primary)
+  );
+  transition: width 240ms ease;
+}
+
+.empty-state {
+  padding: 1rem;
+  border: 2px dashed var(--cp-outline-soft);
+  border-radius: 1rem;
+  text-align: center;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .edit-badge {
     animation: none;
@@ -576,7 +902,9 @@ watch(isDialogOpen, (newValue) => {
 
   .avatar-stage,
   .close-btn,
-  .item-card {
+  .item-card,
+  .share-btn,
+  .progress-fill {
     transition: none;
   }
 }
