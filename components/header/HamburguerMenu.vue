@@ -201,6 +201,12 @@ const internalPages: InternalPage[] = [
     icon: "question",
   },
   {
+    path: "/ask-for-help",
+    name: "Pedir Ajuda",
+    priority: 1,
+    icon: "help",
+  },
+  {
     path: "/account",
     name: "Minha Conta",
     priority: 1,
