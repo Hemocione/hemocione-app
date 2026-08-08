@@ -393,9 +393,9 @@ onMounted(() => {
 .avatar-widget {
   position: relative;
   display: block;
-  flex: 0 0 62px;
-  width: 62px;
-  height: 90px;
+  flex: 0 0 4rem;
+  width: 4rem;
+  height: 4rem;
   padding: 0;
   border: 0;
   background: none;
@@ -410,15 +410,14 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border: 3px solid var(--hemo-color-primary-dark);
-  border-radius: 1.1rem;
+  border: 2px solid var(--hemo-color-primary);
+  border-radius: 50%;
   background: radial-gradient(
     circle at 50% 30%,
     var(--hemo-color-primary-light),
     var(--hemo-color-primary) 70%
   );
-  box-shadow: 0 3px 0 var(--hemo-color-primary-dark),
-    inset 0 -6px 10px rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.5);
   transition: transform 160ms ease;
 }
 
