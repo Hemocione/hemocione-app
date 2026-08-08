@@ -48,7 +48,7 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 5.25rem;
+  height: 4rem;
   gap: 1rem;
 }
 
