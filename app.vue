@@ -215,7 +215,11 @@ if (urlToken) {
   flex-direction: column;
   gap: 3em;
   align-items: center;
-  height: 100vh;
+  /* 100vh conta a altura com a barra de endereço do mobile recolhida —
+     maior que o viewport visível real no load, o que sobrava como scroll
+     indevido nessa tela. 100dvh já é o padrão usado no resto do app
+     (globals.css, pages/account/index.vue). */
+  height: 100dvh;
   width: 100vw;
 }
 
