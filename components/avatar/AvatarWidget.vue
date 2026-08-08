@@ -15,7 +15,12 @@
         :background-asset-ref="avatarStore.equippedAssetRef('BACKGROUND')"
       />
     </span>
-    <span class="edit-badge" aria-hidden="true">🖌️</span>
+    <img
+      v-if="avatarStore.bloodTypeBadge"
+      class="blood-type-badge"
+      :src="`/illustrations/avatarItems/${avatarStore.bloodTypeBadge.assetRef}`"
+      :alt="`Selo tipo sanguíneo ${avatarStore.bloodTypeBadge.bloodType}`"
+    />
   </button>
 
   <ElDialog
@@ -434,20 +439,14 @@ onMounted(() => {
   outline-offset: 3px;
 }
 
-.edit-badge {
+.blood-type-badge {
   position: absolute;
-  right: -6px;
-  bottom: -6px;
-  display: grid;
-  place-items: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  border: 2px solid var(--cp-ink);
-  border-radius: 50%;
-  background: var(--cp-gold);
-  font-size: 0.8rem;
-  line-height: 1;
-  animation: badge-pulse 2.4s ease-in-out infinite;
+  right: -8px;
+  bottom: -8px;
+  width: 1.9rem;
+  height: 1.9rem;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
 }
 
 :deep(.avatar-dialog.el-dialog) {
@@ -895,27 +894,12 @@ onMounted(() => {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .edit-badge {
-    animation: none;
-  }
-
   .avatar-stage,
   .close-btn,
   .item-card,
   .share-btn,
   .progress-fill {
     transition: none;
-  }
-}
-
-@keyframes badge-pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.12);
   }
 }
 </style>

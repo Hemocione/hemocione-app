@@ -18,11 +18,16 @@ export interface AvatarEquipped {
   backgroundItemId: number | null;
 }
 
+export interface BloodTypeBadge {
+  bloodType: string;
+  assetRef: string;
+}
+
 export interface AchievementRewardItem {
-  id: number;
+  id: number | null;
   key: string;
   name: string;
-  slot: AvatarSlot;
+  slot: AvatarSlot | "BADGE";
   assetRef: string;
 }
 
@@ -48,6 +53,7 @@ export const useAvatarStore = defineStore("avatar", {
   state: () => ({
     items: [] as AvatarItem[],
     equipped: null as AvatarEquipped | null,
+    bloodTypeBadge: null as BloodTypeBadge | null,
     achievements: [] as Achievement[],
     isEditorOpen: false,
     activeTab: "HEAD" as AvatarTab,
@@ -59,12 +65,16 @@ export const useAvatarStore = defineStore("avatar", {
       const config = useRuntimeConfig();
       const userStore = useUserStore();
 
-      const data: { items: AvatarItem[]; equipped: AvatarEquipped } = await $fetch(
-        config.public.hemocioneIdApiUrl + "/users/me/avatar",
-        { headers: { Authorization: `Bearer ${userStore.token}` } }
-      );
+      const data: {
+        items: AvatarItem[];
+        equipped: AvatarEquipped;
+        bloodTypeBadge: BloodTypeBadge | null;
+      } = await $fetch(config.public.hemocioneIdApiUrl + "/users/me/avatar", {
+        headers: { Authorization: `Bearer ${userStore.token}` },
+      });
       this.items = data.items;
       this.equipped = data.equipped;
+      this.bloodTypeBadge = data.bloodTypeBadge;
     },
     async fetchAchievements() {
       if (this.achievements.length > 0) return;
