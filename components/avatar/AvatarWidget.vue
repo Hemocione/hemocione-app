@@ -76,6 +76,21 @@
         </button>
       </div>
 
+      <div v-if="avatarStore.bloodTypeBadge !== null || avatarStore.showBloodTypeBadge" class="badge-toggle">
+        <label class="badge-toggle-label">
+          <input
+            type="checkbox"
+            :checked="avatarStore.showBloodTypeBadge && avatarStore.bloodTypeBadge !== null"
+            :disabled="avatarStore.bloodTypeBadge === null"
+            @change="avatarStore.toggleBloodTypeBadge()"
+          />
+          <span v-if="avatarStore.bloodTypeBadge" class="badge-toggle-icon" aria-hidden="true">
+            <img :src="avatarAssetUrl(avatarStore.bloodTypeBadge.assetRef)" alt="" />
+          </span>
+          <span>Mostrar selo {{ avatarStore.bloodTypeBadge?.bloodType ?? '' }}</span>
+        </label>
+      </div>
+
       <div class="customization-sheet">
         <div class="tabs" role="tablist" aria-label="Categorias do avatar">
           <button
@@ -115,7 +130,7 @@
             :disabled="!item.owned"
             :aria-label="item.name"
             :aria-pressed="avatarStore.isEquipped(item)"
-            @click="avatarStore.equipItem(item)"
+            @click="handleItemClick(item)"
           >
             <span v-if="!item.owned" class="lock" aria-hidden="true">🔒</span>
             <img
@@ -137,7 +152,7 @@
 import { createHemocioneSdk } from "@hemocione/sdk";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, shallowRef, watch, computed } from "vue";
-import { useAvatarStore, type AvatarTab } from "~/stores/avatar";
+import { useAvatarStore, type AvatarItem, type AvatarSlot, type AvatarTab } from "~/stores/avatar";
 import HemarcioCharacter from "~/components/avatar/HemarcioCharacter.vue";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 
@@ -288,6 +303,15 @@ const shareHemarcio = () => {
     .catch(() => {
       // Cancelar a folha de compartilhamento é um fluxo normal.
     });
+};
+
+const handleItemClick = (item: AvatarItem) => {
+  if (!item.owned) return;
+  if (avatarStore.isEquipped(item)) {
+    avatarStore.unequipItem(item.slot);
+  } else {
+    avatarStore.equipItem(item);
+  }
 };
 
 watch(
@@ -561,6 +585,36 @@ onMounted(() => {
 .share-btn:disabled {
   cursor: wait;
   opacity: 0.55;
+}
+
+.badge-toggle {
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem 0 0.4rem;
+}
+
+.badge-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border: 2px solid var(--cp-outline-soft);
+  border-radius: 999px;
+  background: var(--cp-paper);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--cp-ink);
+  cursor: pointer;
+}
+
+.badge-toggle-label input {
+  margin: 0;
+}
+
+.badge-toggle-icon img {
+  width: 1.2rem;
+  height: 1.2rem;
+  vertical-align: middle;
 }
 
 .customization-sheet {
