@@ -4,7 +4,6 @@
     class="avatar-widget"
     aria-haspopup="dialog"
     aria-label="Editar meu Hemárcio"
-    :aria-describedby="showAchievementChip ? 'avatar-achievements-count' : undefined"
     @click="avatarStore.openEditor()"
   >
     <span class="avatar-stage" aria-hidden="true">
@@ -17,12 +16,6 @@
         :fundo-asset-ref="avatarStore.equippedAssetRef('FUNDO')"
         :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
       />
-    </span>
-    <span v-if="showAchievementChip" class="achievement-chip" aria-hidden="true">
-      🏆 {{ unlockedAchievementsCount }}/{{ totalAchievementsCount }}
-    </span>
-    <span v-if="showAchievementChip" id="avatar-achievements-count" class="sr-only">
-      {{ unlockedAchievementsCount }} de {{ totalAchievementsCount }} conquistas desbloqueadas
     </span>
   </button>
 
@@ -43,14 +36,24 @@
           <p class="eyebrow">PERSONALIZE SEU</p>
           <h2>Hemárcio</h2>
         </div>
-        <button
-          type="button"
-          class="close-btn"
-          aria-label="Fechar editor do Hemárcio"
-          @click="avatarStore.closeEditor()"
-        >
-          ✕
-        </button>
+        <div class="header-actions">
+          <NuxtLink
+            v-if="showAchievementChip"
+            to="/achievements"
+            class="achievement-chip"
+            @click="avatarStore.closeEditor()"
+          >
+            🏅 {{ unlockedAchievementsCount }}/{{ totalAchievementsCount }}
+          </NuxtLink>
+          <button
+            type="button"
+            class="close-btn"
+            aria-label="Fechar editor do Hemárcio"
+            @click="avatarStore.closeEditor()"
+          >
+            ✕
+          </button>
+        </div>
       </div>
 
       <div class="stage-wrap" aria-hidden="true">
@@ -437,38 +440,6 @@ onMounted(() => {
   outline-offset: 3px;
 }
 
-.achievement-chip {
-  position: absolute;
-  bottom: -0.35rem;
-  left: 50%;
-  z-index: 2;
-  transform: translateX(-50%);
-  display: inline-flex;
-  align-items: center;
-  padding: 0.05rem 0.4rem;
-  border: 2px solid #fff;
-  border-radius: 999px;
-  background: var(--cp-gold);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
-  color: #6b4900;
-  font-size: 0.58rem;
-  font-weight: 900;
-  line-height: 1.4;
-  white-space: nowrap;
-}
-
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
 .dialog-content {
   display: flex;
   min-height: 100%;
@@ -508,6 +479,28 @@ onMounted(() => {
   font-size: clamp(1.35rem, 4vw, 1.8rem);
   font-weight: 800;
   line-height: 1.1;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.achievement-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.55rem;
+  border: 2px solid var(--cp-gold-dark);
+  border-radius: 999px;
+  background: var(--cp-gold);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #6b4900;
+  font-size: 0.7rem;
+  font-weight: 900;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-decoration: none;
 }
 
 .close-btn {
