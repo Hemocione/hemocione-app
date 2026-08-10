@@ -212,6 +212,12 @@ const internalPages: InternalPage[] = [
     priority: 1,
     icon: "account",
   },
+  {
+    path: "/achievements",
+    name: "Conquistas",
+    priority: 1,
+    icon: "medal",
+  },
 ];
 
 const donationPages = computed((): InternalPage => {
