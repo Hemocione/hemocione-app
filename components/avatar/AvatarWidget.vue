@@ -13,14 +13,9 @@
         :face-asset-ref="avatarStore.equippedAssetRef('FACE')"
         :body-asset-ref="avatarStore.equippedAssetRef('BODY')"
         :background-asset-ref="avatarStore.equippedAssetRef('BACKGROUND')"
+        :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
       />
     </span>
-    <img
-      v-if="avatarStore.bloodTypeBadge"
-      class="blood-type-badge"
-      :src="`/illustrations/avatarItems/${avatarStore.bloodTypeBadge.assetRef}`"
-      :alt="`Selo tipo sanguíneo ${avatarStore.bloodTypeBadge.bloodType}`"
-    />
   </button>
 
   <ElDialog
@@ -56,6 +51,7 @@
           :face-asset-ref="avatarStore.equippedAssetRef('FACE')"
           :body-asset-ref="avatarStore.equippedAssetRef('BODY')"
           :background-asset-ref="null"
+          :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
         />
       </div>
 
@@ -437,16 +433,6 @@ onMounted(() => {
 .avatar-widget:focus-visible {
   outline: 3px solid var(--hemo-color-primary-light);
   outline-offset: 3px;
-}
-
-.blood-type-badge {
-  position: absolute;
-  right: -8px;
-  bottom: -8px;
-  width: 1.9rem;
-  height: 1.9rem;
-  object-fit: contain;
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
 }
 
 :deep(.avatar-dialog.el-dialog) {
