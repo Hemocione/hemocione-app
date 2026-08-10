@@ -10,24 +10,30 @@
       {{ year }}
     </h4>
     <div class="donations">
-      <div class="donation-wrapper" v-for="(donation, index) in donations">
-        <DonationCard :donation="donation" />
-        <div v-if="!isLastDonation(index)" class="vertical-line" />
+      <div class="donation-wrapper" v-for="(item, index) in items">
+        <DonationCard v-if="item.type === 'donation'" :donation="item.data" />
+        <DonationAchievementTimelineCard
+          v-else-if="item.type === 'achievement'"
+          :achievement="item.data"
+        />
+        <div v-if="!isLastItem(index)" class="vertical-line" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { TimelineItem } from "~/types/timeline";
+
 const props = defineProps<{
   year: string;
-  donations: Donation[];
+  items: TimelineItem[];
   isLast: boolean;
   isFirst: boolean;
 }>();
 
-const isLastDonation = (index: number) => {
-  return index === props.donations.length - 1;
+const isLastItem = (index: number) => {
+  return index === props.items.length - 1;
 };
 </script>
 
