@@ -30,7 +30,7 @@
         </time>
         <div v-if="achievement.rewardItem" class="achievement-reward">
           <img
-            :src="`/illustrations/avatarItems/${achievement.rewardItem.assetRef}`"
+            :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
             :alt="achievement.rewardItem.name"
           />
           <span>Destravou {{ achievement.rewardItem.name }}</span>
@@ -69,6 +69,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useAvatarStore } from "~/stores/avatar";
+import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 
 const avatarStore = useAvatarStore();
 

@@ -119,7 +119,7 @@
           >
             <span v-if="!item.owned" class="lock" aria-hidden="true">🔒</span>
             <img
-              :src="`/illustrations/avatarItems/${item.assetRef}`"
+              :src="avatarAssetUrl(item.assetRef)"
               :alt="item.name"
             />
             <span>{{ item.name }}</span>
@@ -139,6 +139,7 @@ import { storeToRefs } from "pinia";
 import { onMounted, ref, shallowRef, watch, computed } from "vue";
 import { useAvatarStore, type AvatarTab } from "~/stores/avatar";
 import HemarcioCharacter from "~/components/avatar/HemarcioCharacter.vue";
+import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 
 const avatarStore = useAvatarStore();
 const { isEditorOpen, activeTab } = storeToRefs(avatarStore);
@@ -179,7 +180,7 @@ const stageBackdropStyle = computed(() => {
   const assetRef = avatarStore.equippedAssetRef("FUNDO");
   return assetRef
     ? {
-        backgroundImage: `url("/illustrations/avatarItems/${assetRef}")`,
+        backgroundImage: `url("${avatarAssetUrl(assetRef)}")`,
       }
     : {};
 });
@@ -215,7 +216,7 @@ const svgLayer = (
   const x = (220 * left) / 100;
   const y = (320 * top) / 100;
   const size = (220 * width) / 100;
-  const href = escapeSvgAttribute(`/illustrations/avatarItems/${assetRef}`);
+  const href = escapeSvgAttribute(avatarAssetUrl(assetRef));
 
   return `<image href="${href}" x="${x}" y="${y}" width="${size}" height="${size}" preserveAspectRatio="none" />`;
 };
@@ -223,7 +224,7 @@ const svgLayer = (
 const svgBackgroundLayer = (assetRef: string | null) => {
   if (!assetRef) return "";
 
-  const href = escapeSvgAttribute(`/illustrations/avatarItems/${assetRef}`);
+  const href = escapeSvgAttribute(avatarAssetUrl(assetRef));
   return `<image href="${href}" x="0" y="0" width="220" height="320" preserveAspectRatio="xMidYMid slice" />`;
 };
 
@@ -238,7 +239,7 @@ const regenerateShareableImage = async () => {
   const olhosAssetRef = avatarStore.equippedAssetRef("OLHOS");
   const acessoriosAssetRef = avatarStore.equippedAssetRef("ACESSORIOS");
   const backgroundLayer = svgBackgroundLayer(fundoAssetRef);
-  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="320" viewBox="0 0 220 320">${backgroundLayer}<image href="/illustrations/avatarItems/base/hemarcio_base.svg" x="0" y="0" width="220" height="320" />${svgLayer(corpoAssetRef, 62, 12, 76)}${svgLayer(olhosAssetRef, 42, 28, 44)}${svgLayer(acessoriosAssetRef, -4, 18, 64)}</svg>`;
+  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="320" viewBox="0 0 220 320">${backgroundLayer}<image href="${avatarAssetUrl("base/hemarcio_base.svg")}" x="0" y="0" width="220" height="320" />${svgLayer(corpoAssetRef, 62, 12, 76)}${svgLayer(olhosAssetRef, 42, 28, 44)}${svgLayer(acessoriosAssetRef, -4, 18, 64)}</svg>`;
 
   const image = await new Promise<HTMLImageElement>((resolve, reject) => {
     const loadedImage = new Image();

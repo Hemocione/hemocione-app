@@ -29,7 +29,9 @@ withDefaults(
   { size: "large", bloodTypeBadgeAssetRef: null }
 );
 
-const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
+import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
+
+const assetUrl = avatarAssetUrl;
 </script>
 
 <style scoped>
