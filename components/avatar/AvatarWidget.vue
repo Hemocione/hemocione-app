@@ -26,16 +26,18 @@
     </span>
   </button>
 
-  <ElDialog
-    v-model="isEditorOpen"
-    fullscreen
-    :show-close="false"
-    class="avatar-dialog"
-  >
-    <div
-      class="dialog-content"
-      :style="{ paddingTop: `${topSafeAreaInset?.value ?? 0}px` }"
-    >
+  <Teleport to="body">
+    <Transition name="slide-up">
+      <div
+        v-if="isEditorOpen"
+        class="avatar-drawer-overlay"
+        @click.self="avatarStore.closeEditor()"
+      >
+        <div class="avatar-drawer">
+          <div
+            class="dialog-content"
+            :style="{ paddingTop: `${topSafeAreaInset?.value ?? 0}px` }"
+          >
       <div class="editor-header">
         <div>
           <p class="eyebrow">PERSONALIZE SEU</p>
@@ -145,7 +147,10 @@
         <AvatarAchievementsList v-else />
       </div>
     </div>
-  </ElDialog>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -333,8 +338,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.avatar-widget,
-:global(.avatar-dialog) {
+.avatar-widget {
   --cp-paper: #ffffff;
   --cp-outline: #17324a;
   --cp-outline-soft: #7c98aa;
@@ -342,6 +346,51 @@ onMounted(() => {
   --cp-gold-dark: #d99a00;
   --cp-ink: #17324a;
   --cp-ink-soft: #4c6c82;
+}
+
+.avatar-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: flex-end;
+}
+
+.avatar-drawer {
+  width: 100%;
+  height: 100%;
+  max-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cp-paper);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.3s ease;
+}
+
+.slide-up-enter-active .avatar-drawer,
+.slide-up-leave-active .avatar-drawer {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-up-enter-from .avatar-drawer,
+.slide-up-leave-to .avatar-drawer {
+  transform: translateY(100%);
+}
+
+.slide-up-enter-from,
+.slide-up-leave-to {
+  opacity: 0;
+}
+
+.slide-up-enter-to,
+.slide-up-leave-from {
+  opacity: 1;
 }
 
 .avatar-widget {
@@ -418,31 +467,6 @@ onMounted(() => {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
-}
-
-:global(.avatar-dialog.el-dialog) {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: var(--cp-paper);
-  box-shadow: none;
-}
-
-:global(.avatar-dialog .el-dialog__header) {
-  display: none;
-}
-
-:global(.avatar-dialog .el-dialog__body) {
-  display: flex;
-  flex: 1;
-  min-height: 0;
-  padding: 0;
-  overflow: hidden;
 }
 
 .dialog-content {
@@ -544,7 +568,7 @@ onMounted(() => {
   background-size: cover;
 }
 
-.stage-wrap :deep(.hemarcio) {
+.stage-wrap .hemarcio {
   z-index: 2;
   margin-bottom: 14px;
 }
