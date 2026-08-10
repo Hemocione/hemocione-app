@@ -19,6 +19,20 @@
         {{ unseenItems.length === 1 ? "item novo" : "itens novos" }}! Toque para ver ✨
       </span>
     </button>
+    <NuxtLink
+      v-if="showProfileNudge"
+      to="/account"
+      class="profile-nudge-cta"
+    >
+      <span class="profile-nudge-cta__icon" aria-hidden="true">📋</span>
+      <span>
+        Seu cadastro está incompleto{{
+          profileAchievement?.rewardItem
+            ? ` — complete e ganhe ${profileAchievement.rewardItem.name}`
+            : ""
+        }}. Toque para completar
+      </span>
+    </NuxtLink>
     <div class="status">
       <div
         :class="{
@@ -93,6 +107,38 @@
   flex: 0 0 auto;
   font-size: 1.35rem;
 }
+
+.profile-nudge-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 2px solid var(--hemo-color-warn);
+  border-radius: 1rem;
+  background: var(--yellow-light);
+  color: var(--black-100);
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  text-decoration: none;
+}
+
+.profile-nudge-cta:hover {
+  background: #f3dfb8;
+}
+
+.profile-nudge-cta:focus-visible {
+  outline: 3px solid var(--hemo-color-warn);
+  outline-offset: 3px;
+}
+
+.profile-nudge-cta__icon {
+  flex: 0 0 auto;
+  font-size: 1.35rem;
+}
 .ball {
   height: 0.6rem;
   aspect-ratio: 1/1;
@@ -163,10 +209,17 @@ import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
 const avatarStore = useAvatarStore();
 const userData = userStore.userWithMetrics;
-const { unseenItems } = storeToRefs(avatarStore);
+const { unseenItems, achievements } = storeToRefs(avatarStore);
 
 const ableToDonate = computed(
   () => userStore.userDonationStatus.status === "able-to-donate"
+);
+
+const profileAchievement = computed(() =>
+  achievements.value.find((a) => a.key === "cadastro_completo")
+);
+const showProfileNudge = computed(
+  () => profileAchievement.value?.unlocked === false
 );
 
 const description = computed(() =>
