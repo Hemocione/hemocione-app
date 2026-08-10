@@ -24,13 +24,13 @@
       to="/account"
       class="profile-nudge-cta"
     >
-      <span class="profile-nudge-cta__icon" aria-hidden="true">📋</span>
-      <span>
-        Seu cadastro está incompleto{{
+      <span class="profile-nudge-cta__icon" aria-hidden="true">🏆</span>
+      <span class="cta-text">
+        Complete seu cadastro{{
           profileAchievement?.rewardItem
-            ? ` — complete e ganhe ${profileAchievement.rewardItem.name}`
-            : ""
-        }}. Toque para completar
+            ? ` e ganhe a recompensa: ${profileAchievement.rewardItem.name}`
+            : " para desbloquear recompensas"
+        }}
       </span>
     </NuxtLink>
     <div class="status">
@@ -108,11 +108,18 @@
   font-size: 1.35rem;
 }
 
+.avatar-unseen-cta > span:last-child,
+.profile-nudge-cta > .cta-text {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
 .profile-nudge-cta {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   width: 100%;
+  box-sizing: border-box;
   padding: 0.75rem 0.9rem;
   border: 2px solid var(--hemo-color-warn);
   border-radius: 1rem;
@@ -219,7 +226,9 @@ const profileAchievement = computed(() =>
   achievements.value.find((a) => a.key === "cadastro_completo")
 );
 const showProfileNudge = computed(
-  () => profileAchievement.value?.unlocked === false
+  () =>
+    profileAchievement.value?.unlocked === false &&
+    unseenItems.value.length === 0
 );
 
 const description = computed(() =>

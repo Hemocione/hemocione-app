@@ -4,6 +4,7 @@
     class="avatar-widget"
     aria-haspopup="dialog"
     aria-label="Editar meu Hemocionezinho"
+    :aria-describedby="showAchievementChip ? 'avatar-achievements-count' : undefined"
     @click="avatarStore.openEditor()"
   >
     <span class="avatar-stage" aria-hidden="true">
@@ -15,6 +16,12 @@
         :background-asset-ref="avatarStore.equippedAssetRef('BACKGROUND')"
         :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
       />
+    </span>
+    <span v-if="showAchievementChip" class="achievement-chip" aria-hidden="true">
+      🏆 {{ unlockedAchievementsCount }}/{{ totalAchievementsCount }}
+    </span>
+    <span v-if="showAchievementChip" id="avatar-achievements-count" class="sr-only">
+      {{ unlockedAchievementsCount }} de {{ totalAchievementsCount }} conquistas desbloqueadas
     </span>
   </button>
 
@@ -217,6 +224,12 @@ const tabLabels: Record<AvatarTab, { emoji: string; label: string }> = {
   BACKGROUND: { emoji: "🖼️", label: "Fundo" },
   ACHIEVEMENTS: { emoji: "🏆", label: "Conquistas" },
 };
+
+const unlockedAchievementsCount = computed(
+  () => avatarStore.achievements.filter((achievement) => achievement.unlocked).length
+);
+const totalAchievementsCount = computed(() => avatarStore.achievements.length);
+const showAchievementChip = computed(() => unlockedAchievementsCount.value > 0);
 
 const activeItems = computed(() => {
   if (activeTab.value === "ACHIEVEMENTS") return [];
@@ -433,6 +446,38 @@ onMounted(() => {
 .avatar-widget:focus-visible {
   outline: 3px solid var(--hemo-color-primary-light);
   outline-offset: 3px;
+}
+
+.achievement-chip {
+  position: absolute;
+  bottom: -0.35rem;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  padding: 0.05rem 0.4rem;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  background: var(--cp-gold);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  color: #6b4900;
+  font-size: 0.58rem;
+  font-weight: 900;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 :deep(.avatar-dialog.el-dialog) {
