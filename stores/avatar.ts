@@ -142,6 +142,12 @@ export const useAvatarStore = defineStore("avatar", {
     closeEditor() {
       this.isEditorOpen = false;
     },
+    invalidateCache() {
+      this.items = [];
+      this.equipped = null;
+      this.achievements = [];
+      this.bloodTypeBadge = null;
+    },
     isEquipped(item: AvatarItem) {
       return this.equipped?.[SLOT_TO_FIELD[item.slot]] === item.id;
     },
