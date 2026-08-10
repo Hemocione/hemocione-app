@@ -1,4 +1,4 @@
-export type AvatarSlot = "HEAD" | "FACE" | "BODY" | "BACKGROUND";
+export type AvatarSlot = "OLHOS" | "CORPO" | "PERNAS" | "ACESSORIOS" | "FUNDO";
 export type AvatarTab = AvatarSlot | "ACHIEVEMENTS";
 
 export interface AvatarItem {
@@ -12,10 +12,11 @@ export interface AvatarItem {
 }
 
 export interface AvatarEquipped {
-  headItemId: number | null;
-  faceItemId: number | null;
-  bodyItemId: number | null;
-  backgroundItemId: number | null;
+  olhosItemId: number | null;
+  corpoItemId: number | null;
+  pernasItemId: number | null;
+  acessoriosItemId: number | null;
+  fundoItemId: number | null;
 }
 
 export interface BloodTypeBadge {
@@ -43,10 +44,11 @@ export interface Achievement {
 }
 
 const SLOT_TO_FIELD: Record<AvatarSlot, keyof AvatarEquipped> = {
-  HEAD: "headItemId",
-  FACE: "faceItemId",
-  BODY: "bodyItemId",
-  BACKGROUND: "backgroundItemId",
+  OLHOS: "olhosItemId",
+  CORPO: "corpoItemId",
+  PERNAS: "pernasItemId",
+  ACESSORIOS: "acessoriosItemId",
+  FUNDO: "fundoItemId",
 };
 
 export const useAvatarStore = defineStore("avatar", {
@@ -56,7 +58,7 @@ export const useAvatarStore = defineStore("avatar", {
     bloodTypeBadge: null as BloodTypeBadge | null,
     achievements: [] as Achievement[],
     isEditorOpen: false,
-    activeTab: "HEAD" as AvatarTab,
+    activeTab: "OLHOS" as AvatarTab,
   }),
   actions: {
     async fetchAvatar() {
@@ -146,7 +148,7 @@ export const useAvatarStore = defineStore("avatar", {
   },
   getters: {
     itemsBySlot(state): Record<AvatarSlot, AvatarItem[]> {
-      const groups: Record<AvatarSlot, AvatarItem[]> = { HEAD: [], FACE: [], BODY: [], BACKGROUND: [] };
+      const groups: Record<AvatarSlot, AvatarItem[]> = { OLHOS: [], CORPO: [], PERNAS: [], ACESSORIOS: [], FUNDO: [] };
       for (const item of state.items) groups[item.slot].push(item);
       return groups;
     },
