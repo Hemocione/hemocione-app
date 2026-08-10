@@ -7,7 +7,7 @@
           :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
           :alt="achievement.rewardItem.name"
         />
-        <img v-else src="/icons/trophy.svg" alt="conquista desbloqueada" />
+        <img v-else src="/icons/medal.svg" alt="conquista desbloqueada" />
       </div>
       <div class="achievement-info">
         <span class="achievement-date">{{ readableSimpleDate }}</span>
