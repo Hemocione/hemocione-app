@@ -159,6 +159,7 @@ p {
 <script setup lang="ts">
 import { cloneDeep } from "lodash";
 import { useUserStore, type UserUpdate } from "@/stores/user";
+import { useAvatarStore } from "@/stores/avatar";
 
 definePageMeta({
   pageTransition: {
@@ -274,6 +275,8 @@ const handleClick = async () => {
       message: "Alterações salvas com sucesso."
     })
     nextTick(async () => {
+      const avatarStore = useAvatarStore();
+      avatarStore.invalidateCache();
       await navigateTo("/") // go to home after successfull update
     });
   } catch (error) {

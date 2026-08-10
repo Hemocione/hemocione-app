@@ -1,4 +1,4 @@
-export type AvatarSlot = "HEAD" | "FACE" | "BODY" | "BACKGROUND";
+export type AvatarSlot = "OLHOS" | "CORPO" | "PERNAS" | "ACESSORIOS" | "FUNDO";
 export type AvatarTab = AvatarSlot | "ACHIEVEMENTS";
 
 export interface AvatarItem {
@@ -12,10 +12,11 @@ export interface AvatarItem {
 }
 
 export interface AvatarEquipped {
-  headItemId: number | null;
-  faceItemId: number | null;
-  bodyItemId: number | null;
-  backgroundItemId: number | null;
+  olhosItemId: number | null;
+  corpoItemId: number | null;
+  pernasItemId: number | null;
+  acessoriosItemId: number | null;
+  fundoItemId: number | null;
 }
 
 export interface BloodTypeBadge {
@@ -43,10 +44,11 @@ export interface Achievement {
 }
 
 const SLOT_TO_FIELD: Record<AvatarSlot, keyof AvatarEquipped> = {
-  HEAD: "headItemId",
-  FACE: "faceItemId",
-  BODY: "bodyItemId",
-  BACKGROUND: "backgroundItemId",
+  OLHOS: "olhosItemId",
+  CORPO: "corpoItemId",
+  PERNAS: "pernasItemId",
+  ACESSORIOS: "acessoriosItemId",
+  FUNDO: "fundoItemId",
 };
 
 export const useAvatarStore = defineStore("avatar", {
@@ -56,7 +58,8 @@ export const useAvatarStore = defineStore("avatar", {
     bloodTypeBadge: null as BloodTypeBadge | null,
     achievements: [] as Achievement[],
     isEditorOpen: false,
-    activeTab: "HEAD" as AvatarTab,
+    activeTab: "OLHOS" as AvatarTab,
+    showBloodTypeBadge: true,
   }),
   actions: {
     async fetchAvatar() {
@@ -75,6 +78,7 @@ export const useAvatarStore = defineStore("avatar", {
       this.items = data.items;
       this.equipped = data.equipped;
       this.bloodTypeBadge = data.bloodTypeBadge;
+      this.showBloodTypeBadge = data.bloodTypeBadge !== null;
     },
     async fetchAchievements() {
       if (this.achievements.length > 0) return;
@@ -104,6 +108,40 @@ export const useAvatarStore = defineStore("avatar", {
         }
       );
       this.equipped = data;
+    },
+    async unequipItem(slot: AvatarSlot) {
+      if (!this.equipped) return;
+
+      const config = useRuntimeConfig();
+      const userStore = useUserStore();
+      const updatedEquipped = { ...this.equipped, [SLOT_TO_FIELD[slot]]: null };
+
+      const data: AvatarEquipped = await $fetch(
+        config.public.hemocioneIdApiUrl + "/users/me/avatar",
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${userStore.token}` },
+          body: JSON.stringify(updatedEquipped),
+        }
+      );
+      this.equipped = data;
+    },
+    async toggleBloodTypeBadge() {
+      const config = useRuntimeConfig();
+      const userStore = useUserStore();
+      this.showBloodTypeBadge = !this.showBloodTypeBadge;
+
+      await $fetch(
+        config.public.hemocioneIdApiUrl + "/users/me/avatar",
+        {
+          method: "PUT",
+          headers: { Authorization: `Bearer ${userStore.token}` },
+          body: JSON.stringify({ showBloodTypeBadge: this.showBloodTypeBadge }),
+        }
+      );
+      if (!this.showBloodTypeBadge) {
+        this.bloodTypeBadge = null;
+      }
     },
     async markItemsSeen() {
       const itemIds = this.unseenItems.map((item) => item.id);
@@ -140,13 +178,20 @@ export const useAvatarStore = defineStore("avatar", {
     closeEditor() {
       this.isEditorOpen = false;
     },
+    invalidateCache() {
+      this.items = [];
+      this.equipped = null;
+      this.achievements = [];
+      this.bloodTypeBadge = null;
+      this.showBloodTypeBadge = true;
+    },
     isEquipped(item: AvatarItem) {
       return this.equipped?.[SLOT_TO_FIELD[item.slot]] === item.id;
     },
   },
   getters: {
     itemsBySlot(state): Record<AvatarSlot, AvatarItem[]> {
-      const groups: Record<AvatarSlot, AvatarItem[]> = { HEAD: [], FACE: [], BODY: [], BACKGROUND: [] };
+      const groups: Record<AvatarSlot, AvatarItem[]> = { OLHOS: [], CORPO: [], PERNAS: [], ACESSORIOS: [], FUNDO: [] };
       for (const item of state.items) groups[item.slot].push(item);
       return groups;
     },

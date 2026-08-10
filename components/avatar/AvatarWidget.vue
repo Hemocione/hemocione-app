@@ -3,17 +3,18 @@
     type="button"
     class="avatar-widget"
     aria-haspopup="dialog"
-    aria-label="Editar meu Hemocionezinho"
+    aria-label="Editar meu Hemárcio"
     :aria-describedby="showAchievementChip ? 'avatar-achievements-count' : undefined"
     @click="avatarStore.openEditor()"
   >
     <span class="avatar-stage" aria-hidden="true">
-      <HemocionezinhoCharacter
+      <HemarcioCharacter
         size="thumbnail"
-        :head-asset-ref="avatarStore.equippedAssetRef('HEAD')"
-        :face-asset-ref="avatarStore.equippedAssetRef('FACE')"
-        :body-asset-ref="avatarStore.equippedAssetRef('BODY')"
-        :background-asset-ref="avatarStore.equippedAssetRef('BACKGROUND')"
+        :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
+        :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
+        :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
+        :acessorios-asset-ref="avatarStore.equippedAssetRef('ACESSORIOS')"
+        :fundo-asset-ref="avatarStore.equippedAssetRef('FUNDO')"
         :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
       />
     </span>
@@ -38,12 +39,12 @@
       <div class="editor-header">
         <div>
           <p class="eyebrow">PERSONALIZE SEU</p>
-          <h2>Hemocionezinho</h2>
+          <h2>Hemárcio</h2>
         </div>
         <button
           type="button"
           class="close-btn"
-          aria-label="Fechar editor do Hemocionezinho"
+          aria-label="Fechar editor do Hemárcio"
           @click="avatarStore.closeEditor()"
         >
           ✕
@@ -52,12 +53,13 @@
 
       <div class="stage-wrap" aria-hidden="true">
         <div class="stage-backdrop" :style="stageBackdropStyle"></div>
-        <HemocionezinhoCharacter
+        <HemarcioCharacter
           size="large"
-          :head-asset-ref="avatarStore.equippedAssetRef('HEAD')"
-          :face-asset-ref="avatarStore.equippedAssetRef('FACE')"
-          :body-asset-ref="avatarStore.equippedAssetRef('BODY')"
-          :background-asset-ref="null"
+          :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
+          :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
+          :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
+          :acessorios-asset-ref="avatarStore.equippedAssetRef('ACESSORIOS')"
+          :fundo-asset-ref="null"
           :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
         />
       </div>
@@ -67,11 +69,26 @@
           type="button"
           class="share-btn"
           :disabled="!shareableImage || !canShare"
-          @click="shareHemocionezinho"
+          @click="shareHemarcio"
         >
           <span aria-hidden="true">📤</span>
           Compartilhar
         </button>
+      </div>
+
+      <div v-if="avatarStore.bloodTypeBadge !== null || avatarStore.showBloodTypeBadge" class="badge-toggle">
+        <label class="badge-toggle-label">
+          <input
+            type="checkbox"
+            :checked="avatarStore.showBloodTypeBadge && avatarStore.bloodTypeBadge !== null"
+            :disabled="avatarStore.bloodTypeBadge === null"
+            @change="avatarStore.toggleBloodTypeBadge()"
+          />
+          <span v-if="avatarStore.bloodTypeBadge" class="badge-toggle-icon" aria-hidden="true">
+            <img :src="avatarAssetUrl(avatarStore.bloodTypeBadge.assetRef)" alt="" />
+          </span>
+          <span>Mostrar selo {{ avatarStore.bloodTypeBadge?.bloodType ?? '' }}</span>
+        </label>
       </div>
 
       <div class="customization-sheet">
@@ -113,11 +130,11 @@
             :disabled="!item.owned"
             :aria-label="item.name"
             :aria-pressed="avatarStore.isEquipped(item)"
-            @click="avatarStore.equipItem(item)"
+            @click="handleItemClick(item)"
           >
             <span v-if="!item.owned" class="lock" aria-hidden="true">🔒</span>
             <img
-              :src="`/illustrations/avatarItems/${item.assetRef}`"
+              :src="avatarAssetUrl(item.assetRef)"
               :alt="item.name"
             />
             <span>{{ item.name }}</span>
@@ -135,8 +152,9 @@
 import { createHemocioneSdk } from "@hemocione/sdk";
 import { storeToRefs } from "pinia";
 import { onMounted, ref, shallowRef, watch, computed } from "vue";
-import { useAvatarStore, type AvatarTab } from "~/stores/avatar";
-import HemocionezinhoCharacter from "~/components/avatar/HemocionezinhoCharacter.vue";
+import { useAvatarStore, type AvatarItem, type AvatarSlot, type AvatarTab } from "~/stores/avatar";
+import HemarcioCharacter from "~/components/avatar/HemarcioCharacter.vue";
+import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 
 const avatarStore = useAvatarStore();
 const { isEditorOpen, activeTab } = storeToRefs(avatarStore);
@@ -146,17 +164,19 @@ const canShare =
   typeof navigator !== "undefined" && typeof navigator.share === "function";
 
 const tabs: AvatarTab[] = [
-  "HEAD",
-  "FACE",
-  "BODY",
-  "BACKGROUND",
+  "OLHOS",
+  "CORPO",
+  "PERNAS",
+  "ACESSORIOS",
+  "FUNDO",
   "ACHIEVEMENTS",
 ];
 const tabLabels: Record<AvatarTab, { emoji: string; label: string }> = {
-  HEAD: { emoji: "🎓", label: "Cabeça" },
-  FACE: { emoji: "🕶️", label: "Rosto" },
-  BODY: { emoji: "🎗️", label: "Corpo" },
-  BACKGROUND: { emoji: "🖼️", label: "Fundo" },
+  OLHOS: { emoji: "👀", label: "Olhos" },
+  CORPO: { emoji: "👕", label: "Corpo" },
+  PERNAS: { emoji: "👖", label: "Pernas" },
+  ACESSORIOS: { emoji: "🎒", label: "Acessórios" },
+  FUNDO: { emoji: "🖼️", label: "Fundo" },
   ACHIEVEMENTS: { emoji: "🏆", label: "Conquistas" },
 };
 
@@ -172,10 +192,10 @@ const activeItems = computed(() => {
 });
 
 const stageBackdropStyle = computed(() => {
-  const assetRef = avatarStore.equippedAssetRef("BACKGROUND");
+  const assetRef = avatarStore.equippedAssetRef("FUNDO");
   return assetRef
     ? {
-        backgroundImage: `url("/illustrations/avatarItems/${assetRef}")`,
+        backgroundImage: `url("${avatarAssetUrl(assetRef)}")`,
       }
     : {};
 });
@@ -200,22 +220,6 @@ const escapeSvgAttribute = (value: string) =>
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
 
-const baseCharacterSvg = `
-  <g transform="scale(1.1 1.0666667)">
-    <path
-      d="M100 10 C 135 75, 180 125, 180 175 C 180 225, 144 260, 100 260 C 56 260, 20 225, 20 175 C 20 125, 65 75, 100 10 Z"
-      fill="#E4002B"
-    />
-    <line x1="22" y1="175" x2="-10" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-    <line x1="178" y1="175" x2="210" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-    <line x1="80" y1="255" x2="65" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-    <line x1="120" y1="255" x2="135" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-    <circle cx="80" cy="155" r="12" fill="#fff" />
-    <circle cx="120" cy="155" r="12" fill="#fff" />
-    <circle cx="82" cy="158" r="5" fill="#1a1a1a" />
-    <circle cx="122" cy="158" r="5" fill="#1a1a1a" />
-  </g>`;
-
 const svgLayer = (
   assetRef: string | null,
   top: number,
@@ -227,7 +231,7 @@ const svgLayer = (
   const x = (220 * left) / 100;
   const y = (320 * top) / 100;
   const size = (220 * width) / 100;
-  const href = escapeSvgAttribute(`/illustrations/avatarItems/${assetRef}`);
+  const href = escapeSvgAttribute(avatarAssetUrl(assetRef));
 
   return `<image href="${href}" x="${x}" y="${y}" width="${size}" height="${size}" preserveAspectRatio="none" />`;
 };
@@ -235,7 +239,7 @@ const svgLayer = (
 const svgBackgroundLayer = (assetRef: string | null) => {
   if (!assetRef) return "";
 
-  const href = escapeSvgAttribute(`/illustrations/avatarItems/${assetRef}`);
+  const href = escapeSvgAttribute(avatarAssetUrl(assetRef));
   return `<image href="${href}" x="0" y="0" width="220" height="320" preserveAspectRatio="xMidYMid slice" />`;
 };
 
@@ -245,12 +249,12 @@ const regenerateShareableImage = async () => {
   const generation = ++shareGeneration;
   shareableImage.value = null;
 
-  const backgroundAssetRef = avatarStore.equippedAssetRef("BACKGROUND");
-  const bodyAssetRef = avatarStore.equippedAssetRef("BODY");
-  const faceAssetRef = avatarStore.equippedAssetRef("FACE");
-  const headAssetRef = avatarStore.equippedAssetRef("HEAD");
-  const backgroundLayer = svgBackgroundLayer(backgroundAssetRef);
-  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="320" viewBox="0 0 220 320">${backgroundLayer}${baseCharacterSvg}${svgLayer(bodyAssetRef, 62, 12, 76)}${svgLayer(faceAssetRef, 42, 28, 44)}${svgLayer(headAssetRef, -4, 18, 64)}</svg>`;
+  const fundoAssetRef = avatarStore.equippedAssetRef("FUNDO");
+  const corpoAssetRef = avatarStore.equippedAssetRef("CORPO");
+  const olhosAssetRef = avatarStore.equippedAssetRef("OLHOS");
+  const acessoriosAssetRef = avatarStore.equippedAssetRef("ACESSORIOS");
+  const backgroundLayer = svgBackgroundLayer(fundoAssetRef);
+  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="320" viewBox="0 0 220 320">${backgroundLayer}<image href="${avatarAssetUrl("base/hemarcio_base.svg")}" x="0" y="0" width="220" height="320" />${svgLayer(corpoAssetRef, 62, 12, 76)}${svgLayer(olhosAssetRef, 42, 28, 44)}${svgLayer(acessoriosAssetRef, -4, 18, 64)}</svg>`;
 
   const image = await new Promise<HTMLImageElement>((resolve, reject) => {
     const loadedImage = new Image();
@@ -275,7 +279,7 @@ const regenerateShareableImage = async () => {
   });
 
   if (!blob || generation !== shareGeneration) return;
-  shareableImage.value = new File([blob], "hemocionezinho.png", {
+  shareableImage.value = new File([blob], "hemarcio.png", {
     type: "image/png",
   });
 };
@@ -286,24 +290,33 @@ const refreshShareableImage = () => {
   });
 };
 
-const shareHemocionezinho = () => {
+const shareHemarcio = () => {
   if (!canShare || !shareableImage.value) return;
 
   const sdk = createHemocioneSdk();
   sdk
     .share({
       files: [shareableImage.value],
-      title: "Meu Hemocionezinho",
-      text: "Olha meu hemocionezinho no app da Hemocione! 🩸",
+      title: "Meu Hemárcio",
+      text: "Olha meu Hemárcio no app da Hemocione! 🩸",
     })
     .catch(() => {
       // Cancelar a folha de compartilhamento é um fluxo normal.
     });
 };
 
+const handleItemClick = (item: AvatarItem) => {
+  if (!item.owned) return;
+  if (avatarStore.isEquipped(item)) {
+    avatarStore.unequipItem(item.slot);
+  } else {
+    avatarStore.equipItem(item);
+  }
+};
+
 watch(
   () =>
-    (["HEAD", "FACE", "BODY", "BACKGROUND"] as const).map((slot) =>
+    (["OLHOS", "CORPO", "PERNAS", "ACESSORIOS", "FUNDO"] as const).map((slot) =>
       avatarStore.equippedAssetRef(slot)
     ),
   refreshShareableImage
@@ -531,7 +544,7 @@ onMounted(() => {
   background-size: cover;
 }
 
-.stage-wrap :deep(.hemocionezinho) {
+.stage-wrap :deep(.hemarcio) {
   z-index: 2;
   margin-bottom: 14px;
 }
@@ -572,6 +585,36 @@ onMounted(() => {
 .share-btn:disabled {
   cursor: wait;
   opacity: 0.55;
+}
+
+.badge-toggle {
+  display: flex;
+  justify-content: center;
+  padding: 0.1rem 0 0.4rem;
+}
+
+.badge-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  border: 2px solid var(--cp-outline-soft);
+  border-radius: 999px;
+  background: var(--cp-paper);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--cp-ink);
+  cursor: pointer;
+}
+
+.badge-toggle-label input {
+  margin: 0;
+}
+
+.badge-toggle-icon img {
+  width: 1.2rem;
+  height: 1.2rem;
+  vertical-align: middle;
 }
 
 .customization-sheet {

@@ -5,7 +5,9 @@
       iconDirection="left"
       :custom-path="'/'"
     />
-    <AvatarAchievementsList />
+    <div class="content">
+      <AvatarAchievementsList />
+    </div>
   </div>
 </template>
 
@@ -15,10 +17,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
   width: 100%;
   min-height: 100%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   padding: 1rem;
+  height: calc(100dvh - var(--subheader-size) - var(--navbar-size));
+  overflow-y: auto;
 }
 </style>
 

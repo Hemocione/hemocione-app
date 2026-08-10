@@ -4,7 +4,7 @@
       <div class="achievement-icon">
         <img
           v-if="achievement.rewardItem"
-          :src="`/illustrations/avatarItems/${achievement.rewardItem.assetRef}`"
+          :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
           :alt="achievement.rewardItem.name"
         />
         <img v-else src="/icons/trophy.svg" alt="conquista desbloqueada" />
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import type { Achievement } from "~/stores/avatar";
+import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 
 const props = defineProps<{
   achievement: Achievement;
