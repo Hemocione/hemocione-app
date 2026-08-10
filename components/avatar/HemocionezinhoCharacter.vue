@@ -16,6 +16,12 @@
       <circle cx="122" cy="158" r="5" fill="#1a1a1a" />
     </svg>
     <img v-if="bodyAssetRef" class="layer body" :src="assetUrl(bodyAssetRef)" alt="" />
+    <img
+      v-if="bloodTypeBadgeAssetRef"
+      class="layer blood-type-medal"
+      :src="assetUrl(bloodTypeBadgeAssetRef)"
+      alt=""
+    />
     <img v-if="faceAssetRef" class="layer face" :src="assetUrl(faceAssetRef)" alt="" />
     <img v-if="headAssetRef" class="layer head" :src="assetUrl(headAssetRef)" alt="" />
   </div>
@@ -29,8 +35,9 @@ withDefaults(
     faceAssetRef: string | null;
     bodyAssetRef: string | null;
     backgroundAssetRef: string | null;
+    bloodTypeBadgeAssetRef?: string | null;
   }>(),
-  { size: "large" }
+  { size: "large", bloodTypeBadgeAssetRef: null }
 );
 
 const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
@@ -46,8 +53,8 @@ const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
   height: 320px;
 }
 .hemocionezinho.thumbnail {
-  width: 56px;
-  height: 82px;
+  width: 48px;
+  height: 70px;
 }
 .layer {
   position: absolute;
@@ -74,16 +81,22 @@ const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
   width: 76%;
   z-index: 2;
 }
+.layer.blood-type-medal {
+  top: 51%;
+  left: 35%;
+  width: 30%;
+  z-index: 3;
+}
 .layer.face {
   top: 42%;
   left: 28%;
   width: 44%;
-  z-index: 3;
+  z-index: 4;
 }
 .layer.head {
   top: -4%;
   left: 18%;
   width: 64%;
-  z-index: 4;
+  z-index: 5;
 }
 </style>
