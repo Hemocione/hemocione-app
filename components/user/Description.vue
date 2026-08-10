@@ -6,6 +6,13 @@
         <h4>{{ userData?.name }}</h4>
         <span>{{ description }}</span>
       </div>
+      <NuxtLink
+        v-if="totalAchievementsCount > 0"
+        to="/achievements"
+        class="achievement-chip"
+      >
+        🏅 {{ unlockedAchievementsCount }}/{{ totalAchievementsCount }}
+      </NuxtLink>
     </div>
     <button
       v-if="unseenItems.length > 0"
@@ -64,6 +71,24 @@
   width: 100%;
   height: 4rem;
   gap: 1rem;
+}
+
+.achievement-chip {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border: 2px solid #d99a00;
+  border-radius: 999px;
+  background: #ffc635;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #6b4900;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
 .status {
@@ -234,4 +259,9 @@ const showProfileNudge = computed(
 const description = computed(() =>
   [userStore.userAge, userStore.userReadableGender].filter(Boolean).join(", ")
 );
+
+const unlockedAchievementsCount = computed(
+  () => achievements.value.filter((a) => a.unlocked).length
+);
+const totalAchievementsCount = computed(() => achievements.value.length);
 </script>
