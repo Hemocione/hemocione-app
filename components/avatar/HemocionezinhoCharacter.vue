@@ -82,9 +82,9 @@ const assetUrl = (assetRef: string) => `/illustrations/avatarItems/${assetRef}`;
   z-index: 2;
 }
 .layer.blood-type-medal {
-  top: 51%;
-  left: 35%;
-  width: 30%;
+  top: 54%;
+  left: 34%;
+  width: 32%;
   z-index: 3;
 }
 .layer.face {
