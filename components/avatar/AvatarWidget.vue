@@ -394,7 +394,7 @@ onMounted(() => {
 
 <style scoped>
 .avatar-widget,
-:deep(.avatar-dialog) {
+:global(.avatar-dialog) {
   --cp-paper: #ffffff;
   --cp-outline: #17324a;
   --cp-outline-soft: #7c98aa;
@@ -480,7 +480,7 @@ onMounted(() => {
   border: 0;
 }
 
-:deep(.avatar-dialog.el-dialog) {
+:global(.avatar-dialog.el-dialog) {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -493,11 +493,11 @@ onMounted(() => {
   box-shadow: none;
 }
 
-:deep(.avatar-dialog .el-dialog__header) {
+:global(.avatar-dialog .el-dialog__header) {
   display: none;
 }
 
-:deep(.avatar-dialog .el-dialog__body) {
+:global(.avatar-dialog .el-dialog__body) {
   display: flex;
   flex: 1;
   min-height: 0;
