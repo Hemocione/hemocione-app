@@ -339,13 +339,6 @@ onMounted(() => {
 
 <style scoped>
 .avatar-widget {
-  --cp-paper: #ffffff;
-  --cp-outline: #17324a;
-  --cp-outline-soft: #7c98aa;
-  --cp-gold: #ffc635;
-  --cp-gold-dark: #d99a00;
-  --cp-ink: #17324a;
-  --cp-ink-soft: #4c6c82;
 }
 
 .avatar-drawer-overlay {
@@ -358,6 +351,13 @@ onMounted(() => {
 }
 
 .avatar-drawer {
+  --cp-paper: #ffffff;
+  --cp-outline: #17324a;
+  --cp-outline-soft: #7c98aa;
+  --cp-gold: #ffc635;
+  --cp-gold-dark: #d99a00;
+  --cp-ink: #17324a;
+  --cp-ink-soft: #4c6c82;
   width: 100%;
   height: 100%;
   max-height: 100dvh;
