@@ -1,5 +1,5 @@
 export type AvatarSlot = "OLHOS" | "CORPO" | "PERNAS" | "ACESSORIOS" | "FUNDO";
-export type AvatarTab = AvatarSlot | "ACHIEVEMENTS";
+export type AvatarTab = AvatarSlot | "ACHIEVEMENTS" | "SELO";
 
 export interface AvatarItem {
   id: number;
@@ -60,6 +60,7 @@ export const useAvatarStore = defineStore("avatar", {
     isEditorOpen: false,
     activeTab: "OLHOS" as AvatarTab,
     showBloodTypeBadge: true,
+    pendingEquipItemId: null as number | null,
   }),
   actions: {
     async fetchAvatar() {
@@ -139,9 +140,6 @@ export const useAvatarStore = defineStore("avatar", {
           body: JSON.stringify({ showBloodTypeBadge: this.showBloodTypeBadge }),
         }
       );
-      if (!this.showBloodTypeBadge) {
-        this.bloodTypeBadge = null;
-      }
     },
     async markItemsSeen() {
       const itemIds = this.unseenItems.map((item) => item.id);
@@ -166,6 +164,21 @@ export const useAvatarStore = defineStore("avatar", {
       for (const item of this.items) {
         if (itemIds.includes(item.id)) item.seenAt = seenAt;
       }
+    },
+    requestEquipItem(itemId: number) {
+      this.pendingEquipItemId = itemId;
+    },
+    async resolvePendingEquip() {
+      if (this.pendingEquipItemId === null) return;
+      const itemId = this.pendingEquipItemId;
+      this.pendingEquipItemId = null;
+
+      await this.fetchAvatar();
+      const item = this.items.find((candidate) => candidate.id === itemId);
+      if (!item || !item.owned) return;
+
+      this.openEditor(item.slot);
+      await this.equipItem(item);
     },
     openEditor(tab?: AvatarTab) {
       this.isEditorOpen = true;

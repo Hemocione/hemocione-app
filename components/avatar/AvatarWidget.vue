@@ -81,21 +81,6 @@
         </button>
       </div>
 
-      <div v-if="avatarStore.bloodTypeBadge !== null || avatarStore.showBloodTypeBadge" class="badge-toggle">
-        <label class="badge-toggle-label">
-          <input
-            type="checkbox"
-            :checked="avatarStore.showBloodTypeBadge && avatarStore.bloodTypeBadge !== null"
-            :disabled="avatarStore.bloodTypeBadge === null"
-            @change="avatarStore.toggleBloodTypeBadge()"
-          />
-          <span v-if="avatarStore.bloodTypeBadge" class="badge-toggle-icon" aria-hidden="true">
-            <img :src="avatarAssetUrl(avatarStore.bloodTypeBadge.assetRef)" alt="" />
-          </span>
-          <span>Mostrar selo {{ avatarStore.bloodTypeBadge?.bloodType ?? '' }}</span>
-        </label>
-      </div>
-
       <div class="customization-sheet">
         <div class="tabs" role="tablist" aria-label="Categorias do avatar">
           <button
@@ -107,7 +92,7 @@
             role="tab"
             :aria-selected="activeTab === tab"
             :aria-pressed="activeTab === tab"
-            :aria-controls="tab === 'ACHIEVEMENTS' ? 'avatar-achievements' : 'avatar-items-grid'"
+            :aria-controls="tabPanelId(tab)"
             @click="activeTab = tab"
           >
             <span aria-hidden="true">{{ tabLabels[tab].emoji }}</span>
@@ -116,7 +101,7 @@
         </div>
 
         <div
-          v-if="activeTab !== 'ACHIEVEMENTS'"
+          v-if="isSlotTab(activeTab)"
           id="avatar-items-grid"
           class="items-grid"
           role="tabpanel"
@@ -147,6 +132,38 @@
           </button>
         </div>
 
+        <div
+          v-else-if="activeTab === 'SELO'"
+          id="avatar-badge-panel"
+          class="badge-panel"
+          role="tabpanel"
+          aria-label="Selo de tipo sanguíneo"
+        >
+          <div class="badge-card">
+            <img
+              v-if="avatarStore.bloodTypeBadge"
+              :src="avatarAssetUrl(avatarStore.bloodTypeBadge.assetRef)"
+              :alt="`Selo ${avatarStore.bloodTypeBadge.bloodType}`"
+              class="badge-card__img"
+            />
+            <div class="badge-card__info">
+              <h3>Selo {{ avatarStore.bloodTypeBadge?.bloodType }}</h3>
+              <p>
+                Você ganhou esse selo automaticamente por ter o tipo
+                sanguíneo cadastrado. Escolha se ele aparece no seu Hemárcio.
+              </p>
+            </div>
+            <label class="badge-card__switch">
+              <input
+                type="checkbox"
+                :checked="avatarStore.showBloodTypeBadge"
+                @change="avatarStore.toggleBloodTypeBadge()"
+              />
+              <span>{{ avatarStore.showBloodTypeBadge ? "Exibindo" : "Oculto" }}</span>
+            </label>
+          </div>
+        </div>
+
         <AvatarAchievementsList v-else />
       </div>
     </div>
@@ -171,21 +188,30 @@ const shareableImage = ref<File | null>(null);
 const canShare =
   typeof navigator !== "undefined" && typeof navigator.share === "function";
 
-const tabs: AvatarTab[] = [
-  "OLHOS",
-  "CORPO",
-  "PERNAS",
-  "ACESSORIOS",
-  "FUNDO",
+const slotTabs: AvatarSlot[] = ["OLHOS", "CORPO", "PERNAS", "ACESSORIOS", "FUNDO"];
+
+const tabs = computed<AvatarTab[]>(() => [
+  ...slotTabs,
+  ...(avatarStore.bloodTypeBadge !== null ? (["SELO"] as const) : []),
   "ACHIEVEMENTS",
-];
+]);
 const tabLabels: Record<AvatarTab, { emoji: string; label: string }> = {
   OLHOS: { emoji: "👀", label: "Olhos" },
   CORPO: { emoji: "👕", label: "Corpo" },
   PERNAS: { emoji: "👖", label: "Pernas" },
   ACESSORIOS: { emoji: "🎒", label: "Acessórios" },
   FUNDO: { emoji: "🖼️", label: "Fundo" },
+  SELO: { emoji: "🩸", label: "Selo" },
   ACHIEVEMENTS: { emoji: "🏆", label: "Conquistas" },
+};
+
+const isSlotTab = (tab: AvatarTab): tab is AvatarSlot =>
+  (slotTabs as AvatarTab[]).includes(tab);
+
+const tabPanelId = (tab: AvatarTab) => {
+  if (tab === "ACHIEVEMENTS") return "avatar-achievements";
+  if (tab === "SELO") return "avatar-badge-panel";
+  return "avatar-items-grid";
 };
 
 const unlockedAchievementsCount = computed(
@@ -195,7 +221,7 @@ const totalAchievementsCount = computed(() => avatarStore.achievements.length);
 const showAchievementChip = computed(() => unlockedAchievementsCount.value > 0);
 
 const activeItems = computed(() => {
-  if (activeTab.value === "ACHIEVEMENTS") return [];
+  if (!isSlotTab(activeTab.value)) return [];
   return avatarStore.itemsBySlot[activeTab.value];
 });
 
@@ -330,8 +356,9 @@ watch(
   refreshShareableImage
 );
 
-onMounted(() => {
-  void avatarStore.fetchAvatar();
+onMounted(async () => {
+  await avatarStore.fetchAvatar();
+  void avatarStore.resolvePendingEquip();
   void avatarStore.fetchAchievements();
   void useTopSafeAreaInset().then((inset) => {
     topSafeAreaInset.value = inset;
@@ -604,34 +631,64 @@ onMounted(() => {
   opacity: 0.55;
 }
 
-.badge-toggle {
+.badge-panel {
   display: flex;
-  justify-content: center;
-  padding: 0.1rem 0 0.4rem;
 }
 
-.badge-toggle-label {
+.badge-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  width: 100%;
+  padding: 1rem;
+  border: 3px solid #d7e2e8;
+  border-radius: 1.1rem;
+  background: #fbfdfe;
+  box-shadow: 0 3px 0 #d7e2e8;
+}
+
+.badge-card__img {
+  grid-row: span 2;
+  width: 3.2rem;
+  height: 3.2rem;
+  object-fit: contain;
+}
+
+.badge-card__info h3 {
+  margin: 0;
+  color: var(--cp-ink);
+  font-family: "Baloo 2", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.badge-card__info p {
+  margin: 0.2rem 0 0;
+  color: var(--cp-ink-soft);
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.badge-card__switch {
+  grid-column: 1 / -1;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.3rem 0.7rem;
+  justify-self: start;
+  gap: 0.45rem;
+  padding: 0.35rem 0.8rem;
   border: 2px solid var(--cp-outline-soft);
   border-radius: 999px;
   background: var(--cp-paper);
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 0.72rem;
+  font-weight: 800;
   color: var(--cp-ink);
   cursor: pointer;
 }
 
-.badge-toggle-label input {
+.badge-card__switch input {
   margin: 0;
-}
-
-.badge-toggle-icon img {
-  width: 1.2rem;
-  height: 1.2rem;
-  vertical-align: middle;
 }
 
 .customization-sheet {
