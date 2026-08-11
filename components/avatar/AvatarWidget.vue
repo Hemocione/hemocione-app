@@ -59,6 +59,7 @@
       <div class="stage-wrap" aria-hidden="true">
         <div class="stage-backdrop" :style="stageBackdropStyle"></div>
         <HemarcioCharacter
+          ref="stageCharacterRef"
           size="large"
           :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
           :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
@@ -66,6 +67,13 @@
           :acessorios-asset-ref="avatarStore.equippedAssetRef('ACESSORIOS')"
           :fundo-asset-ref="null"
           :blood-type-badge-asset-ref="visibleBloodTypeBadgeAssetRef"
+        />
+        <img
+          v-if="shareOnlyFundoAssetRef"
+          ref="shareOnlyFundoRef"
+          class="share-only-fundo"
+          :src="avatarAssetUrl(shareOnlyFundoAssetRef)"
+          alt=""
         />
       </div>
 
@@ -180,6 +188,7 @@ import { onMounted, ref, shallowRef, watch, computed } from "vue";
 import { useAvatarStore, type AvatarItem, type AvatarSlot, type AvatarTab } from "~/stores/avatar";
 import HemarcioCharacter from "~/components/avatar/HemarcioCharacter.vue";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
+import { AVATAR_LAYER_CLASS, AVATAR_LAYER_ORDER, AVATAR_LAYER_RECTS } from "~/utils/avatarLayerLayout";
 
 const avatarStore = useAvatarStore();
 const { isEditorOpen, activeTab } = storeToRefs(avatarStore);
@@ -187,6 +196,9 @@ const topSafeAreaInset = shallowRef<{ value: number } | null>(null);
 const shareableImage = ref<File | null>(null);
 const canShare =
   typeof navigator !== "undefined" && typeof navigator.share === "function";
+const stageCharacterRef = ref<InstanceType<typeof HemarcioCharacter> | null>(null);
+const shareOnlyFundoRef = ref<HTMLImageElement | null>(null);
+const shareOnlyFundoAssetRef = computed(() => avatarStore.equippedAssetRef("FUNDO"));
 
 const slotTabs: AvatarSlot[] = ["OLHOS", "CORPO", "PERNAS", "ACESSORIOS", "FUNDO"];
 
@@ -251,35 +263,7 @@ watch(isEditorOpen, (newValue) => {
   }
 });
 
-const escapeSvgAttribute = (value: string) =>
-  value
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-const svgLayer = (
-  assetRef: string | null,
-  top: number,
-  left: number,
-  width: number
-) => {
-  if (!assetRef) return "";
-
-  const x = (220 * left) / 100;
-  const y = (320 * top) / 100;
-  const size = (220 * width) / 100;
-  const href = escapeSvgAttribute(avatarAssetUrl(assetRef));
-
-  return `<image href="${href}" x="${x}" y="${y}" width="${size}" height="${size}" preserveAspectRatio="none" />`;
-};
-
-const svgBackgroundLayer = (assetRef: string | null) => {
-  if (!assetRef) return "";
-
-  const href = escapeSvgAttribute(avatarAssetUrl(assetRef));
-  return `<image href="${href}" x="0" y="0" width="220" height="320" preserveAspectRatio="xMidYMid slice" />`;
-};
+const AVATAR_SHARE_CANVAS_SIZE = 440;
 
 let shareGeneration = 0;
 
@@ -287,30 +271,41 @@ const regenerateShareableImage = async () => {
   const generation = ++shareGeneration;
   shareableImage.value = null;
 
-  const fundoAssetRef = avatarStore.equippedAssetRef("FUNDO");
-  const corpoAssetRef = avatarStore.equippedAssetRef("CORPO");
-  const olhosAssetRef = avatarStore.equippedAssetRef("OLHOS");
-  const acessoriosAssetRef = avatarStore.equippedAssetRef("ACESSORIOS");
-  const backgroundLayer = svgBackgroundLayer(fundoAssetRef);
-  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" width="220" height="320" viewBox="0 0 220 320">${backgroundLayer}<image href="${avatarAssetUrl("base/hemarcio_base.svg")}" x="0" y="0" width="220" height="320" />${svgLayer(corpoAssetRef, 62, 12, 76)}${svgLayer(olhosAssetRef, 42, 28, 44)}${svgLayer(acessoriosAssetRef, -4, 18, 64)}</svg>`;
+  const stageEl = stageCharacterRef.value?.$el as HTMLElement | undefined;
+  if (!stageEl) return;
 
-  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-    const loadedImage = new Image();
-    loadedImage.onload = () => resolve(loadedImage);
-    loadedImage.onerror = () => reject(new Error("Could not load avatar image"));
-    loadedImage.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
-      svgString
-    )}`;
-  });
+  const layerImages: Array<{ key: keyof typeof AVATAR_LAYER_RECTS; el: HTMLImageElement }> = [];
+  for (const key of AVATAR_LAYER_ORDER) {
+    const el =
+      key === "fundo"
+        ? shareOnlyFundoRef.value
+        : stageEl.querySelector<HTMLImageElement>(`img.layer.${AVATAR_LAYER_CLASS[key]}`);
+    if (el) layerImages.push({ key, el });
+  }
+
+  // Same-origin <img> elements already rendered on screen - decode() resolves
+  // immediately if already loaded, or waits for an in-flight src change.
+  await Promise.all(layerImages.map(({ el }) => el.decode().catch(() => {})));
 
   if (generation !== shareGeneration) return;
 
   const canvas = document.createElement("canvas");
-  canvas.width = 440;
-  canvas.height = 640;
+  canvas.width = AVATAR_SHARE_CANVAS_SIZE;
+  canvas.height = AVATAR_SHARE_CANVAS_SIZE;
   const context = canvas.getContext("2d");
   if (!context) throw new Error("Could not create avatar canvas context");
-  context.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+  for (const { key, el } of layerImages) {
+    if (!el.complete || el.naturalWidth === 0) continue;
+    const rect = AVATAR_LAYER_RECTS[key];
+    context.drawImage(
+      el,
+      (canvas.width * rect.left) / 100,
+      (canvas.height * rect.top) / 100,
+      (canvas.width * rect.width) / 100,
+      (canvas.height * rect.height) / 100
+    );
+  }
 
   const blob = await new Promise<Blob | null>((resolve) => {
     canvas.toBlob(resolve, "image/png");
@@ -449,11 +444,7 @@ onMounted(async () => {
   overflow: hidden;
   border: 2px solid var(--hemo-color-primary);
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 50% 30%,
-    var(--hemo-color-primary-light),
-    var(--hemo-color-primary) 70%
-  );
+  background: radial-gradient(circle at 50% 30%, #ffffff, #e7ebee 70%);
   box-shadow: inset 0 -6px 10px rgba(255, 255, 255, 0.5);
   transition: transform 160ms ease;
 }
@@ -572,22 +563,14 @@ onMounted(async () => {
   margin: 0 auto 0.6rem;
   overflow: hidden;
   border-radius: 1.5rem;
-  background: radial-gradient(
-    circle at 50% 30%,
-    var(--hemo-color-primary-light),
-    var(--hemo-color-primary) 70%
-  );
+  background: radial-gradient(circle at 50% 30%, var(--cp-paper), #e7ebee 70%);
 }
 
 .stage-backdrop {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: radial-gradient(
-    circle at 50% 30%,
-    var(--hemo-color-primary-light),
-    var(--hemo-color-primary) 70%
-  );
+  background: radial-gradient(circle at 50% 30%, var(--cp-paper), #e7ebee 70%);
   background-position: center;
   background-size: cover;
 }
@@ -595,6 +578,15 @@ onMounted(async () => {
 .stage-wrap .hemarcio {
   z-index: 2;
   margin-bottom: 14px;
+}
+
+.share-only-fundo {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .share-actions {
