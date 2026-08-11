@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 300">
-  <path
-    d="M100 10 C 135 75, 180 125, 180 175 C 180 225, 144 260, 100 260 C 56 260, 20 225, 20 175 C 20 125, 65 75, 100 10 Z"
-    fill="#E4002B"
-  />
-  <line x1="22" y1="175" x2="-10" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-  <line x1="178" y1="175" x2="210" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-  <line x1="80" y1="255" x2="65" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-  <line x1="120" y1="255" x2="135" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round" />
-  <circle cx="80" cy="155" r="12" fill="#fff" />
-  <circle cx="120" cy="155" r="12" fill="#fff" />
-  <circle cx="82" cy="158" r="5" fill="#1a1a1a" />
-  <circle cx="122" cy="158" r="5" fill="#1a1a1a" />
+<path d="M100 10C135 75,180 125,180 175C180 225,144 260,100 260C56 260,20 225,20 175C20 125,65 75,100 10Z" fill="#E4002B"/>
+<line x1="22" y1="175" x2="-10" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round"/>
+<line x1="178" y1="175" x2="210" y2="205" stroke="#E4002B" stroke-width="16" stroke-linecap="round"/>
+<line x1="80" y1="255" x2="65" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round"/>
+<line x1="120" y1="255" x2="135" y2="292" stroke="#E4002B" stroke-width="16" stroke-linecap="round"/>
+<path d="M65 130q5-25 25-25q20 0 25 25q0 30-25 32q-25-2-25-32Z" fill="#F4EFE4" stroke="#1a1a1a" stroke-width="3"/>
+<path d="M115 130q5-25 25-25q20 0 25 25q0 30-25 32q-25-2-25-32Z" fill="#F4EFE4" stroke="#1a1a1a" stroke-width="3"/>
+<circle cx="82" cy="140" r="12" fill="#1a1a1a"/>
+<circle cx="132" cy="140" r="12" fill="#1a1a1a"/>
+<circle cx="78" cy="135" r="3" fill="#fff"/>
+<circle cx="128" cy="135" r="3" fill="#fff"/>
+<path d="M90 165q10 8 20 0" stroke="#8a0000" stroke-width="3" fill="none" stroke-linecap="round"/>
 </svg>
