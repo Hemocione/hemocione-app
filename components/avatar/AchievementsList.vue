@@ -24,18 +24,28 @@
         </span>
       </div>
 
-      <div v-if="achievement.unlocked" class="achievement-unlocked">
-        <time v-if="achievement.unlockedAt" :datetime="achievement.unlockedAt">
-          {{ formatAchievementDate(achievement.unlockedAt) }}
-        </time>
-        <div v-if="achievement.rewardItem" class="achievement-reward">
-          <img
-            :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
-            :alt="achievement.rewardItem.name"
-          />
-          <span>Destravou {{ achievement.rewardItem.name }}</span>
+      <template v-if="achievement.unlocked">
+        <div class="achievement-unlocked">
+          <time v-if="achievement.unlockedAt" :datetime="achievement.unlockedAt">
+            {{ formatAchievementDate(achievement.unlockedAt) }}
+          </time>
+          <div v-if="achievement.rewardItem" class="achievement-reward">
+            <img
+              :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
+              :alt="achievement.rewardItem.name"
+            />
+            <span>Destravou {{ achievement.rewardItem.name }}</span>
+          </div>
         </div>
-      </div>
+        <button
+          v-if="achievement.rewardItem && achievement.rewardItem.id !== null && achievement.rewardItem.slot !== 'BADGE'"
+          type="button"
+          class="equip-cta"
+          @click="handleEquip(achievement.rewardItem.id)"
+        >
+          🎒 Equipar no meu Hemárcio
+        </button>
+      </template>
 
       <div
         v-else-if="achievement.progress"
@@ -79,6 +89,17 @@ const formatAchievementDate = (date: string) =>
 const getProgressPercent = (progress: { current: number; target: number }) => {
   if (progress.target <= 0) return 0;
   return Math.min(100, Math.max(0, (progress.current / progress.target) * 100));
+};
+
+const handleEquip = async (itemId: number) => {
+  const item = avatarStore.items.find((candidate) => candidate.id === itemId);
+  if (avatarStore.isEditorOpen && item) {
+    avatarStore.openEditor(item.slot);
+    await avatarStore.equipItem(item);
+    return;
+  }
+  avatarStore.requestEquipItem(itemId);
+  await navigateTo("/");
 };
 
 onMounted(() => {
@@ -180,6 +201,25 @@ onMounted(() => {
   width: 2rem;
   height: 2rem;
   object-fit: contain;
+}
+
+.equip-cta {
+  justify-self: start;
+  padding: 0.4rem 0.8rem;
+  border: 2px solid var(--hemo-color-primary-dark);
+  border-radius: 999px;
+  background: var(--hemo-color-primary);
+  box-shadow: 0 2px 0 var(--hemo-color-primary-dark);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.equip-cta:active {
+  transform: translateY(1px);
+  box-shadow: none;
 }
 
 .achievement-progress {
