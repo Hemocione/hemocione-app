@@ -14,7 +14,7 @@
         :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
         :acessorios-asset-ref="avatarStore.equippedAssetRef('ACESSORIOS')"
         :fundo-asset-ref="avatarStore.equippedAssetRef('FUNDO')"
-        :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
+        :blood-type-badge-asset-ref="visibleBloodTypeBadgeAssetRef"
       />
     </span>
   </button>
@@ -65,7 +65,7 @@
           :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
           :acessorios-asset-ref="avatarStore.equippedAssetRef('ACESSORIOS')"
           :fundo-asset-ref="null"
-          :blood-type-badge-asset-ref="avatarStore.bloodTypeBadge?.assetRef ?? null"
+          :blood-type-badge-asset-ref="visibleBloodTypeBadgeAssetRef"
         />
       </div>
 
@@ -219,6 +219,10 @@ const unlockedAchievementsCount = computed(
 );
 const totalAchievementsCount = computed(() => avatarStore.achievements.length);
 const showAchievementChip = computed(() => unlockedAchievementsCount.value > 0);
+
+const visibleBloodTypeBadgeAssetRef = computed(() =>
+  avatarStore.showBloodTypeBadge ? avatarStore.bloodTypeBadge?.assetRef ?? null : null
+);
 
 const activeItems = computed(() => {
   if (!isSlotTab(activeTab.value)) return [];
