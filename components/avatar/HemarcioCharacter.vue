@@ -1,7 +1,7 @@
 <template>
   <div class="hemarcio" :class="[size]">
     <img v-if="fundoAssetRef" class="layer fundo" :src="assetUrl(fundoAssetRef)" alt="" />
-    <img class="layer base" :src="assetUrl('https://cdn.hemocione.com.br/events/prod/uploads/private/2b62e938-2bdd-467c-b168-fefff6c7e671/1786401855884-hemarcio_base.svg')" alt="" />
+    <img class="layer base" :src="assetUrl('https://cdn.hemocione.com.br/events/prod/uploads/private/cd2a6b42-b9d7-4a39-99d5-605da81d673f/1786463196975-hemarcio_base_real.png')" alt="" />
     <img v-if="pernasAssetRef" class="layer pernas" :src="assetUrl(pernasAssetRef)" alt="" />
     <img v-if="corpoAssetRef" class="layer corpo" :src="assetUrl(corpoAssetRef)" alt="" />
     <img v-if="olhosAssetRef" class="layer olhos" :src="assetUrl(olhosAssetRef)" alt="" />
