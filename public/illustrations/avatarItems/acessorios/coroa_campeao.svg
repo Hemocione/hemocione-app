@@ -1,6 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
-<!-- Crown is centered over the head and leaves a deliberate breathing margin. -->
-<path d="M400 315 L425 154 L530 220 L600 110 L670 220 L775 154 L800 315 Q600 344 400 315 Z" fill="#FFB300" stroke="#8B5A00" stroke-width="14" stroke-linejoin="round"/>
-<path d="M407 315 Q600 346 793 315 L783 354 Q600 378 417 354 Z" fill="#F3A600" stroke="#8B5A00" stroke-width="12"/>
-<path d="M600 130 L600 295" stroke="#FFE58A" stroke-width="12" stroke-linecap="round" opacity=".9"/>
+<!-- A compact crown that sits above the eyes instead of spanning the whole head. -->
+<g transform="rotate(-3 600 250)" stroke-linejoin="round">
+<path d="M450 286 L470 180 L548 224 L600 132 L652 224 L730 180 L750 286 Q600 306 450 286 Z" fill="#FFB300" stroke="#8B5A00" stroke-width="12"/>
+<path d="M456 284 Q600 304 744 284 L738 320 Q600 335 462 320 Z" fill="#F3A600" stroke="#8B5A00" stroke-width="10"/>
+<path d="M600 151 L600 270" stroke="#FFE58A" stroke-width="10" stroke-linecap="round" opacity=".9"/>
+</g>
 </svg>
