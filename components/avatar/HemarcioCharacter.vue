@@ -4,6 +4,13 @@
     <img class="layer base" :style="rectStyle('base')" :src="assetUrl('base/hemarcio_base.svg')" alt="" />
     <img v-if="pernasAssetRef" class="layer pernas" :style="rectStyle('pernas')" :src="assetUrl(pernasAssetRef)" alt="" />
     <img v-if="corpoAssetRef" class="layer corpo" :style="rectStyle('corpo')" :src="assetUrl(corpoAssetRef)" alt="" />
+    <img
+      v-if="showDefaultEyesBehindGlasses"
+      class="layer olhos-base"
+      :style="rectStyle('olhosBase')"
+      :src="assetUrl(DEFAULT_EYES_ASSET_REF)"
+      alt=""
+    />
     <img v-if="olhosAssetRef" class="layer olhos" :style="rectStyle('olhos')" :src="assetUrl(olhosAssetRef)" alt="" />
     <img
       v-if="bloodTypeBadgeAssetRef"
@@ -17,7 +24,14 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(
+import { computed } from "vue";
+import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
+import { AVATAR_LAYER_RECTS } from "~/utils/avatarLayerLayout";
+
+const assetUrl = avatarAssetUrl;
+const DEFAULT_EYES_ASSET_REF = "olhos/olhos_padrao.svg";
+
+const props = withDefaults(
   defineProps<{
     size?: "large" | "thumbnail" | "home";
     olhosAssetRef: string | null;
@@ -30,10 +44,9 @@ withDefaults(
   { size: "large", bloodTypeBadgeAssetRef: null }
 );
 
-import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
-import { AVATAR_LAYER_RECTS } from "~/utils/avatarLayerLayout";
-
-const assetUrl = avatarAssetUrl;
+const showDefaultEyesBehindGlasses = computed(() =>
+  props.olhosAssetRef?.endsWith("oculos_veterano.svg") ?? false
+);
 
 const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
   const rect = AVATAR_LAYER_RECTS[key];
@@ -83,16 +96,20 @@ const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
   z-index: 3;
   object-fit: contain;
 }
-.layer.olhos {
+.layer.olhos-base {
   z-index: 4;
   object-fit: contain;
 }
-.layer.blood-type-medal {
+.layer.olhos {
   z-index: 5;
   object-fit: contain;
 }
-.layer.acessorios {
+.layer.blood-type-medal {
   z-index: 6;
+  object-fit: contain;
+}
+.layer.acessorios {
+  z-index: 7;
   object-fit: contain;
 }
 </style>
