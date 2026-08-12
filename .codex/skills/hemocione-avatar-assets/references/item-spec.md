@@ -27,7 +27,7 @@ This is why a body overlay at `y=180` covers the face: the body slot itself is a
 - Keep all SVGs transparent unless the slot explicitly supplies a background.
 - Keep strokes rounded and consistent with the Hemárcio art: dark navy/burgundy outlines, bright red, warm gold, cream, and green accents.
 - Make the primary shape readable as a silhouette at 56px. Use contrast, not tiny labels, to communicate the item.
-- Keep accessory visual bounds inside approximately 8–92% of the 1200 canvas unless the item intentionally fills the stage.
+- Keep headwear visual bounds around 32–68% of the 1200 canvas width; keep a chest-card accessory around 12–18% of the canvas width. Leave a visible breathing margin around both.
 - Put chest accessories to one side of the torso and below the eyes. Keep the blood badge visible unless the item is explicitly a replacement badge.
 - Do not use an SVG `<image href="...">` to borrow another layer. The browser may show it while the canvas/share renderer drops the nested resource.
 

@@ -26,9 +26,9 @@ Use this skill whenever an avatar item is created or repaired. Treat each SVG as
 ## Slot contracts
 
 - `corpo/*.svg`: use `viewBox="0 0 712 670"`. Include the complete body silhouette required by the body slot, then place clothing overlays around the torso coordinates documented in the reference. Never start a clothing overlay at the face height.
-- `olhos/*.svg`: let the component place the asset in the shared eyes rect. Veteran glasses must be transparent around the lenses so the base eyes layer can remain visible underneath.
+- `olhos/*.svg`: let the component place the asset in the shared eyes rect. Veteran glasses must be transparent around the lenses, cover roughly the same width as both eyes, and leave the base eyes layer visible underneath.
 - `pernas/*.svg`: use the existing legs rect and keep both feet inside it.
-- `acessorios/*.svg`: use `viewBox="0 0 1200 1200"`, keep the visual bounds inside a breathing margin, and anchor the item to the head/chest instead of stretching it to the canvas edges.
+- `acessorios/*.svg`: use `viewBox="0 0 1200 1200"`, keep headwear around 32–68% of the canvas width and chest cards around 12–18%, and anchor the item to the head/chest instead of stretching it to the canvas edges.
 - `background/*.svg` and `badge/*.svg`: use a transparent or intentionally painted full canvas according to the slot’s semantics. Do not let these assets alter the avatar silhouette.
 
 ## Visual acceptance

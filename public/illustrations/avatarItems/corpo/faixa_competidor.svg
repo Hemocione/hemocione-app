@@ -11,11 +11,11 @@
 </g>
 <!-- A compact sash crossing the torso, never the face or the arms. -->
 <defs>
-<clipPath id="torso-clip"><path d="M210 295 Q356 270 502 295 L510 505 Q356 532 202 505 Z"/></clipPath>
+<clipPath id="torso-clip"><path d="M230 310 Q356 290 482 310 L488 490 Q356 510 224 490 Z"/></clipPath>
 </defs>
 <g clip-path="url(#torso-clip)">
-<path d="M150 296 L555 412 L531 494 L126 378 Z" fill="#FFF8E1" stroke="#7D0008" stroke-width="11" stroke-linejoin="round"/>
-<path d="M145 329 L544 443" fill="none" stroke="#C62828" stroke-width="36"/>
-<path d="M149 310 L548 424 M137 367 L536 481" fill="none" stroke="#F9A825" stroke-width="10"/>
+<path d="M205 310 L515 398 L494 480 L184 392 Z" fill="#FFF8E1" stroke="#7D0008" stroke-width="10" stroke-linejoin="round"/>
+<path d="M202 337 L508 424" fill="none" stroke="#C62828" stroke-width="30"/>
+<path d="M208 321 L513 408 M190 380 L496 467" fill="none" stroke="#F9A825" stroke-width="8"/>
 </g>
 </svg>
