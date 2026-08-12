@@ -56,8 +56,8 @@ const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
   height: 220px;
 }
 .hemarcio.thumbnail {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
 }
 .layer {
   position: absolute;
