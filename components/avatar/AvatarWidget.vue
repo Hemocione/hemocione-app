@@ -8,7 +8,7 @@
   >
     <span class="avatar-stage" aria-hidden="true">
       <HemarcioCharacter
-        size="thumbnail"
+        size="home"
         :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
         :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
         :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
@@ -446,9 +446,9 @@ onMounted(async () => {
 .avatar-widget {
   position: relative;
   display: block;
-  flex: 0 0 4rem;
-  width: 4rem;
-  height: 4rem;
+  flex: 0 0 4.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
   padding: 0;
   border: 0;
   background: none;
