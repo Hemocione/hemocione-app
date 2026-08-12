@@ -19,7 +19,7 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    size?: "large" | "thumbnail";
+    size?: "large" | "thumbnail" | "home";
     olhosAssetRef: string | null;
     corpoAssetRef: string | null;
     pernasAssetRef: string | null;
@@ -58,6 +58,10 @@ const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
 .hemarcio.thumbnail {
   width: 56px;
   height: 56px;
+}
+.hemarcio.home {
+  width: 66px;
+  height: 66px;
 }
 .layer {
   position: absolute;
