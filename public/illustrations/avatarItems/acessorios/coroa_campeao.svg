@@ -1,1 +1,5 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M15 70 L15 35 L35 55 L50 25 L65 55 L85 35 L85 70 Z" fill="#FFB300"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+<g transform="translate(470,30) scale(2.6)">
+<path d="M15 70 L15 35 L35 55 L50 25 L65 55 L85 35 L85 70 Z" fill="#FFB300"/>
+</g>
+</svg>
