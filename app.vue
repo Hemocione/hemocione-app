@@ -231,7 +231,8 @@ if (urlToken) {
 .header {
   position: fixed;
   top: 0;
-  z-index: 2;
+  /* The avatar layers reach z-index 6. Keep the drawer's overlay above them. */
+  z-index: 10;
   height: var(--navbar-size);
   width: 100%;
 }

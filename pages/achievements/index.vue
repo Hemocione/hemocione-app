@@ -32,10 +32,16 @@
 </style>
 
 <script setup lang="ts">
+const avatarStore = useAvatarStore();
+
 definePageMeta({
   pageTransition: {
     name: "slide-left-fast-and-furious",
     mode: "out-in",
   },
+});
+
+onMounted(async () => {
+  await avatarStore.markItemsSeen();
 });
 </script>

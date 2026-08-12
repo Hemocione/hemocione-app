@@ -9,6 +9,7 @@ export interface AvatarItem {
   name: string;
   slot: AvatarSlot;
   assetRef: string;
+  isDefault: boolean;
   owned: boolean;
   seenAt: string | null;
 }
@@ -145,6 +146,8 @@ export const useAvatarStore = defineStore("avatar", {
       );
     },
     async markItemsSeen() {
+      if (this.items.length === 0) await this.fetchAvatar();
+
       const itemIds = this.unseenItems.map((item) => item.id);
       if (itemIds.length === 0) return;
 
@@ -221,7 +224,9 @@ export const useAvatarStore = defineStore("avatar", {
       };
     },
     unseenItems(state): AvatarItem[] {
-      return state.items.filter((item) => item.owned && item.seenAt === null);
+      return state.items.filter(
+        (item) => item.owned && !item.isDefault && item.seenAt === null
+      );
     },
   },
 });
