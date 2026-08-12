@@ -1,5 +1,7 @@
 export type AvatarSlot = "OLHOS" | "CORPO" | "PERNAS" | "ACESSORIOS" | "FUNDO";
-export type AvatarTab = AvatarSlot | "ACHIEVEMENTS" | "SELO";
+export type AvatarTab = AvatarSlot | "SELO";
+
+export const REQUIRED_AVATAR_SLOTS: AvatarSlot[] = ["OLHOS", "CORPO", "PERNAS"];
 
 export interface AvatarItem {
   id: number;
@@ -73,13 +75,14 @@ export const useAvatarStore = defineStore("avatar", {
         items: AvatarItem[];
         equipped: AvatarEquipped;
         bloodTypeBadge: BloodTypeBadge | null;
+        showBloodTypeBadge?: boolean;
       } = await $fetch(config.public.hemocioneIdApiUrl + "/users/me/avatar", {
         headers: { Authorization: `Bearer ${userStore.token}` },
       });
       this.items = data.items;
       this.equipped = data.equipped;
       this.bloodTypeBadge = data.bloodTypeBadge;
-      this.showBloodTypeBadge = data.bloodTypeBadge !== null;
+      this.showBloodTypeBadge = data.showBloodTypeBadge ?? data.bloodTypeBadge !== null;
     },
     async fetchAchievements() {
       if (this.achievements.length > 0) return;
@@ -111,7 +114,7 @@ export const useAvatarStore = defineStore("avatar", {
       this.equipped = data;
     },
     async unequipItem(slot: AvatarSlot) {
-      if (!this.equipped) return;
+      if (!this.equipped || REQUIRED_AVATAR_SLOTS.includes(slot)) return;
 
       const config = useRuntimeConfig();
       const userStore = useUserStore();
@@ -200,6 +203,9 @@ export const useAvatarStore = defineStore("avatar", {
     },
     isEquipped(item: AvatarItem) {
       return this.equipped?.[SLOT_TO_FIELD[item.slot]] === item.id;
+    },
+    isSlotEmpty(slot: AvatarSlot) {
+      return this.equipped?.[SLOT_TO_FIELD[slot]] == null;
     },
   },
   getters: {

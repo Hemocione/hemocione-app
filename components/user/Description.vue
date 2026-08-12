@@ -18,7 +18,7 @@
       v-if="unseenItems.length > 0"
       type="button"
       class="avatar-unseen-cta"
-      @click="avatarStore.openEditor('ACHIEVEMENTS')"
+      @click="avatarStore.openEditor(unseenItems[0]?.slot)"
     >
       <span class="avatar-unseen-cta__icon" aria-hidden="true">🎉</span>
       <span>

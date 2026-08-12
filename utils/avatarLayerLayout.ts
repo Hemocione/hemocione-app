@@ -17,10 +17,10 @@ export interface AvatarLayerRect {
 export const AVATAR_LAYER_RECTS: Record<string, AvatarLayerRect> = {
   fundo: { top: 0, left: 0, width: 100, height: 100 },
   base: { top: 6.25, left: 28.83, width: 42.33, height: 56.75 },
-  pernas: { top: 61.58, left: 35.33, width: 29.33, height: 32.17 },
+  pernas: { top: 52, left: 35.33, width: 29.33, height: 32.17 },
   corpo: { top: 22.58, left: 23.58, width: 59.33, height: 55.83 },
   olhos: { top: 28.75, left: 38.75, width: 22.42, height: 18.75 },
-  bloodTypeMedal: { top: 47, left: 42, width: 16, height: 16 },
+  bloodTypeMedal: { top: 47, left: 48, width: 16, height: 16 },
   acessorios: { top: 0, left: 0, width: 100, height: 100 },
 };
 

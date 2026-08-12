@@ -37,14 +37,6 @@
           <h2>Hemárcio</h2>
         </div>
         <div class="header-actions">
-          <NuxtLink
-            v-if="showAchievementChip"
-            to="/achievements"
-            class="achievement-chip"
-            @click="avatarStore.closeEditor()"
-          >
-            🏅 {{ unlockedAchievementsCount }}/{{ totalAchievementsCount }}
-          </NuxtLink>
           <button
             type="button"
             class="close-btn"
@@ -117,29 +109,30 @@
         >
           <button
             v-for="item in activeItems"
-            :key="item.id"
+            :key="item.key"
             type="button"
             class="item-card"
             :class="{
               owned: item.owned,
               locked: !item.owned,
-              equipped: avatarStore.isEquipped(item),
+              equipped: isOptionEquipped(item),
             }"
-            :disabled="!item.owned"
+            :disabled="item.id !== null && !item.owned"
             :aria-label="item.name"
-            :aria-pressed="avatarStore.isEquipped(item)"
+            :aria-pressed="isOptionEquipped(item)"
             @click="handleItemClick(item)"
           >
-            <span v-if="!item.owned" class="lock" aria-hidden="true">🔒</span>
+            <span v-if="item.id !== null && !item.owned" class="lock" aria-hidden="true">🔒</span>
+            <span v-if="item.id === null" class="empty-item-icon" aria-hidden="true">∅</span>
             <img
-              v-if="item.slot === 'FUNDO'"
+              v-else-if="item.slot === 'FUNDO'"
               :src="avatarAssetUrl(item.assetRef)"
               alt=""
               aria-hidden="true"
             />
             <AvatarItemPreview v-else :slot="item.slot" :asset-ref="item.assetRef" aria-hidden="true" />
             <span>{{ item.name }}</span>
-            <span v-if="!item.owned" class="locked-hint">Bloqueado</span>
+            <span v-if="item.id !== null && !item.owned" class="locked-hint">Bloqueado</span>
           </button>
         </div>
 
@@ -175,7 +168,6 @@
           </div>
         </div>
 
-        <AvatarAchievementsList v-else />
       </div>
     </div>
         </div>
@@ -205,11 +197,23 @@ const shareOnlyFundoRef = ref<HTMLImageElement | null>(null);
 const shareOnlyFundoAssetRef = computed(() => avatarStore.equippedAssetRef("FUNDO"));
 
 const slotTabs: AvatarSlot[] = ["OLHOS", "CORPO", "PERNAS", "ACESSORIOS", "FUNDO"];
+const optionalSlots: AvatarSlot[] = ["ACESSORIOS", "FUNDO"];
+
+type EmptyAvatarOption = {
+  id: null;
+  key: string;
+  name: "Sem nada";
+  slot: AvatarSlot;
+  assetRef: "";
+  owned: true;
+  seenAt: null;
+};
+
+type AvatarOption = AvatarItem | EmptyAvatarOption;
 
 const tabs = computed<AvatarTab[]>(() => [
   ...slotTabs,
   ...(avatarStore.bloodTypeBadge !== null ? (["SELO"] as const) : []),
-  "ACHIEVEMENTS",
 ]);
 const tabLabels: Record<AvatarTab, { emoji: string; label: string }> = {
   OLHOS: { emoji: "👀", label: "Olhos" },
@@ -218,32 +222,41 @@ const tabLabels: Record<AvatarTab, { emoji: string; label: string }> = {
   ACESSORIOS: { emoji: "🎒", label: "Acessórios" },
   FUNDO: { emoji: "🖼️", label: "Fundo" },
   SELO: { emoji: "🩸", label: "Selo" },
-  ACHIEVEMENTS: { emoji: "🏆", label: "Conquistas" },
 };
 
 const isSlotTab = (tab: AvatarTab): tab is AvatarSlot =>
   (slotTabs as AvatarTab[]).includes(tab);
 
 const tabPanelId = (tab: AvatarTab) => {
-  if (tab === "ACHIEVEMENTS") return "avatar-achievements";
   if (tab === "SELO") return "avatar-badge-panel";
   return "avatar-items-grid";
 };
-
-const unlockedAchievementsCount = computed(
-  () => avatarStore.achievements.filter((achievement) => achievement.unlocked).length
-);
-const totalAchievementsCount = computed(() => avatarStore.achievements.length);
-const showAchievementChip = computed(() => unlockedAchievementsCount.value > 0);
 
 const visibleBloodTypeBadgeAssetRef = computed(() =>
   avatarStore.showBloodTypeBadge ? avatarStore.bloodTypeBadge?.assetRef ?? null : null
 );
 
-const activeItems = computed(() => {
+const activeItems = computed<AvatarOption[]>(() => {
   if (!isSlotTab(activeTab.value)) return [];
-  return avatarStore.itemsBySlot[activeTab.value];
+  const items = avatarStore.itemsBySlot[activeTab.value];
+  if (!optionalSlots.includes(activeTab.value)) return items;
+
+  return [
+    {
+      id: null,
+      key: `${activeTab.value.toLowerCase()}_sem_nada`,
+      name: "Sem nada",
+      slot: activeTab.value,
+      assetRef: "",
+      owned: true,
+      seenAt: null,
+    },
+    ...items,
+  ];
 });
+
+const isOptionEquipped = (item: AvatarOption) =>
+  item.id === null ? avatarStore.isSlotEmpty(item.slot) : avatarStore.isEquipped(item);
 
 const stageBackdropStyle = computed(() => {
   const assetRef = avatarStore.equippedAssetRef("FUNDO");
@@ -342,7 +355,11 @@ const shareHemarcio = () => {
     });
 };
 
-const handleItemClick = (item: AvatarItem) => {
+const handleItemClick = (item: AvatarOption) => {
+  if (item.id === null) {
+    avatarStore.unequipItem(item.slot);
+    return;
+  }
   if (!item.owned) return;
   if (avatarStore.isEquipped(item)) {
     avatarStore.unequipItem(item.slot);
@@ -511,22 +528,6 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-}
-
-.achievement-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.25rem 0.55rem;
-  border: 2px solid var(--cp-gold-dark);
-  border-radius: 999px;
-  background: var(--cp-gold);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  color: #6b4900;
-  font-size: 0.7rem;
-  font-weight: 900;
-  line-height: 1.3;
-  white-space: nowrap;
-  text-decoration: none;
 }
 
 .close-btn {
@@ -779,6 +780,18 @@ onMounted(async () => {
   width: 34px;
   height: 34px;
   object-fit: contain;
+}
+
+.empty-item-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 2px dashed var(--cp-outline-soft);
+  border-radius: 50%;
+  color: var(--cp-outline-soft);
+  font-size: 1.35rem;
+  line-height: 1;
 }
 
 .item-card.owned {
