@@ -31,8 +31,16 @@
           </time>
           <div v-if="achievement.rewardItem" class="achievement-reward">
             <img
+              v-if="achievement.rewardItem.slot === 'FUNDO'"
               :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
-              :alt="achievement.rewardItem.name"
+              alt=""
+              aria-hidden="true"
+            />
+            <AvatarItemPreview
+              v-else
+              :slot="achievement.rewardItem.slot"
+              :asset-ref="achievement.rewardItem.assetRef"
+              aria-hidden="true"
             />
             <span>Destravou {{ achievement.rewardItem.name }}</span>
           </div>
@@ -80,6 +88,7 @@
 import { onMounted } from "vue";
 import { useAvatarStore } from "~/stores/avatar";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
+import AvatarItemPreview from "~/components/avatar/AvatarItemPreview.vue";
 
 const avatarStore = useAvatarStore();
 
@@ -198,9 +207,14 @@ onMounted(() => {
 }
 
 .achievement-reward img {
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
   object-fit: contain;
+}
+
+.achievement-reward :deep(.hemarcio) {
+  width: 2.25rem;
+  height: 2.25rem;
 }
 
 .equip-cta {

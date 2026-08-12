@@ -132,9 +132,12 @@
           >
             <span v-if="!item.owned" class="lock" aria-hidden="true">🔒</span>
             <img
+              v-if="item.slot === 'FUNDO'"
               :src="avatarAssetUrl(item.assetRef)"
-              :alt="item.name"
+              alt=""
+              aria-hidden="true"
             />
+            <AvatarItemPreview v-else :slot="item.slot" :asset-ref="item.assetRef" aria-hidden="true" />
             <span>{{ item.name }}</span>
             <span v-if="!item.owned" class="locked-hint">Bloqueado</span>
           </button>
@@ -187,6 +190,7 @@ import { storeToRefs } from "pinia";
 import { onMounted, ref, shallowRef, watch, computed } from "vue";
 import { useAvatarStore, type AvatarItem, type AvatarSlot, type AvatarTab } from "~/stores/avatar";
 import HemarcioCharacter from "~/components/avatar/HemarcioCharacter.vue";
+import AvatarItemPreview from "~/components/avatar/AvatarItemPreview.vue";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 import { AVATAR_LAYER_CLASS, AVATAR_LAYER_ORDER, AVATAR_LAYER_RECTS } from "~/utils/avatarLayerLayout";
 
@@ -809,7 +813,8 @@ onMounted(async () => {
   opacity: 0.55;
 }
 
-.item-card.locked img {
+.item-card.locked img,
+.item-card.locked :deep(.hemarcio) {
   filter: grayscale(1);
 }
 
