@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
 <!-- Friendly cap sized to the head, with a brim that reads at thumbnail size. -->
-<path d="M410 275 Q423 112 600 88 Q777 112 790 275 Z" fill="#2E7D32" stroke="#174C2A" stroke-width="16"/>
-<path d="M312 274 Q600 226 888 274 Q896 294 873 313 Q600 350 327 313 Q304 294 312 274 Z" fill="#388E3C" stroke="#174C2A" stroke-width="16"/>
-<path d="M470 143 Q600 106 730 143" fill="none" stroke="#66BB6A" stroke-width="18" stroke-linecap="round" opacity=".8"/>
+<path d="M460 280 Q470 130 600 112 Q730 130 740 280 Z" fill="#2E7D32" stroke="#174C2A" stroke-width="14"/>
+<path d="M400 280 Q600 242 800 280 Q807 298 790 313 Q600 340 410 313 Q393 298 400 280 Z" fill="#388E3C" stroke="#174C2A" stroke-width="14"/>
+<path d="M505 158 Q600 126 695 158" fill="none" stroke="#66BB6A" stroke-width="14" stroke-linecap="round" opacity=".8"/>
 </svg>

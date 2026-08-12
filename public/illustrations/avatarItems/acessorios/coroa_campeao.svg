@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
 <!-- Crown is centered over the head and leaves a deliberate breathing margin. -->
-<path d="M315 300 L350 126 L510 220 L600 66 L690 220 L850 126 L885 300 Q600 340 315 300 Z" fill="#FFB300" stroke="#8B5A00" stroke-width="16" stroke-linejoin="round"/>
-<path d="M322 300 Q600 342 878 300 L864 354 Q600 390 336 354 Z" fill="#F3A600" stroke="#8B5A00" stroke-width="14"/>
-<path d="M600 93 L600 275" stroke="#FFE58A" stroke-width="15" stroke-linecap="round" opacity=".9"/>
+<path d="M400 315 L425 154 L530 220 L600 110 L670 220 L775 154 L800 315 Q600 344 400 315 Z" fill="#FFB300" stroke="#8B5A00" stroke-width="14" stroke-linejoin="round"/>
+<path d="M407 315 Q600 346 793 315 L783 354 Q600 378 417 354 Z" fill="#F3A600" stroke="#8B5A00" stroke-width="12"/>
+<path d="M600 130 L600 295" stroke="#FFE58A" stroke-width="12" stroke-linecap="round" opacity=".9"/>
 </svg>

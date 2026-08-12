@@ -10,9 +10,9 @@
 </g>
 </g>
 <!-- Clothing stays on the torso. Keep the face clear: the body slot sits below the shared eyes layer. -->
-<path d="M218 301 Q286 282 356 296 Q426 282 494 301 L507 496 Q356 529 205 496 Z" fill="#F9A825" stroke="#7D0008" stroke-width="11" stroke-linejoin="round"/>
-<path d="M220 307 Q287 290 356 304 Q425 290 492 307" fill="none" stroke="#FFD75A" stroke-width="14" stroke-linecap="round"/>
-<path d="M356 307 L356 510" fill="none" stroke="#FFF8E1" stroke-width="13" stroke-linecap="round"/>
-<path d="M243 350 H326 M386 350 H469" fill="none" stroke="#C47A00" stroke-width="10" stroke-linecap="round"/>
-<path d="M233 467 Q356 492 479 467" fill="none" stroke="#C47A00" stroke-width="10" stroke-linecap="round"/>
+<path d="M252 315 Q300 300 356 312 Q412 300 460 315 L470 475 Q356 500 242 475 Z" fill="#F9A825" stroke="#7D0008" stroke-width="10" stroke-linejoin="round"/>
+<path d="M254 321 Q302 307 356 319 Q410 307 458 321" fill="none" stroke="#FFD75A" stroke-width="12" stroke-linecap="round"/>
+<path d="M356 320 L356 482" fill="none" stroke="#FFF8E1" stroke-width="11" stroke-linecap="round"/>
+<path d="M274 360 H326 M386 360 H438" fill="none" stroke="#C47A00" stroke-width="9" stroke-linecap="round"/>
+<path d="M264 450 Q356 472 448 450" fill="none" stroke="#C47A00" stroke-width="9" stroke-linecap="round"/>
 </svg>

@@ -2,19 +2,18 @@
 <!-- Event badge: a clean lanyard and identification card on the shared avatar canvas. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- Start below the face: this is a neck strap, not a second pair of arms. -->
-    <path d="M520 548 C538 602 584 628 640 640 C696 628 742 602 760 548" fill="none" stroke="#152B45" stroke-width="24" />
-    <path d="M520 548 C538 602 584 628 640 640 C696 628 742 602 760 548" fill="none" stroke="#F4F7FA" stroke-width="8" opacity=".95" />
-    <path d="M730 622 L778 665" fill="none" stroke="#152B45" stroke-width="24" />
+    <!-- A short shoulder strap keeps the card away from the face and medal. -->
+    <path d="M720 560 C735 604 765 632 798 660" fill="none" stroke="#152B45" stroke-width="18" />
+    <path d="M720 560 C735 604 765 632 798 660" fill="none" stroke="#D71920" stroke-width="7" />
 
-    <!-- A small chest card, offset to the character's right and clear of the blood badge. -->
-    <rect x="700" y="650" width="250" height="285" rx="30" fill="#FFF9F2" stroke="#152B45" stroke-width="16" />
-    <path d="M700 650 H950 V742 H700 Z" fill="#C62828" />
-    <path d="M700 742 H950" stroke="#F9A825" stroke-width="14" />
-    <circle cx="825" cy="798" r="43" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
-    <path d="M825 816 C813 797 790 801 790 820 C790 838 825 853 825 853 C825 853 860 838 860 820 C860 801 837 797 825 816 Z" fill="#C62828" />
-    <path d="M760 884 H890" stroke="#152B45" stroke-width="12" />
-    <path d="M785 910 H865" stroke="#8B9AAC" stroke-width="10" />
-    <circle cx="825" cy="681" r="8" fill="#FFF9F2" />
+    <!-- A compact chest card, offset to the character's right and clear of the blood badge. -->
+    <rect x="790" y="650" width="150" height="220" rx="22" fill="#FFF9F2" stroke="#152B45" stroke-width="13" />
+    <path d="M790 650 H940 V716 H790 Z" fill="#C62828" />
+    <path d="M790 716 H940" stroke="#F9A825" stroke-width="10" />
+    <circle cx="865" cy="760" r="31" fill="#FFF9F2" stroke="#152B45" stroke-width="7" />
+    <path d="M865 775 C857 762 840 765 840 779 C840 792 865 803 865 803 C865 803 890 792 890 779 C890 765 873 762 865 775 Z" fill="#C62828" />
+    <path d="M826 828 H904" stroke="#152B45" stroke-width="9" />
+    <path d="M842 848 H888" stroke="#8B9AAC" stroke-width="8" />
+    <circle cx="865" cy="672" r="6" fill="#FFF9F2" />
   </g>
 </svg>

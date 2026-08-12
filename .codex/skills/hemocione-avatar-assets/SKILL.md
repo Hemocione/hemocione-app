@@ -20,15 +20,40 @@ Use this skill whenever an avatar item is created or repaired. Treat each SVG as
    ```
 
 6. Compose the item with the real base, legs, body, eyes, blood badge, and accessory layers. Check three scales: the editor stage (220px), the item card thumbnail (56px), and the home avatar preview (66px). Check at least one neighboring item at the same time so a fix does not solve one combination by breaking another.
-7. Use browser QA against the real editor before shipping. Select every item in the changed slot, inspect the large avatar and its card thumbnail, then reload the home view and confirm the compact avatar has no clipping, unexpected background, or layer collision.
+7. Use browser QA against the real deployed app or PR preview before shipping. A local canvas, SVG coordinate inspection, DOM snapshot, or generated composition grid is diagnostic only; it is not visual acceptance. Open the actual URL with the QA account, enter the editor, select every item in the changed slot, take screenshots of the rendered stage and item card, open those screenshots with an image viewer, and judge the bitmap as a person would. Then close/reload the editor and inspect the home avatar screenshot at its compact size. Confirm the same item is recognizable, proportionate, and layered correctly in all three contexts.
 8. Commit the SVG and any catalog change together. Keep the canonical `assetRef` stable when only art is being repaired.
+
+## Real-browser review gate
+
+Use this exact acceptance loop for visual work:
+
+```text
+deployed/preview URL + QA token
+  -> home screenshot (66px avatar)
+  -> click Edit
+  -> select changed item by its visible/accessibility name
+  -> editor screenshot (220px stage)
+  -> item-card screenshot (56px)
+  -> open each screenshot and inspect the rendered pixels
+  -> reload, close the editor, and inspect home again
+```
+
+The rendered result is the source of truth because the shared layer rects can make an asset look reasonable in isolation while making it oversized or invisible in the product. During the real review, explicitly look for these failure modes:
+
+- headwear that dominates the head or touches the canvas edge;
+- a chest card whose lanyard crosses the face, blood badge, or arm;
+- clothing overlays translated into the face because the body-local `y` was treated as a shared-canvas `y`;
+- glasses that technically load but are too faint or narrow to read at 220px, 66px, and 56px, or that hide the base eyes;
+- an item that looks acceptable in the editor but becomes clipped, tiny, or visually absent in the card/home preview.
+
+Do not mark the item complete from the SVG source or canvas alone. If the screenshot looks wrong, fix the asset geometry or contrast, redeploy the preview, and repeat the browser loop.
 
 ## Slot contracts
 
 - `corpo/*.svg`: use `viewBox="0 0 712 670"`. Include the complete body silhouette required by the body slot, then place clothing overlays around the torso coordinates documented in the reference. Never start a clothing overlay at the face height.
-- `olhos/*.svg`: let the component place the asset in the shared eyes rect. Veteran glasses must be transparent around the lenses so the base eyes layer can remain visible underneath.
+- `olhos/*.svg`: let the component place the asset in the shared eyes rect. Veteran glasses must be transparent around the lenses, cover roughly the same width as both eyes, and leave the base eyes layer visible underneath.
 - `pernas/*.svg`: use the existing legs rect and keep both feet inside it.
-- `acessorios/*.svg`: use `viewBox="0 0 1200 1200"`, keep the visual bounds inside a breathing margin, and anchor the item to the head/chest instead of stretching it to the canvas edges.
+- `acessorios/*.svg`: use `viewBox="0 0 1200 1200"`, keep headwear around 32–68% of the canvas width and chest cards around 12–18%, and anchor the item to the head/chest instead of stretching it to the canvas edges.
 - `background/*.svg` and `badge/*.svg`: use a transparent or intentionally painted full canvas according to the slot’s semantics. Do not let these assets alter the avatar silhouette.
 
 ## Visual acceptance
