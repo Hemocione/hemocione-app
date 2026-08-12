@@ -67,11 +67,11 @@ const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
   object-fit: cover;
   border-radius: 12px;
 }
-.layer.base {
+.layer.pernas {
   z-index: 1;
   object-fit: contain;
 }
-.layer.pernas {
+.layer.base {
   z-index: 2;
   object-fit: contain;
 }
