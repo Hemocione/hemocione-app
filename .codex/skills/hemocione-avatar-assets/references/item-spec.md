@@ -42,3 +42,5 @@ For each changed item, test:
 5. A reload after selecting the item, so cached and persisted asset refs are exercised.
 
 Record the browser URL, selected item, screenshot, and any console/page error. A passing asset has no broken image, no unexpected opaque rectangle, no face/feet collision, and no visible layer-order workaround.
+
+The screenshot from the deployed/preview browser session is the acceptance artifact. Do not accept a local canvas or isolated SVG when the editor, item card, or home preview has not been visually inspected.
