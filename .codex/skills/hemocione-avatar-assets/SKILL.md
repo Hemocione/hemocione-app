@@ -29,10 +29,10 @@ Design against the rendered Hemárcio, not against the empty SVG canvas. The fiv
 
 | Item family | Shared-canvas visual budget | Non-negotiable visual rule |
 | --- | --- | --- |
-| torso clothing (`corpo`) | body-local `x≈220..492`, `y≈295..500`; a sash may reach `x≈190..520` | Follow the torso curve. Never use a flat rectangle, never cover the face, and leave both arms and the blood medal readable. |
+| torso clothing (`corpo`) | body-local `x≈245..465`, `y≈295..485`; a sash may reach `x≈210..515` | Follow the torso curve. Never use a flat rectangle, never cover the face, and leave visible vest/sash surface on both sides of the blood medal. |
 | crown | roughly `x≈425..775`, `y≈135..350` | Sit on the head with breathing room; the crown must be narrower than the head silhouette and must not cover the eyes. |
 | hat | roughly `x≈420..780`, `y≈145..345` | The brim follows the head width; keep the crown compact and keep the flame tip from looking like a random extra spike. |
-| event badge | card around `x≈805..950`, `y≈620..880` | The strap must visibly begin at the shoulder and stay outside the blood-medal rectangle (`x=576..768`, `y=564..756`). The card is a chest accessory, not a second torso. |
+| event badge | card around `x≈760..855`, `y≈700..840` | Use a short shoulder connector and keep the card partly over the torso, away from the hand. The card is a chest accessory, not a second torso or a phone being held. |
 
 For a new clothing item, keep the complete body silhouette required by the slot, then add only the clothing overlay. If the base silhouette is copied into the file, the overlay still has to be aligned to the body-local art: the existing body art is translated by `y=273`, while the clothing overlay is authored in the same 712×670 body viewBox. Do not apply the shared-canvas `(283,271)` offset a second time.
 

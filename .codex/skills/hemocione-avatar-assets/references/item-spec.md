@@ -35,10 +35,10 @@ This is why a body overlay at `y=180` covers the face: the body slot itself is a
 
 These are authoring budgets for the current Hemárcio art, not arbitrary SVG padding:
 
-- torso overlays: body-local `x≈220..492`, `y≈295..500`; a diagonal sash may use `x≈190..520` but must be clipped to the torso;
+- torso overlays: body-local `x≈245..465`, `y≈295..485`; a diagonal sash may use `x≈210..515` but must be clipped to the torso;
 - crown: shared `x≈425..775`, `y≈135..350`;
 - hat: shared `x≈420..780`, `y≈145..345`;
-- event badge card: shared `x≈805..950`, `y≈620..880`; keep its connector outside the blood badge rectangle;
+- event badge card: shared `x≈760..855`, `y≈700..840`; use a short connector and keep the card away from the hand/forearm;
 - the blood badge occupies shared `x=576..768`, `y=564..756` and must remain readable.
 
 The budgets are intentionally expressed in the coordinates that the product actually renders. They prevent a future item from consuming the whole 1200×1200 accessory canvas or from placing body-local geometry in shared-canvas coordinates.
