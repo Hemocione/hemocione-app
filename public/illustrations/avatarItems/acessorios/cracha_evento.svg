@@ -2,39 +2,19 @@
 <!-- Event badge: a clean lanyard and identification card on the shared avatar canvas. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- Lanyard, kept narrow so it reads as a strap rather than an extra limb. -->
-    <path
-      d="M462 430 C485 490 545 542 630 560 C715 542 775 490 738 430"
-      fill="none"
-      stroke="#152B45"
-      stroke-width="30"
-    />
-    <path
-      d="M462 430 C485 490 545 542 630 560 C715 542 775 490 738 430"
-      fill="none"
-      stroke="#D71920"
-      stroke-width="18"
-    />
+    <!-- Start below the face: this is a neck strap, not a second pair of arms. -->
+    <path d="M520 548 C538 602 584 628 640 640 C696 628 742 602 760 548" fill="none" stroke="#152B45" stroke-width="24" />
+    <path d="M520 548 C538 602 584 628 640 640 C696 628 742 602 760 548" fill="none" stroke="#F4F7FA" stroke-width="8" opacity=".95" />
+    <path d="M730 622 L778 665" fill="none" stroke="#152B45" stroke-width="24" />
 
-    <!-- Clip and card. -->
-    <circle cx="630" cy="544" r="30" fill="#F7C945" stroke="#152B45" stroke-width="12" />
-    <circle cx="630" cy="544" r="11" fill="#152B45" />
-    <rect x="510" y="548" width="240" height="310" rx="28" fill="#FFF9F2" stroke="#152B45" stroke-width="14" />
-    <path d="M524 578 Q524 562 540 562 H720 Q736 562 736 578 V660 H524 Z" fill="#D71920" />
-    <path d="M524 660 H736" fill="none" stroke="#F7C945" stroke-width="10" />
-
-    <!-- Hemocione heart mark. -->
-    <circle cx="630" cy="716" r="52" fill="#D71920" />
-    <path
-      d="M630 752 C622 744 588 722 588 697 C588 680 610 674 630 693 C650 674 672 680 672 697 C672 722 638 744 630 752 Z"
-      fill="#FFF9F2"
-      stroke="#152B45"
-      stroke-width="8"
-    />
-
-    <!-- Simple information lines, legible even at thumbnail size. -->
-    <path d="M558 794 H682" stroke="#152B45" stroke-width="13" />
-    <path d="M582 824 H658" stroke="#8B9AAC" stroke-width="11" />
-    <circle cx="630" cy="586" r="9" fill="#FFF9F2" />
+    <!-- A small chest card, offset to the character's right and clear of the blood badge. -->
+    <rect x="700" y="650" width="250" height="285" rx="30" fill="#FFF9F2" stroke="#152B45" stroke-width="16" />
+    <path d="M700 650 H950 V742 H700 Z" fill="#C62828" />
+    <path d="M700 742 H950" stroke="#F9A825" stroke-width="14" />
+    <circle cx="825" cy="798" r="43" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
+    <path d="M825 816 C813 797 790 801 790 820 C790 838 825 853 825 853 C825 853 860 838 860 820 C860 801 837 797 825 816 Z" fill="#C62828" />
+    <path d="M760 884 H890" stroke="#152B45" stroke-width="12" />
+    <path d="M785 910 H865" stroke="#8B9AAC" stroke-width="10" />
+    <circle cx="825" cy="681" r="8" fill="#FFF9F2" />
   </g>
 </svg>
