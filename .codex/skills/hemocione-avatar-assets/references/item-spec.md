@@ -20,7 +20,7 @@ sharedX = 283 + bodyX
 sharedY = 271 + bodyY
 ```
 
-This is why a body overlay at `y=180` covers the face: the body slot itself is already offset down by about 271px. Start torso clothing near the body silhouette’s translated torso, usually around body-local `y=290`, and verify against the default body.
+This is why a body overlay at `y=180` covers the face: the body slot itself is already offset down by about 271px. Start torso clothing near the body silhouette’s translated torso, usually around body-local `y=290`, and verify against the default body. The canonical body art also contains an internal `translate(0,273)` for the silhouette; do not add that translation to the clothing overlay a second time.
 
 ## Art rules
 
@@ -30,6 +30,18 @@ This is why a body overlay at `y=180` covers the face: the body slot itself is a
 - Keep headwear visual bounds around 32–68% of the 1200 canvas width; keep a chest-card accessory around 12–18% of the canvas width. Leave a visible breathing margin around both.
 - Put chest accessories to one side of the torso and below the eyes. Keep the blood badge visible unless the item is explicitly a replacement badge.
 - Do not use an SVG `<image href="...">` to borrow another layer. The browser may show it while the canvas/share renderer drops the nested resource.
+
+## Practical coordinate budgets
+
+These are authoring budgets for the current Hemárcio art, not arbitrary SVG padding:
+
+- torso overlays: body-local `x≈220..492`, `y≈295..500`; a diagonal sash may use `x≈190..520` but must be clipped to the torso;
+- crown: shared `x≈425..775`, `y≈135..350`;
+- hat: shared `x≈420..780`, `y≈145..345`;
+- event badge card: shared `x≈805..950`, `y≈620..880`; keep its connector outside the blood badge rectangle;
+- the blood badge occupies shared `x=576..768`, `y=564..756` and must remain readable.
+
+The budgets are intentionally expressed in the coordinates that the product actually renders. They prevent a future item from consuming the whole 1200×1200 accessory canvas or from placing body-local geometry in shared-canvas coordinates.
 
 ## QA matrix
 
