@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Eligibility badge: a small chest credential on the shared avatar canvas, marking an encouraging near-miss on the pre-donation screening. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- A short connector fixes the smaller card inside the vest's right panel, away from the hand. -->
+    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#152B45" stroke-width="10" />
+    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#F6A609" stroke-width="4" />
+
+    <!-- The card sits on the right torso panel, clear of the arm and readable at home size. -->
+    <rect x="760" y="600" width="80" height="125" rx="14" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
+    <path d="M760 600 H840 V633 H760 Z" fill="#F6A609" />
+    <path d="M760 633 H840" stroke="#A86A00" stroke-width="7" />
+    <circle cx="800" cy="662" r="20" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
+    <path d="M800 668 C795 660 787 663 787 671 C787 679 800 687 800 687 C800 687 813 679 813 671 C813 663 805 660 800 668 Z" fill="#F6A609" />
+    <path d="M780 700 H820" stroke="#152B45" stroke-width="7" />
+    <circle cx="800" cy="612" r="5" fill="#FFF9F2" />
+  </g>
+</svg>
