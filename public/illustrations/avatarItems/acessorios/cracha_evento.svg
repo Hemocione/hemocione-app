@@ -2,17 +2,17 @@
 <!-- Event badge: a small chest credential on the shared avatar canvas. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- A short shoulder connector keeps the smaller card attached without crossing the medal. -->
-    <path d="M770 592 C772 604 775 616 780 624" fill="none" stroke="#152B45" stroke-width="11" />
-    <path d="M770 592 C772 604 775 616 780 624" fill="none" stroke="#D71920" stroke-width="4" />
+    <!-- A short connector fixes the smaller card inside the vest's right panel, away from the hand. -->
+    <path d="M710 570 C708 582 704 592 700 604" fill="none" stroke="#152B45" stroke-width="11" />
+    <path d="M710 570 C708 582 704 592 700 604" fill="none" stroke="#D71920" stroke-width="4" />
 
-    <!-- The card sits partly over the torso, away from the hand and just clear of the medal. -->
-    <rect x="780" y="620" width="95" height="140" rx="15" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
-    <path d="M780 620 H875 V656 H780 Z" fill="#C62828" />
-    <path d="M780 656 H875" stroke="#F9A825" stroke-width="7" />
-    <circle cx="827" cy="686" r="21" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
-    <path d="M827 693 C821 684 811 687 811 696 C811 705 827 713 827 713 C827 713 843 705 843 696 C843 687 833 684 827 693 Z" fill="#C62828" />
-    <path d="M803 733 H851" stroke="#152B45" stroke-width="7" />
-    <circle cx="827" cy="632" r="5" fill="#FFF9F2" />
+    <!-- The card sits on the right torso panel, clear of the arm and readable at home size. -->
+    <rect x="690" y="600" width="95" height="140" rx="15" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
+    <path d="M690 600 H785 V636 H690 Z" fill="#C62828" />
+    <path d="M690 636 H785" stroke="#F9A825" stroke-width="7" />
+    <circle cx="737" cy="666" r="21" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
+    <path d="M737 673 C731 664 721 667 721 676 C721 685 737 693 737 693 C737 693 753 685 753 676 C753 667 743 664 737 673 Z" fill="#C62828" />
+    <path d="M713 713 H761" stroke="#152B45" stroke-width="7" />
+    <circle cx="737" cy="612" r="5" fill="#FFF9F2" />
   </g>
 </svg>
