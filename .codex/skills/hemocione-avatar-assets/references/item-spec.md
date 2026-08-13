@@ -35,10 +35,10 @@ This is why a body overlay at `y=180` covers the face: the body slot itself is a
 
 These are authoring budgets for the current Hemárcio art, not arbitrary SVG padding:
 
-- torso overlays: body-local `x≈220..492`, `y≈295..500`; a diagonal sash may use `x≈190..520` but must be clipped to the torso;
+- torso overlays: body-local `x≈202..510`, `y≈274..519`; the garment must bridge the arm shoulders, follow the torso curve, and a diagonal sash may use `x≈210..515` but must be clipped to the torso;
 - crown: shared `x≈425..775`, `y≈135..350`;
 - hat: shared `x≈420..780`, `y≈145..345`;
-- event badge card: shared `x≈805..950`, `y≈620..880`; keep its connector outside the blood badge rectangle;
+- event badge card: shared `x≈760..840`, `y≈600..725`; use a short connector into the right torso panel, keep it just outside the blood badge, and keep it away from the hand/forearm;
 - the blood badge occupies shared `x=576..768`, `y=564..756` and must remain readable.
 
 The budgets are intentionally expressed in the coordinates that the product actually renders. They prevent a future item from consuming the whole 1200×1200 accessory canvas or from placing body-local geometry in shared-canvas coordinates.
@@ -47,7 +47,7 @@ The budgets are intentionally expressed in the coordinates that the product actu
 
 For each changed item, test:
 
-1. The item by itself with default body, eyes, legs, and blood badge.
+1. The item by itself with default body, eyes, legs, and blood badge; for chest cards, explicitly inspect the card and medal together for overlap.
 2. The item with veteran glasses and one head accessory.
 3. The item in the editor’s 220px stage.
 4. The item card at 56px and the home preview at 66px.
