@@ -3,16 +3,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
     <!-- A short connector fixes the smaller card inside the vest's right panel, away from the hand. -->
-    <path d="M710 570 C708 582 704 592 700 604" fill="none" stroke="#152B45" stroke-width="11" />
-    <path d="M710 570 C708 582 704 592 700 604" fill="none" stroke="#D71920" stroke-width="4" />
+    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#152B45" stroke-width="10" />
+    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#D71920" stroke-width="4" />
 
     <!-- The card sits on the right torso panel, clear of the arm and readable at home size. -->
-    <rect x="690" y="600" width="95" height="140" rx="15" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
-    <path d="M690 600 H785 V636 H690 Z" fill="#C62828" />
-    <path d="M690 636 H785" stroke="#F9A825" stroke-width="7" />
-    <circle cx="737" cy="666" r="21" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
-    <path d="M737 673 C731 664 721 667 721 676 C721 685 737 693 737 693 C737 693 753 685 753 676 C753 667 743 664 737 673 Z" fill="#C62828" />
-    <path d="M713 713 H761" stroke="#152B45" stroke-width="7" />
-    <circle cx="737" cy="612" r="5" fill="#FFF9F2" />
+    <rect x="760" y="600" width="80" height="125" rx="14" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
+    <path d="M760 600 H840 V633 H760 Z" fill="#C62828" />
+    <path d="M760 633 H840" stroke="#F9A825" stroke-width="7" />
+    <circle cx="800" cy="660" r="18" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
+    <path d="M800 666 C795 658 786 661 786 669 C786 677 800 685 800 685 C800 685 814 677 814 669 C814 661 805 658 800 666 Z" fill="#C62828" />
+    <path d="M780 698 H820" stroke="#152B45" stroke-width="7" />
+    <circle cx="800" cy="612" r="5" fill="#FFF9F2" />
   </g>
 </svg>
