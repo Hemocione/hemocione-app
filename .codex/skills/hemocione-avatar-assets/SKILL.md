@@ -29,10 +29,10 @@ Design against the rendered Hemárcio, not against the empty SVG canvas. The fiv
 
 | Item family | Shared-canvas visual budget | Non-negotiable visual rule |
 | --- | --- | --- |
-| torso clothing (`corpo`) | body-local `x≈245..465`, `y≈295..485`; a sash may reach `x≈210..515` | Follow the torso curve. Never use a flat rectangle, never cover the face, and leave visible vest/sash surface on both sides of the blood medal. |
+| torso clothing (`corpo`) | body-local `x≈202..510`, `y≈274..519`; a sash may reach `x≈210..515` | Follow the torso curve and bridge the arms at the shoulders. Never use flat rectangles, never cover the face, and leave visible vest/sash surface on both sides of the blood medal. |
 | crown | roughly `x≈425..775`, `y≈135..350` | Sit on the head with breathing room; the crown must be narrower than the head silhouette and must not cover the eyes. |
 | hat | roughly `x≈420..780`, `y≈145..345` | The brim follows the head width; keep the crown compact and keep the flame tip from looking like a random extra spike. |
-| event badge | card around `x≈760..855`, `y≈700..840` | Use a short shoulder connector and keep the card partly over the torso, away from the hand. The card is a chest accessory, not a second torso or a phone being held. |
+| event badge | card around `x≈760..840`, `y≈600..725` | Use a short connector into the right vest panel, keep the card just outside the blood medal, and keep it away from the hand. The card is a chest accessory, not a second torso or a phone being held. |
 
 For a new clothing item, keep the complete body silhouette required by the slot, then add only the clothing overlay. If the base silhouette is copied into the file, the overlay still has to be aligned to the body-local art: the existing body art is translated by `y=273`, while the clothing overlay is authored in the same 712×670 body viewBox. Do not apply the shared-canvas `(283,271)` offset a second time.
 
@@ -70,6 +70,7 @@ The rendered result is the source of truth because the shared layer rects can ma
 - an item that looks acceptable in the editor but becomes clipped, tiny, or visually absent in the card/home preview.
 - a clothing item that is technically present but reads as a box, a stray stripe, or the default body because its contrast and silhouette do not survive the 56px card;
 - a lanyard that technically reaches a card but does not visually connect it to the character's shoulder.
+- a chest card that looks acceptable alone but collides with the blood medal when both are visible.
 
 Do not mark the item complete from the SVG source or canvas alone. If the screenshot looks wrong, fix the asset geometry or contrast, redeploy the preview, and repeat the browser loop.
 
