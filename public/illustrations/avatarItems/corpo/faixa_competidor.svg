@@ -10,12 +10,13 @@
 </g>
 </g>
 <!-- A clear diagonal competition sash contained by the torso silhouette. -->
+<!-- Shifted -39 on x: the arm groups (translate 175/459) are centered on local x=317 to align with the canvas center (corpo rect left=23.58% maps local x=317 to canvas x=600); the sash was drawn centered on the viewBox's own midpoint (356) instead, a 39px rightward miss. -->
 <defs>
-<clipPath id="torso-clip"><path d="M225 310 Q356 288 487 310 L500 490 Q356 510 212 490 Z"/></clipPath>
+<clipPath id="torso-clip"><path d="M186 310 Q317 288 448 310 L461 490 Q317 510 173 490 Z"/></clipPath>
 </defs>
 <g clip-path="url(#torso-clip)">
-<path d="M232 306 L512 386 L492 454 L212 374 Z" fill="#FFF8E1" stroke="#7D0008" stroke-width="9" stroke-linejoin="round"/>
-<path d="M226 335 L505 415" fill="none" stroke="#C62828" stroke-width="24"/>
-<path d="M231 316 L512 396 M218 367 L499 447" fill="none" stroke="#F9A825" stroke-width="7"/>
+<path d="M193 306 L473 386 L453 454 L173 374 Z" fill="#FFF8E1" stroke="#7D0008" stroke-width="9" stroke-linejoin="round"/>
+<path d="M187 335 L466 415" fill="none" stroke="#C62828" stroke-width="24"/>
+<path d="M192 316 L473 396 M179 367 L460 447" fill="none" stroke="#F9A825" stroke-width="7"/>
 </g>
 </svg>

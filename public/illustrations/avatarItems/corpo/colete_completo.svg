@@ -10,11 +10,12 @@
 </g>
 </g>
 <!-- A fitted two-panel vest that bridges the arms at the shoulders and leaves a clear V opening. -->
+<!-- Shifted -39 on x: the arm groups (translate 175/459) are centered on local x=317 to align with the canvas center (corpo rect left=23.58% maps local x=317 to canvas x=600); the vest was drawn centered on the viewBox's own midpoint (356) instead, a 39px rightward miss. -->
 <g stroke-linecap="round" stroke-linejoin="round">
-<path d="M210 300 Q228 274 258 280 L356 338 L337 378 L346 505 Q285 519 214 482 L202 350 Q203 320 210 300 Z" fill="#F9A825" stroke="#7D0008" stroke-width="10"/>
-<path d="M502 300 Q484 274 454 280 L356 338 L375 378 L366 505 Q427 519 498 482 L510 350 Q509 320 502 300 Z" fill="#F9A825" stroke="#7D0008" stroke-width="10"/>
-<path d="M215 304 Q231 282 255 288 L344 340 M497 304 Q481 282 457 288 L368 340" fill="none" stroke="#FFD75A" stroke-width="9"/>
-<path d="M224 392 L230 472 M488 392 L482 472" fill="none" stroke="#C47A00" stroke-width="8"/>
-<path d="M214 480 Q285 501 342 486 M370 486 Q427 501 498 480" fill="none" stroke="#FFF8E1" stroke-width="11"/>
+<path d="M171 300 Q189 274 219 280 L317 338 L298 378 L307 505 Q246 519 175 482 L163 350 Q164 320 171 300 Z" fill="#F9A825" stroke="#7D0008" stroke-width="10"/>
+<path d="M463 300 Q445 274 415 280 L317 338 L336 378 L327 505 Q388 519 459 482 L471 350 Q470 320 463 300 Z" fill="#F9A825" stroke="#7D0008" stroke-width="10"/>
+<path d="M176 304 Q192 282 216 288 L305 340 M458 304 Q442 282 418 288 L329 340" fill="none" stroke="#FFD75A" stroke-width="9"/>
+<path d="M185 392 L191 472 M449 392 L443 472" fill="none" stroke="#C47A00" stroke-width="8"/>
+<path d="M175 480 Q246 501 303 486 M331 486 Q388 501 459 480" fill="none" stroke="#FFF8E1" stroke-width="11"/>
 </g>
 </svg>
