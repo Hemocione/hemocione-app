@@ -169,7 +169,7 @@ interface InternalPage extends Page {
   path: string;
 }
 
-const internalPages: InternalPage[] = [
+const baseInternalPages: InternalPage[] = [
   {
     path: "/",
     name: "Início",
@@ -220,6 +220,22 @@ const internalPages: InternalPage[] = [
   },
 ];
 
+// "Instituições" only shows up for users with at least one institutionRole
+// decoded from the JWT (see userStore.hasInstitutionRole).
+const internalPages = computed((): InternalPage[] => {
+  if (!userStore.hasInstitutionRole) return baseInternalPages;
+
+  return [
+    ...baseInternalPages,
+    {
+      path: "/institutions",
+      name: "Instituições",
+      priority: 1,
+      icon: "institution",
+    },
+  ];
+});
+
 const donationPages = computed((): InternalPage => {
   return [
     {
@@ -263,7 +279,7 @@ const externalPages: ExternalPage[] = [
 ];
 
 const currentRouteIndex = computed(() => {
-  const pagesCopy = [...internalPages, ...donationPages.value];
+  const pagesCopy = [...internalPages.value, ...donationPages.value];
   const posiblePages = pagesCopy.filter((page) =>
     currentRoute.path.startsWith(page.path)
   );
@@ -284,7 +300,7 @@ const isCurrentRoute = (
     return pageIndex === currentRouteIndex.value;
   }
 
-  const internalPagesLength = internalPages.length;
+  const internalPagesLength = internalPages.value.length;
   return pageIndex === currentRouteIndex.value - internalPagesLength;
 };
 
@@ -301,7 +317,7 @@ async function openExternalPage(externalPage: ExternalPage) {
 }
 
 function handleInternalPageClick(internalPage: InternalPage) {
-  if (!isCurrentRoute(internalPages.indexOf(internalPage))) {
+  if (!isCurrentRoute(internalPages.value.indexOf(internalPage))) {
     navigateTo(internalPage.path);
   }
 
