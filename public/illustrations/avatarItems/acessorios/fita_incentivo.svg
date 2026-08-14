@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Eligibility badge: a small chest credential on the shared avatar canvas, marking an encouraging near-miss on the pre-donation screening. -->
+<!-- Encouragement badge v2: an amber awareness-ribbon shape on the RIGHT shoulder, above the blood medal (x 576-768, y 564-756) and the event badge (x 760-840, y 600-725), so it reads as its own distinct silhouette instead of another chest card. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- A short connector fixes the smaller card inside the vest's right panel, away from the hand. -->
-    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#152B45" stroke-width="10" />
-    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#F6A609" stroke-width="4" />
-
-    <!-- The card sits on the right torso panel, clear of the arm and readable at home size. -->
-    <rect x="760" y="600" width="80" height="125" rx="14" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
-    <path d="M760 600 H840 V633 H760 Z" fill="#F6A609" />
-    <path d="M760 633 H840" stroke="#A86A00" stroke-width="7" />
-    <circle cx="800" cy="662" r="20" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
-    <path d="M800 668 C795 660 787 663 787 671 C787 679 800 687 800 687 C800 687 813 679 813 671 C813 663 805 660 800 668 Z" fill="#F6A609" />
-    <path d="M780 700 H820" stroke="#152B45" stroke-width="7" />
-    <circle cx="800" cy="612" r="5" fill="#FFF9F2" />
+    <!-- Ribbon tails: two bands crossing in an X below the loop. -->
+    <path d="M800 470 L890 640 L860 660 L790 520 Z" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
+    <path d="M900 470 L810 640 L840 660 L910 520 Z" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
+    <!-- Loop at the top: two overlapping circles pinched at the center. -->
+    <circle cx="825" cy="450" r="42" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
+    <circle cx="875" cy="450" r="42" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
+    <circle cx="850" cy="450" r="16" fill="#A86A00" />
   </g>
 </svg>

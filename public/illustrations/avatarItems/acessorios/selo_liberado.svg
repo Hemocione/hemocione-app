@@ -1,18 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Eligibility badge: a small chest credential on the shared avatar canvas, marking a passed pre-donation screening. -->
+<!-- Eligibility badge v2: a green approval shield on the LEFT shoulder (screen-left, x~300-500), well clear of the blood medal (x 576-768, y 564-756) and the event badge (x 760-840, y 600-725) which both sit on the right/center chest. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- A short connector fixes the smaller card inside the vest's right panel, away from the hand. -->
-    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#152B45" stroke-width="10" />
-    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#2AC769" stroke-width="4" />
-
-    <!-- The card sits on the right torso panel, clear of the arm and readable at home size. -->
-    <rect x="760" y="600" width="80" height="125" rx="14" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
-    <path d="M760 600 H840 V633 H760 Z" fill="#2AC769" />
-    <path d="M760 633 H840" stroke="#1F9C56" stroke-width="7" />
-    <circle cx="800" cy="662" r="20" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
-    <path d="M789 662 L797 671 L813 651" fill="none" stroke="#2AC769" stroke-width="8" />
-    <path d="M780 700 H820" stroke="#152B45" stroke-width="7" />
-    <circle cx="800" cy="612" r="5" fill="#FFF9F2" />
+    <!-- Simple rounded shield silhouette: flat top, curved sides, pointed bottom. -->
+    <path d="M310 360
+             L470 360
+             Q510 360 510 400
+             L510 470
+             Q510 560 390 615
+             Q270 560 270 470
+             L270 400
+             Q270 360 310 360 Z"
+          fill="#2AC769" stroke="#152B45" stroke-width="16" />
+    <path d="M330 380
+             L450 380
+             Q485 380 485 410
+             L485 468
+             Q485 545 390 592
+             Q295 545 295 468
+             L295 410
+             Q295 380 330 380 Z"
+          fill="#1F9C56" />
+    <path d="M340 460 L378 498 L448 415" fill="none" stroke="#FFFFFF" stroke-width="28" />
   </g>
 </svg>
