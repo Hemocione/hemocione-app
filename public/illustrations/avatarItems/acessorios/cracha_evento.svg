@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Event badge: a small chest credential on the shared avatar canvas. -->
+<!-- Event badge: a lanyard credential hanging below the blood-type medal. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- A short connector fixes the smaller card inside the vest's right panel, away from the hand. -->
-    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#152B45" stroke-width="10" />
-    <path d="M785 570 C782 582 775 592 765 604" fill="none" stroke="#D71920" stroke-width="4" />
+    <!-- Two narrow lanyard straps leave the neck and converge on the card's top corners - a tight V, not a wide loop, so it stays clear of the medal. -->
+    <path d="M600 568 Q562 670 550 774" fill="none" stroke="#152B45" stroke-width="12" />
+    <path d="M600 568 Q562 670 550 774" fill="none" stroke="#D71920" stroke-width="5" />
+    <path d="M600 568 Q638 670 650 774" fill="none" stroke="#152B45" stroke-width="12" />
+    <path d="M600 568 Q638 670 650 774" fill="none" stroke="#D71920" stroke-width="5" />
 
-    <!-- The card sits on the right torso panel, clear of the arm and readable at home size. -->
-    <rect x="760" y="600" width="80" height="125" rx="14" fill="#FFF9F2" stroke="#152B45" stroke-width="9" />
-    <path d="M760 600 H840 V633 H760 Z" fill="#C62828" />
-    <path d="M760 633 H840" stroke="#F9A825" stroke-width="7" />
-    <circle cx="800" cy="660" r="18" fill="#FFF9F2" stroke="#152B45" stroke-width="5" />
-    <path d="M800 666 C795 658 786 661 786 669 C786 677 800 685 800 685 C800 685 814 677 814 669 C814 661 805 658 800 666 Z" fill="#C62828" />
-    <path d="M780 698 H820" stroke="#152B45" stroke-width="7" />
-    <circle cx="800" cy="612" r="5" fill="#FFF9F2" />
+    <!-- The horizontal credential sits below the medal, with a clear red header. -->
+    <rect x="526" y="774" width="148" height="82" rx="12" fill="#FFF9F2" stroke="#152B45" stroke-width="8" />
+    <path d="M530 778 H670 V800 H530 Z" fill="#C62828" />
+    <path d="M530 802 H670" stroke="#F9A825" stroke-width="6" />
+    <circle cx="600" cy="786" r="5" fill="#FFF9F2" stroke="#152B45" stroke-width="3" />
+    <circle cx="600" cy="824" r="16" fill="#FFF9F2" stroke="#152B45" stroke-width="4" />
+    <path d="M600 831 C595 825 588 827 588 833 C588 840 600 846 600 846 C600 846 612 840 612 833 C612 827 605 825 600 831 Z" fill="#C62828" />
+    <path d="M570 846 H630" stroke="#152B45" stroke-width="6" />
   </g>
 </svg>

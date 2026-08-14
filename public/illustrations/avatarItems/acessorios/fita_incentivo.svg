@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Encouragement badge v2: an amber awareness-ribbon shape on the RIGHT shoulder, above the blood medal (x 576-768, y 564-756) and the event badge (x 760-840, y 600-725), so it reads as its own distinct silhouette instead of another chest card. -->
+<!-- Encouragement ribbon: a compact amber loop on the viewer-right shoulder. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
     <!-- Ribbon tails: two bands crossing in an X below the loop. -->
-    <path d="M800 470 L890 640 L860 660 L790 520 Z" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
-    <path d="M900 470 L810 640 L840 660 L910 520 Z" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
+    <path d="M806 480 L884 574 L858 594 L790 505 Z" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <path d="M884 480 L806 574 L832 594 L900 505 Z" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
     <!-- Loop at the top: two overlapping circles pinched at the center. -->
-    <circle cx="825" cy="450" r="42" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
-    <circle cx="875" cy="450" r="42" fill="#F6A609" stroke="#A86A00" stroke-width="10" />
-    <circle cx="850" cy="450" r="16" fill="#A86A00" />
+    <circle cx="820" cy="462" r="36" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <circle cx="870" cy="462" r="36" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <circle cx="845" cy="462" r="14" fill="#A86A00" />
   </g>
 </svg>
