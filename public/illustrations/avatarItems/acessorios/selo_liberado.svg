@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Eligibility badge v4: smaller green approval shield, narrow band y 580-750 (below the eyes rect which ends at y=570, above where the left arm/hand sits near the base). -->
+<!-- Eligibility badge: compact green approval shield on the viewer-left shoulder. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <path d="M330 580
-             L450 580
-             Q480 580 480 610
-             L480 660
-             Q480 720 390 755
-             Q300 720 300 660
-             L300 610
-             Q300 580 330 580 Z"
-          fill="#2AC769" stroke="#152B45" stroke-width="14" />
-    <path d="M345 596
-             L435 596
-             Q460 596 460 622
-             L460 658
-             Q460 705 390 733
-             Q320 705 320 658
-             L320 622
-             Q320 596 345 596 Z"
+    <path d="M310 487
+             L400 487
+             Q417 487 417 504
+             L417 548
+             Q417 588 355 613
+             Q293 588 293 548
+             L293 504
+             Q293 487 310 487 Z"
+          fill="#2AC769" stroke="#152B45" stroke-width="12" />
+    <path d="M313 502
+             L397 502
+             Q405 502 405 510
+             L405 548
+             Q405 576 355 594
+             Q305 576 305 548
+             L305 510
+             Q305 502 313 502 Z"
           fill="#1F9C56" />
-    <path d="M350 650 L378 678 L432 618" fill="none" stroke="#FFFFFF" stroke-width="20" />
+    <path d="M318 543 L343 568 L395 515" fill="none" stroke="#FFFFFF" stroke-width="16" />
   </g>
 </svg>
