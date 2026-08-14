@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Eligibility badge v3: green approval shield on the LEFT shoulder, lowered below the eyes rect (x 465-734, y 345-570) to stop touching the veteran-glasses layer. Still clear of the blood medal (x 576-768, y 564-756) and event badge (x 760-840, y 600-725) via the x offset. -->
+<!-- Eligibility badge v4: smaller green approval shield, narrow band y 580-750 (below the eyes rect which ends at y=570, above where the left arm/hand sits near the base). -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <path d="M310 620
-             L470 620
-             Q510 620 510 660
-             L510 730
-             Q510 820 390 875
-             Q270 820 270 730
-             L270 660
-             Q270 620 310 620 Z"
-          fill="#2AC769" stroke="#152B45" stroke-width="16" />
-    <path d="M330 640
-             L450 640
-             Q485 640 485 670
-             L485 728
-             Q485 805 390 852
-             Q295 805 295 728
-             L295 670
-             Q295 640 330 640 Z"
+    <path d="M330 580
+             L450 580
+             Q480 580 480 610
+             L480 660
+             Q480 720 390 755
+             Q300 720 300 660
+             L300 610
+             Q300 580 330 580 Z"
+          fill="#2AC769" stroke="#152B45" stroke-width="14" />
+    <path d="M345 596
+             L435 596
+             Q460 596 460 622
+             L460 658
+             Q460 705 390 733
+             Q320 705 320 658
+             L320 622
+             Q320 596 345 596 Z"
           fill="#1F9C56" />
-    <path d="M340 720 L378 758 L448 675" fill="none" stroke="#FFFFFF" stroke-width="28" />
+    <path d="M350 650 L378 678 L432 618" fill="none" stroke="#FFFFFF" stroke-width="20" />
   </g>
 </svg>
