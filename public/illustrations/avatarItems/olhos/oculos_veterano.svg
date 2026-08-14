@@ -1,1 +1,17 @@
-<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><g fill="#152B45" fill-opacity=".12" stroke="#152B45" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><circle cx="25" cy="50" r="23"/><circle cx="75" cy="50" r="23"/><path d="M48 50 H52" fill="none"/><path d="M2 43 H0 M98 43 H100" fill="none"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Veteran glasses v2: thick bronze/gold frame that reads against the character's dark eyes (v1 was near-black at 12% opacity, invisible over the black base eyes), with real temple arms reaching to the sides of the head. -->
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Temple arms: long, reaching the side of the head. -->
+    <path d="M2 46 L-6 40" fill="none" stroke="#8A5A00" stroke-width="6"/>
+    <path d="M98 46 L106 40" fill="none" stroke="#8A5A00" stroke-width="6"/>
+    <!-- Lenses: dark but with a frame thick and light enough to read over black eyes. -->
+    <circle cx="25" cy="50" r="23" fill="#152B45" fill-opacity=".55" stroke="#D9A441" stroke-width="7"/>
+    <circle cx="75" cy="50" r="23" fill="#152B45" fill-opacity=".55" stroke="#D9A441" stroke-width="7"/>
+    <!-- Bridge: thick, same gold tone. -->
+    <path d="M46 50 H54" fill="none" stroke="#D9A441" stroke-width="8"/>
+    <!-- Lens highlight, so the glass itself reads as glass, not a flat void. -->
+    <path d="M16 40 Q25 33 34 40" fill="none" stroke="#F2C572" stroke-width="4" opacity=".8"/>
+    <path d="M66 40 Q75 33 84 40" fill="none" stroke="#F2C572" stroke-width="4" opacity=".8"/>
+  </g>
+</svg>
