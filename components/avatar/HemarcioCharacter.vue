@@ -73,8 +73,8 @@ const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
   height: 56px;
 }
 .hemarcio.home {
-  width: 66px;
-  height: 66px;
+  width: 100%;
+  height: 100%;
 }
 .layer {
   position: absolute;

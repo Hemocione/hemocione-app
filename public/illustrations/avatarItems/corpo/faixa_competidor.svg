@@ -11,12 +11,13 @@
 </g>
 <!-- A clear diagonal competition sash contained by the torso silhouette. -->
 <!-- Shifted -39 on x: the arm groups (translate 175/459) are centered on local x=317 to align with the canvas center (corpo rect left=23.58% maps local x=317 to canvas x=600); the sash was drawn centered on the viewBox's own midpoint (356) instead, a 39px rightward miss. -->
+<!-- Right end trimmed to x=316: the always-on blood-type medal (bloodTypeMedal rect, canvas x 576-768 y 564-756 -> local x/y 293-485) draws its circle starting at local x=316. The sash used to run to x=473, past where its own torso-clip already cuts it off (~453-461) - the leftover sliver between the clip edge and the medal box was see-through, showing a stray triangle poking out beside the medal. Ending the sash exactly at the medal's circle edge makes it disappear cleanly behind the medal with no gap and no peek-through. -->
 <defs>
 <clipPath id="torso-clip"><path d="M186 310 Q317 288 448 310 L461 490 Q317 510 173 490 Z"/></clipPath>
 </defs>
 <g clip-path="url(#torso-clip)">
-<path d="M193 306 L473 386 L453 454 L173 374 Z" fill="#FFF8E1" stroke="#7D0008" stroke-width="9" stroke-linejoin="round"/>
-<path d="M187 335 L466 415" fill="none" stroke="#C62828" stroke-width="24"/>
-<path d="M192 316 L473 396 M179 367 L460 447" fill="none" stroke="#F9A825" stroke-width="7"/>
+<path d="M193 306 L316 341 L316 415 L173 374 Z" fill="#FFF8E1" stroke="#7D0008" stroke-width="9" stroke-linejoin="round"/>
+<path d="M187 335 L316 372" fill="none" stroke="#C62828" stroke-width="24"/>
+<path d="M192 316 L316 351 M179 367 L316 406" fill="none" stroke="#F9A825" stroke-width="7"/>
 </g>
 </svg>
