@@ -2,11 +2,11 @@
 <!-- Event badge: a lanyard credential hanging below the blood-type medal. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- Two narrow lanyard straps leave the neck and converge on the card's top corners - a tight V, not a wide loop, so it stays clear of the medal. -->
-    <path d="M600 568 Q562 670 550 774" fill="none" stroke="#152B45" stroke-width="12" />
-    <path d="M600 568 Q562 670 550 774" fill="none" stroke="#D71920" stroke-width="5" />
-    <path d="M600 568 Q638 670 650 774" fill="none" stroke="#152B45" stroke-width="12" />
-    <path d="M600 568 Q638 670 650 774" fill="none" stroke="#D71920" stroke-width="5" />
+    <!-- Two narrow lanyard straps leave the neck and converge on the card's top corners. The medal (center 672,645 r=73, plus a 12px stroke) reaches up to y~572 and covers x 599-745 at its widest - any path aimed at the card from directly above clips its face. The left strap clears by going straight down at x<=600. The right strap detours out past x=850, past the medal's ribbon tail (bottom y=756) before turning back to the card, so no part of it crosses the medal's circle or text. -->
+    <path d="M600 530 Q555 660 550 774" fill="none" stroke="#152B45" stroke-width="12" />
+    <path d="M600 530 Q555 660 550 774" fill="none" stroke="#D71920" stroke-width="5" />
+    <path d="M600 530 C760 555 850 600 850 680 C850 730 760 765 650 774" fill="none" stroke="#152B45" stroke-width="12" />
+    <path d="M600 530 C760 555 850 600 850 680 C850 730 760 765 650 774" fill="none" stroke="#D71920" stroke-width="5" />
 
     <!-- The horizontal credential sits below the medal, with a clear red header. -->
     <rect x="526" y="774" width="148" height="82" rx="12" fill="#FFF9F2" stroke="#152B45" stroke-width="8" />
