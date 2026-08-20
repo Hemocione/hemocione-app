@@ -1,0 +1,8 @@
+<svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+<!-- A light rookie cap: narrower than the head, lifted clear of the eyes AND fully covering the drop's pointed top (v1 left the tip visible above the cap). -->
+<g transform="translate(0,-55) rotate(2 600 245)" stroke-linejoin="round">
+<path d="M475 268 Q485 155 600 138 Q715 155 725 268 Z" fill="#2E7D32" stroke="#174C2A" stroke-width="12"/>
+<path d="M430 270 Q600 242 770 270 Q776 285 762 297 Q600 318 438 297 Q424 285 430 270 Z" fill="#388E3C" stroke="#174C2A" stroke-width="12"/>
+<path d="M515 178 Q600 151 685 178" fill="none" stroke="#66BB6A" stroke-width="11" stroke-linecap="round" opacity=".8"/>
+</g>
+</svg>

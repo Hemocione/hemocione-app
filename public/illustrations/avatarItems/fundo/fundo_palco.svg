@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <rect width="1200" height="1200" fill="#1a0e35"/>
+
+  <!-- Dark stage depth behind the character -->
+  <path d="M205 105H995V147H205Z" fill="#29164d"/>
+  <path d="M220 112L310 145H345L255 112ZM390 112L480 145H515L425 112ZM560 112L600 145L640 112ZM775 112L685 145H720L810 112ZM945 112L855 145H890L980 112Z" fill="#3b2163" opacity="0.72"/>
+  <path d="M255 145L340 80H358L285 145ZM430 145L505 80H523L460 145ZM677 145L740 80H758L685 145ZM840 145L913 80H931L858 145Z" fill="#2f1b56" opacity="0.78"/>
+
+  <!-- Top drape -->
+  <path d="M0 0H1200V72C1055 108 948 88 830 37C731 -6 671 -8 600 20C529 -8 469 -6 370 37C252 88 145 108 0 72Z" fill="#4d126d"/>
+  <path d="M0 0H154C175 36 213 63 275 73C319 80 355 70 397 50C477 12 530 4 600 26C670 4 723 12 803 50C845 70 881 80 925 73C987 63 1025 36 1046 0H1200V30C1075 94 965 83 831 28C737 -11 668 -12 600 14C532 -12 463 -11 369 28C235 83 125 94 0 30Z" fill="#761a8d" opacity="0.86"/>
+  <path d="M0 58C129 113 240 100 371 49C463 13 531 7 600 32C669 7 737 13 829 49C960 100 1071 113 1200 58V80C1070 130 951 112 820 64C733 32 671 28 600 51C529 28 467 32 380 64C249 112 130 130 0 80Z" fill="#b32b9d" opacity="0.82"/>
+
+  <!-- Side curtains: broad silhouettes plus graphic folds -->
+  <path d="M0 0H235C216 121 208 243 203 363C194 552 176 710 151 842C130 955 91 1090 33 1200H0Z" fill="#64177f"/>
+  <path d="M0 0H86C79 171 76 351 70 528C64 739 45 1018 0 1138Z" fill="#9c2bad" opacity="0.92"/>
+  <path d="M92 0H151C145 194 145 391 143 572C141 787 115 1021 60 1200H24C74 1000 94 762 97 546C100 333 102 148 92 0Z" fill="#481260"/>
+  <path d="M163 0H235C216 155 210 314 205 465C197 671 173 846 137 985C118 1061 99 1138 67 1200H40C99 1050 128 904 148 758C173 574 180 367 177 198C176 116 171 48 163 0Z" fill="#82208f" opacity="0.84"/>
+  <path d="M205 0H258C232 178 228 336 222 499C214 711 188 876 157 1016C143 1082 128 1145 106 1200H72C126 1057 155 900 177 746C203 559 211 349 210 178C210 103 208 45 205 0Z" fill="#c22aa2" opacity="0.46"/>
+  <path d="M0 584C80 525 139 450 190 355L183 438C135 541 76 622 0 683Z" fill="#b52da4" opacity="0.62"/>
+
+  <path d="M1200 0H965C984 121 992 243 997 363C1006 552 1024 710 1049 842C1070 955 1109 1090 1167 1200H1200Z" fill="#64177f"/>
+  <path d="M1200 0H1114C1121 171 1124 351 1130 528C1136 739 1155 1018 1200 1138Z" fill="#9c2bad" opacity="0.92"/>
+  <path d="M1108 0H1049C1055 194 1055 391 1057 572C1059 787 1085 1021 1140 1200H1176C1126 1000 1106 762 1103 546C1100 333 1098 148 1108 0Z" fill="#481260"/>
+  <path d="M1037 0H965C984 155 990 314 995 465C1003 671 1027 846 1063 985C1082 1061 1101 1138 1133 1200H1160C1101 1050 1072 904 1052 758C1027 574 1020 367 1023 198C1024 116 1029 48 1037 0Z" fill="#82208f" opacity="0.84"/>
+  <path d="M995 0H942C968 178 972 336 978 499C986 711 1012 876 1043 1016C1057 1082 1072 1145 1094 1200H1128C1074 1057 1045 900 1023 746C997 559 989 349 990 178C990 103 992 45 995 0Z" fill="#c22aa2" opacity="0.46"/>
+  <path d="M1200 584C1120 525 1061 450 1010 355L1017 438C1065 541 1124 622 1200 683Z" fill="#b52da4" opacity="0.62"/>
+
+  <!-- Five stage spotlights, with the center kept intentionally subdued -->
+  <polygon points="236 171 126 930 422 930" fill="#ff9d62" opacity="0.28"/>
+  <polygon points="432 162 253 936 545 936" fill="#ff3f9a" opacity="0.29"/>
+  <polygon points="600 164 446 960 754 960" fill="#7654e8" opacity="0.27"/>
+  <polygon points="768 162 655 936 947 936" fill="#ff3f9a" opacity="0.29"/>
+  <polygon points="964 171 778 930 1074 930" fill="#ff9d62" opacity="0.28"/>
+
+  <!-- Subtle second facets add depth without filling the avatar area -->
+  <polygon points="236 171 174 910 259 910" fill="#ffd18b" opacity="0.13"/>
+  <polygon points="432 162 365 920 434 920" fill="#ffb2d8" opacity="0.13"/>
+  <polygon points="600 164 557 950 612 950" fill="#b9a4ff" opacity="0.12"/>
+  <polygon points="768 162 766 920 835 920" fill="#ffb2d8" opacity="0.13"/>
+  <polygon points="964 171 941 910 1026 910" fill="#ffd18b" opacity="0.13"/>
+
+  <!-- Light heads -->
+  <circle cx="236" cy="171" r="28" fill="#ffaf72" opacity="0.36"/>
+  <circle cx="236" cy="171" r="14" fill="#fff5d5"/>
+  <circle cx="432" cy="162" r="28" fill="#ff75bd" opacity="0.36"/>
+  <circle cx="432" cy="162" r="14" fill="#fff7f0"/>
+  <circle cx="600" cy="164" r="29" fill="#9e88ff" opacity="0.34"/>
+  <circle cx="600" cy="164" r="15" fill="#ffffff"/>
+  <circle cx="768" cy="162" r="28" fill="#ff75bd" opacity="0.36"/>
+  <circle cx="768" cy="162" r="14" fill="#fff7f0"/>
+  <circle cx="964" cy="171" r="28" fill="#ffaf72" opacity="0.36"/>
+  <circle cx="964" cy="171" r="14" fill="#fff5d5"/>
+
+  <!-- Confetti and small sparks, kept mostly around the side framing -->
+  <polygon points="91 242 106 257 91 272 76 257" fill="#ff58b4"/>
+  <path d="M153 348L160 363L153 378L146 363Z" fill="#ffd166"/>
+  <path d="M73 505L78 518L91 523L78 528L73 541L68 528L55 523L68 518Z" fill="#ffb04c"/>
+  <polygon points="152 685 168 701 152 717 136 701" fill="#b98cff"/>
+  <polygon points="87 932 101 946 87 960 73 946" fill="#ff8c5c"/>
+  <path d="M190 1030L196 1043L209 1049L196 1055L190 1068L184 1055L171 1049L184 1043Z" fill="#ffcf5a"/>
+  <polygon points="1109 242 1124 257 1109 272 1094 257" fill="#ff69c2"/>
+  <path d="M1047 348L1054 363L1047 378L1040 363Z" fill="#ff9966"/>
+  <path d="M1127 505L1132 518L1145 523L1132 528L1127 541L1122 528L1109 523L1122 518Z" fill="#ffd166"/>
+  <polygon points="1048 685 1064 701 1048 717 1032 701" fill="#a88bff"/>
+  <polygon points="1113 932 1127 946 1113 960 1099 946" fill="#ff6cae"/>
+  <path d="M1010 1030L1016 1043L1029 1049L1016 1055L1010 1068L1004 1055L991 1049L1004 1043Z" fill="#ffad5e"/>
+
+  <!-- Stage floor and central light pool -->
+  <path d="M0 1084C212 1058 988 1058 1200 1084V1200H0Z" fill="#241044"/>
+  <ellipse cx="600" cy="1132" rx="540" ry="86" fill="#3d1a72" opacity="0.96"/>
+  <ellipse cx="600" cy="1130" rx="408" ry="64" fill="#9f2d9a" opacity="0.78"/>
+  <ellipse cx="600" cy="1128" rx="282" ry="43" fill="#f04da9" opacity="0.76"/>
+  <ellipse cx="600" cy="1125" rx="146" ry="23" fill="#ffd08d" opacity="0.75"/>
+  <polygon points="600 1125 430 1200 502 1200" fill="#d93ca7" opacity="0.24"/>
+  <polygon points="600 1125 535 1200 573 1200" fill="#ffb27d" opacity="0.22"/>
+  <polygon points="600 1125 665 1200 627 1200" fill="#ffb27d" opacity="0.22"/>
+  <polygon points="600 1125 770 1200 698 1200" fill="#d93ca7" opacity="0.24"/>
+</svg>

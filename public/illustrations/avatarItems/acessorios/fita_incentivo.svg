@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Encouragement ribbon: a compact amber loop on the viewer-right shoulder. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <!-- Ribbon tails: two bands crossing in an X below the loop. -->
+    <path d="M806 480 L884 574 L858 594 L790 505 Z" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <path d="M884 480 L806 574 L832 594 L900 505 Z" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <!-- Loop at the top: two overlapping circles pinched at the center. -->
+    <circle cx="820" cy="462" r="36" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <circle cx="870" cy="462" r="36" fill="#F6A609" stroke="#A86A00" stroke-width="9" />
+    <circle cx="845" cy="462" r="14" fill="#A86A00" />
+  </g>
+</svg>

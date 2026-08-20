@@ -5,6 +5,29 @@ export const isReviewStatus = (value: any): value is ReviewStatus => {
   return reviewStatuses.includes(value);
 };
 
+export interface InstitutionRole {
+  institutionId: string;
+  role: "admin" | "staff";
+}
+
+// The token is already verified by hemocione-id; the app only needs to read
+// the claims, so a plain base64url decode of the payload is enough here.
+const decodeJwtPayload = <T>(token: string): T | null => {
+  try {
+    const payload = token.split(".")[1];
+    const base64 = payload.replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + c.charCodeAt(0).toString(16).padStart(2, "0"))
+        .join("")
+    );
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+};
+
 const getUserDonationsByStatus = (
   userDonations: Donation[] | undefined,
   status: ReviewStatus
@@ -412,6 +435,19 @@ export const useUserStore = defineStore("user", {
 
       return orderedDonationsByDateDesc[0];
     },
+    institutionRoles(state): InstitutionRole[] {
+      if (!state.token) return [];
+
+      const payload = decodeJwtPayload<{ institutionRoles?: InstitutionRole[] }>(
+        state.token
+      );
+      return payload?.institutionRoles || [];
+    },
+
+    hasInstitutionRole(): boolean {
+      return this.institutionRoles.length > 0;
+    },
+
     lastDonationBloodBankLocationId(state) {
       const donationsWithBloodBank = state.user?.donations.filter(
         (donation) => donation.bloodBanksLocationId

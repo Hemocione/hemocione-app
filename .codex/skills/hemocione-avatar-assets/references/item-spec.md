@@ -1,0 +1,58 @@
+# Hemocione avatar item specification
+
+## Shared canvas
+
+The avatar is composed in a 1200×1200 logical canvas. The Vue renderer places each layer with these percentages; the share generator uses the same order and geometry.
+
+| Layer | left | top | width | height | Asset contract |
+| --- | ---: | ---: | ---: | ---: | --- |
+| base | 28.83% | 6.25% | 42.33% | 56.75% | Preserve the base art viewBox. |
+| pernas | 35.33% | 52% | 29.33% | 32.17% | Preserve the legs art viewBox. |
+| corpo | 23.58% | 22.58% | 59.33% | 55.83% | Canonical viewBox `0 0 712 670`. |
+| olhos | 38.75% | 28.75% | 22.42% | 18.75% | Transparent face art; glasses sit above eyes. |
+| blood badge | 48% | 47% | 16% | 16% | Full badge art is scaled into this rect. |
+| acessórios | 0 | 0 | 100% | 100% | Canonical viewBox `0 0 1200 1200`. |
+
+For a 1200×1200 canvas, the body slot begins at roughly `(283, 271)` and is `712×670`. A coordinate in a body SVG maps to the shared canvas as:
+
+```text
+sharedX = 283 + bodyX
+sharedY = 271 + bodyY
+```
+
+This is why a body overlay at `y=180` covers the face: the body slot itself is already offset down by about 271px. Start torso clothing near the body silhouette’s translated torso, usually around body-local `y=290`, and verify against the default body. The canonical body art also contains an internal `translate(0,273)` for the silhouette; do not add that translation to the clothing overlay a second time.
+
+## Art rules
+
+- Keep all SVGs transparent unless the slot explicitly supplies a background.
+- Keep strokes rounded and consistent with the Hemárcio art: dark navy/burgundy outlines, bright red, warm gold, cream, and green accents.
+- Make the primary shape readable as a silhouette at 56px. Use contrast, not tiny labels, to communicate the item.
+- Keep headwear visual bounds around 32–68% of the 1200 canvas width; keep a chest-card accessory around 12–18% of the canvas width. Leave a visible breathing margin around both.
+- Put chest accessories to one side of the torso and below the eyes. Keep the blood badge visible unless the item is explicitly a replacement badge.
+- Do not use an SVG `<image href="...">` to borrow another layer. The browser may show it while the canvas/share renderer drops the nested resource.
+
+## Practical coordinate budgets
+
+These are authoring budgets for the current Hemárcio art, not arbitrary SVG padding:
+
+- torso overlays: body-local `x≈202..510`, `y≈274..519`; the garment must bridge the arm shoulders, follow the torso curve, and a diagonal sash may use `x≈210..515` but must be clipped to the torso;
+- crown: shared `x≈425..775`, `y≈135..350`;
+- hat: shared `x≈420..780`, `y≈145..345`;
+- event badge card: shared `x≈760..840`, `y≈600..725`; use a short connector into the right torso panel, keep it just outside the blood badge, and keep it away from the hand/forearm;
+- the blood badge occupies shared `x=576..768`, `y=564..756` and must remain readable.
+
+The budgets are intentionally expressed in the coordinates that the product actually renders. They prevent a future item from consuming the whole 1200×1200 accessory canvas or from placing body-local geometry in shared-canvas coordinates.
+
+## QA matrix
+
+For each changed item, test:
+
+1. The item by itself with default body, eyes, legs, and blood badge; for chest cards, explicitly inspect the card and medal together for overlap.
+2. The item with veteran glasses and one head accessory.
+3. The item in the editor’s 220px stage.
+4. The item card at 56px and the home preview at 66px.
+5. A reload after selecting the item, so cached and persisted asset refs are exercised.
+
+Record the browser URL, selected item, screenshot, and any console/page error. A passing asset has no broken image, no unexpected opaque rectangle, no face/feet collision, and no visible layer-order workaround.
+
+The screenshot from the deployed/preview browser session is the acceptance artifact. Do not accept a local canvas or isolated SVG when the editor, item card, or home preview has not been visually inspected.

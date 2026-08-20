@@ -41,4 +41,8 @@ defineExpose({ unmaskedValue, maskedValue });
 .masked-input:focus {
   border: 1px solid var(--hemo-color-primary);
 }
+
+.masked-input::placeholder {
+  color: var(--black-40);
+}
 </style>

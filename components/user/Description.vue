@@ -1,12 +1,45 @@
 <template>
   <section class="header">
     <div class="wrapper">
-      <img class="user-image" :src="userImgSrc" alt="User Profile Image" />
+      <AvatarWidget />
       <div class="user-profile">
         <h4>{{ userData?.name }}</h4>
         <span>{{ description }}</span>
       </div>
+      <NuxtLink
+        v-if="totalAchievementsCount > 0"
+        to="/achievements"
+        class="achievement-chip"
+      >
+        🏅 {{ unlockedAchievementsCount }}/{{ totalAchievementsCount }}
+      </NuxtLink>
     </div>
+    <button
+      v-if="unseenItems.length > 0"
+      type="button"
+      class="avatar-unseen-cta"
+      @click="avatarStore.openEditor(unseenItems[0]?.slot)"
+    >
+      <span class="avatar-unseen-cta__icon" aria-hidden="true">🎉</span>
+      <span>
+        Você desbloqueou {{ unseenItems.length }}
+        {{ unseenItems.length === 1 ? "item novo" : "itens novos" }}! Toque para ver ✨
+      </span>
+    </button>
+    <NuxtLink
+      v-if="showProfileNudge"
+      to="/account"
+      class="profile-nudge-cta"
+    >
+      <span class="profile-nudge-cta__icon" aria-hidden="true">🏆</span>
+      <span class="cta-text">
+        Complete seu cadastro{{
+          profileAchievement?.rewardItem
+            ? ` e ganhe a recompensa: ${profileAchievement.rewardItem.name}`
+            : " para desbloquear recompensas"
+        }}
+      </span>
+    </NuxtLink>
     <div class="status">
       <div
         :class="{
@@ -36,8 +69,26 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
-  height: 4rem;
+  height: 4.5rem;
   gap: 1rem;
+}
+
+.achievement-chip {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.5rem;
+  border: 2px solid #d99a00;
+  border-radius: 999px;
+  background: #ffc635;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  color: #6b4900;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
 }
 
 .status {
@@ -46,6 +97,79 @@
   gap: 6px;
   width: 100%;
   font-size: 0.75rem;
+}
+
+.avatar-unseen-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 0;
+  border-radius: 1rem;
+  background: var(--hemo-color-primary);
+  box-shadow: 0 3px 0 var(--hemo-color-primary-dark);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: left;
+  animation: avatar-cta-breathe 2.8s ease-in-out infinite;
+}
+
+.avatar-unseen-cta:hover {
+  background: var(--hemo-color-primary-dark);
+}
+
+.avatar-unseen-cta:focus-visible {
+  outline: 3px solid var(--hemo-color-primary-light);
+  outline-offset: 3px;
+}
+
+.avatar-unseen-cta__icon {
+  flex: 0 0 auto;
+  font-size: 1.35rem;
+}
+
+.avatar-unseen-cta > span:last-child,
+.profile-nudge-cta > .cta-text {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.profile-nudge-cta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 0.9rem;
+  border: 2px solid var(--hemo-color-warn);
+  border-radius: 1rem;
+  background: var(--yellow-light);
+  color: var(--black-100);
+  cursor: pointer;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.25;
+  text-align: left;
+  text-decoration: none;
+}
+
+.profile-nudge-cta:hover {
+  background: #f3dfb8;
+}
+
+.profile-nudge-cta:focus-visible {
+  outline: 3px solid var(--hemo-color-warn);
+  outline-offset: 3px;
+}
+
+.profile-nudge-cta__icon {
+  flex: 0 0 auto;
+  font-size: 1.35rem;
 }
 .ball {
   height: 0.6rem;
@@ -59,15 +183,6 @@
 
 .greenBall {
   background-color: var(--hemo-color-success);
-}
-
-.user-image {
-  height: 100%;
-  aspect-ratio: 1/1;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid var(--hemo-color-primary);
-  background-color: var(--light-purple);
 }
 
 .user-profile {
@@ -100,27 +215,53 @@
     width: 80%;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar-unseen-cta {
+    animation: none;
+  }
+}
+
+@keyframes avatar-cta-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.015);
+  }
+}
 </style>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
+import { useAvatarStore } from "~/stores/avatar";
 import { useUserStore } from "~/stores/user";
 const userStore = useUserStore();
+const avatarStore = useAvatarStore();
 const userData = userStore.userWithMetrics;
+const { unseenItems, achievements } = storeToRefs(avatarStore);
 
 const ableToDonate = computed(
   () => userStore.userDonationStatus.status === "able-to-donate"
 );
 
-const bloodType = computed(() => userData?.bloodType ?? "-");
-
-const userImgSrc = computed(
+const profileAchievement = computed(() =>
+  achievements.value.find((a) => a.key === "cadastro_completo")
+);
+const showProfileNudge = computed(
   () =>
-    `/illustrations/bloodCharacters/${
-      bloodType.value === "-" ? "O-" : bloodType.value
-    }.svg`
+    profileAchievement.value?.unlocked === false &&
+    unseenItems.value.length === 0
 );
 
 const description = computed(() =>
   [userStore.userAge, userStore.userReadableGender].filter(Boolean).join(", ")
 );
+
+const unlockedAchievementsCount = computed(
+  () => achievements.value.filter((a) => a.unlocked).length
+);
+const totalAchievementsCount = computed(() => achievements.value.length);
 </script>
