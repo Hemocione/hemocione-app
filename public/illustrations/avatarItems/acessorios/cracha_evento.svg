@@ -2,19 +2,17 @@
 <!-- Event badge: a lanyard credential hanging below the blood-type medal. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
   <g stroke-linecap="round" stroke-linejoin="round">
-    <!-- Two narrow lanyard straps leave the neck and converge on the card's top corners. The medal (center 672,645 r=73, plus a 12px stroke) reaches up to y~572 and covers x 599-745 at its widest - any path aimed at the card from directly above clips its face. The left strap clears by going straight down at x<=600. The right strap detours out past x=850, past the medal's ribbon tail (bottom y=756) before turning back to the card, so no part of it crosses the medal's circle or text. -->
-    <path d="M600 530 Q555 660 550 774" fill="none" stroke="#152B45" stroke-width="12" />
-    <path d="M600 530 Q555 660 550 774" fill="none" stroke="#D71920" stroke-width="5" />
-    <path d="M600 530 C760 555 850 600 850 680 C850 730 760 765 650 774" fill="none" stroke="#152B45" stroke-width="12" />
-    <path d="M600 530 C760 555 850 600 850 680 C850 730 760 765 650 774" fill="none" stroke="#D71920" stroke-width="5" />
+    <!-- v2: short lanyard resting beside the medal on its left shoulder, not looping under it. Fable's review of v1 (straps arcing around the medal to a card at y 774) found the cord anatomically illogical - a real lanyard drops straight from the neck, it doesn't detour out and back - and the card sat low enough to read as belt height, not chest. Root fix: keep the whole necklace short and to one side, the same pattern that already worked for selo_liberado/fita_incentivo on the shoulders - no need to clear the medal by looping when it's simply not in the way. -->
+    <path d="M585 545 Q550 575 500 600" fill="none" stroke="#152B45" stroke-width="12" />
+    <path d="M585 545 Q550 575 500 600" fill="none" stroke="#D71920" stroke-width="5" />
+    <path d="M615 548 Q595 578 560 600" fill="none" stroke="#152B45" stroke-width="12" />
+    <path d="M615 548 Q595 578 560 600" fill="none" stroke="#D71920" stroke-width="5" />
 
-    <!-- The horizontal credential sits below the medal, with a clear red header. -->
-    <rect x="526" y="774" width="148" height="82" rx="12" fill="#FFF9F2" stroke="#152B45" stroke-width="8" />
-    <path d="M530 778 H670 V800 H530 Z" fill="#C62828" />
-    <path d="M530 802 H670" stroke="#F9A825" stroke-width="6" />
-    <circle cx="600" cy="786" r="5" fill="#FFF9F2" stroke="#152B45" stroke-width="3" />
-    <circle cx="600" cy="824" r="16" fill="#FFF9F2" stroke="#152B45" stroke-width="4" />
-    <path d="M600 831 C595 825 588 827 588 833 C588 840 600 846 600 846 C600 846 612 840 612 833 C612 827 605 825 600 831 Z" fill="#C62828" />
-    <path d="M570 846 H630" stroke="#152B45" stroke-width="6" />
+    <rect x="455" y="600" width="140" height="78" rx="12" fill="#FFF9F2" stroke="#152B45" stroke-width="8" />
+    <path d="M459 604 H591 V626 H459 Z" fill="#C62828" />
+    <path d="M459 628 H591" stroke="#F9A825" stroke-width="6" />
+    <circle cx="525" cy="654" r="16" fill="#FFF9F2" stroke="#152B45" stroke-width="4" />
+    <path d="M525 661 C520 655 513 657 513 663 C513 670 525 676 525 676 C525 676 537 670 537 663 C537 657 530 655 525 661 Z" fill="#C62828" />
+    <path d="M495 668 H555" stroke="#152B45" stroke-width="6" />
   </g>
 </svg>
