@@ -123,3 +123,24 @@ test("concurrent avatar callers wait for the same request before pending equip",
   assert.equal(store.isEditorOpen, true);
   assert.equal(store.equipped.corpoItemId, 9);
 });
+
+test("partial save response keeps effective defaults for nullable required slots", async () => {
+  const store = setup(async () => ({
+    olhosItemId: null,
+    corpoItemId: null,
+    pernasItemId: null,
+    acessoriosItemId: null,
+    fundoItemId: null,
+    showBloodTypeBadge: false,
+  }));
+  store.items = [
+    { id: 1, slot: "OLHOS", isDefault: true },
+    { id: 2, slot: "CORPO", isDefault: true },
+    { id: 3, slot: "PERNAS", isDefault: true },
+  ];
+  await store.toggleBloodTypeBadge();
+  assert.equal(store.equipped.olhosItemId, 1);
+  assert.equal(store.equipped.corpoItemId, 2);
+  assert.equal(store.equipped.pernasItemId, 3);
+  assert.equal(store.showBloodTypeBadge, false);
+});

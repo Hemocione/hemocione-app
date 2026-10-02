@@ -147,7 +147,16 @@ export const useAvatarStore = defineStore("avatar", {
             body: patch,
           },
         );
-        this.equipped = data;
+        const equipped = { ...this.equipped, ...data };
+        for (const slot of REQUIRED_AVATAR_SLOTS) {
+          const field = SLOT_TO_FIELD[slot];
+          equipped[field] ??=
+            this.items.find((item) => item.slot === slot && item.isDefault)
+              ?.id ??
+            this.equipped?.[field] ??
+            null;
+        }
+        this.equipped = equipped;
         if (patch.showBloodTypeBadge !== undefined) {
           this.showBloodTypeBadge = patch.showBloodTypeBadge;
         }
