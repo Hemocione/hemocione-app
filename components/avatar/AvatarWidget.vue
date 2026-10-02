@@ -1,6 +1,7 @@
 <template>
   <button
     type="button"
+    ref="widgetButtonRef"
     class="avatar-widget"
     aria-haspopup="dialog"
     aria-label="Editar meu Hemárcio"
@@ -17,6 +18,12 @@
         :blood-type-badge-asset-ref="visibleBloodTypeBadgeAssetRef"
       />
     </span>
+    <span
+      v-if="avatarStore.unseenItems.length"
+      class="new-count"
+      aria-label="Itens novos"
+      >{{ avatarStore.unseenItems.length }}</span
+    >
   </button>
 
   <Teleport to="body">
@@ -26,150 +33,234 @@
         class="avatar-drawer-overlay"
         @click.self="avatarStore.closeEditor()"
       >
-        <div class="avatar-drawer">
+        <div
+          ref="drawerRef"
+          class="avatar-drawer"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="avatar-editor-title"
+          @keydown="handleDialogKeydown"
+        >
           <div
             class="dialog-content"
             :style="{ paddingTop: `${topSafeAreaInset?.value ?? 0}px` }"
           >
-      <div class="editor-header">
-        <div>
-          <p class="eyebrow">PERSONALIZE SEU</p>
-          <h2>Hemárcio</h2>
-        </div>
-        <div class="header-actions">
-          <button
-            type="button"
-            class="close-btn"
-            aria-label="Fechar editor do Hemárcio"
-            @click="avatarStore.closeEditor()"
-          >
-            ✕
-          </button>
-        </div>
-      </div>
-
-      <div class="stage-wrap" aria-hidden="true">
-        <div class="stage-backdrop" :style="stageBackdropStyle"></div>
-        <HemarcioCharacter
-          ref="stageCharacterRef"
-          size="large"
-          :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
-          :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
-          :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
-          :acessorios-asset-ref="avatarStore.equippedAssetRef('ACESSORIOS')"
-          :fundo-asset-ref="null"
-          :blood-type-badge-asset-ref="visibleBloodTypeBadgeAssetRef"
-        />
-        <img
-          v-if="shareOnlyFundoAssetRef"
-          ref="shareOnlyFundoRef"
-          class="share-only-fundo"
-          :src="avatarAssetUrl(shareOnlyFundoAssetRef)"
-          alt=""
-        />
-      </div>
-
-      <div v-if="canShare" class="share-actions">
-        <button
-          type="button"
-          class="share-btn"
-          :disabled="!shareableImage || !canShare"
-          @click="shareHemarcio"
-        >
-          <span aria-hidden="true">📤</span>
-          Compartilhar
-        </button>
-      </div>
-
-      <div class="customization-sheet">
-        <div class="tabs" role="tablist" aria-label="Categorias do avatar">
-          <button
-            v-for="tab in tabs"
-            :key="tab"
-            type="button"
-            class="tab"
-            :class="{ active: activeTab === tab }"
-            role="tab"
-            :aria-selected="activeTab === tab"
-            :aria-pressed="activeTab === tab"
-            :aria-controls="tabPanelId(tab)"
-            @click="activeTab = tab"
-          >
-            <span aria-hidden="true">{{ tabLabels[tab].emoji }}</span>
-            {{ tabLabels[tab].label }}
-          </button>
-        </div>
-
-        <div
-          v-if="isSlotTab(activeTab)"
-          id="avatar-items-grid"
-          class="items-grid"
-          role="tabpanel"
-          aria-label="Itens do avatar"
-        >
-          <button
-            v-for="item in activeItems"
-            :key="item.key"
-            type="button"
-            class="item-card"
-            :class="{
-              owned: item.owned,
-              locked: !item.owned,
-              equipped: isOptionEquipped(item),
-            }"
-            :disabled="item.id !== null && !item.owned"
-            :aria-label="item.name"
-            :aria-pressed="isOptionEquipped(item)"
-            @click="handleItemClick(item)"
-          >
-            <span v-if="item.id !== null && !item.owned" class="lock" aria-hidden="true">🔒</span>
-            <span v-if="item.id === null" class="empty-item-icon" aria-hidden="true">∅</span>
-            <img
-              v-else-if="item.slot === 'FUNDO'"
-              :src="avatarAssetUrl(item.assetRef)"
-              alt=""
-              aria-hidden="true"
-            />
-            <AvatarItemPreview v-else :slot="item.slot" :asset-ref="item.assetRef" aria-hidden="true" />
-            <span>{{ item.name }}</span>
-            <span v-if="item.id !== null && !item.owned" class="locked-hint">Bloqueado</span>
-          </button>
-        </div>
-
-        <div
-          v-else-if="activeTab === 'SELO'"
-          id="avatar-badge-panel"
-          class="badge-panel"
-          role="tabpanel"
-          aria-label="Selo de tipo sanguíneo"
-        >
-          <div class="badge-card">
-            <img
-              v-if="avatarStore.bloodTypeBadge"
-              :src="avatarAssetUrl(avatarStore.bloodTypeBadge.assetRef)"
-              :alt="`Selo ${avatarStore.bloodTypeBadge.bloodType}`"
-              class="badge-card__img"
-            />
-            <div class="badge-card__info">
-              <h3>Selo {{ avatarStore.bloodTypeBadge?.bloodType }}</h3>
-              <p>
-                Você ganhou esse selo automaticamente por ter o tipo
-                sanguíneo cadastrado. Escolha se ele aparece no seu Hemárcio.
-              </p>
+            <div class="editor-header">
+              <div>
+                <p class="eyebrow">PERSONALIZE SEU</p>
+                <h2 id="avatar-editor-title">Hemárcio</h2>
+              </div>
+              <div class="header-actions">
+                <button
+                  type="button"
+                  class="close-btn"
+                  aria-label="Fechar editor do Hemárcio"
+                  @click="avatarStore.closeEditor()"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
-            <label class="badge-card__switch">
-              <input
-                type="checkbox"
-                :checked="avatarStore.showBloodTypeBadge"
-                @change="avatarStore.toggleBloodTypeBadge()"
-              />
-              <span>{{ avatarStore.showBloodTypeBadge ? "Exibindo" : "Oculto" }}</span>
-            </label>
-          </div>
-        </div>
 
-      </div>
-    </div>
+            <div class="stage-wrap" aria-hidden="true">
+              <div class="stage-backdrop" :style="stageBackdropStyle"></div>
+              <HemarcioCharacter
+                ref="stageCharacterRef"
+                size="large"
+                :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
+                :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
+                :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
+                :acessorios-asset-ref="
+                  avatarStore.equippedAssetRef('ACESSORIOS')
+                "
+                :fundo-asset-ref="null"
+                :blood-type-badge-asset-ref="visibleBloodTypeBadgeAssetRef"
+              />
+              <img
+                v-if="shareOnlyFundoAssetRef"
+                ref="shareOnlyFundoRef"
+                class="share-only-fundo"
+                :src="avatarAssetUrl(shareOnlyFundoAssetRef)"
+                alt=""
+              />
+            </div>
+
+            <div class="share-actions">
+              <button
+                type="button"
+                class="share-btn"
+                :disabled="
+                  !shareableImage ||
+                  avatarStore.isSaving ||
+                  !avatarStore.avatarLoaded
+                "
+                @click="shareHemarcio"
+              >
+                <span aria-hidden="true">📤</span>
+                {{ canShare ? "Compartilhar" : "Baixar imagem" }}
+              </button>
+            </div>
+
+            <div class="customization-sheet">
+              <p v-if="avatarStore.isLoadingAvatar" role="status">
+                Carregando seu Hemárcio…
+              </p>
+              <div
+                v-else-if="avatarStore.avatarError"
+                role="alert"
+                class="editor-message"
+              >
+                <p>{{ avatarStore.avatarError }}</p>
+                <button type="button" @click="avatarStore.fetchAvatar()">
+                  Tentar novamente
+                </button>
+              </div>
+              <p v-if="avatarStore.isSaving" role="status">Salvando…</p>
+              <p
+                v-if="avatarStore.saveError || shareError"
+                role="alert"
+                class="editor-message"
+              >
+                {{ avatarStore.saveError || shareError }}
+              </p>
+              <div
+                class="tabs"
+                role="tablist"
+                aria-label="Categorias do avatar"
+              >
+                <button
+                  v-for="tab in tabs"
+                  :key="tab"
+                  type="button"
+                  class="tab"
+                  :class="{ active: activeTab === tab }"
+                  role="tab"
+                  :aria-selected="activeTab === tab"
+                  :aria-pressed="activeTab === tab"
+                  :aria-controls="tabPanelId(tab)"
+                  @click="activeTab = tab"
+                >
+                  <span aria-hidden="true">{{ tabLabels[tab].emoji }}</span>
+                  {{ tabLabels[tab].label }}
+                </button>
+              </div>
+
+              <div
+                v-if="isSlotTab(activeTab)"
+                id="avatar-items-grid"
+                class="items-grid"
+                role="tabpanel"
+                aria-label="Itens do avatar"
+              >
+                <button
+                  v-for="item in activeItems"
+                  :key="item.key"
+                  type="button"
+                  class="item-card"
+                  :class="{
+                    owned: item.owned,
+                    locked: !item.owned,
+                    equipped: isOptionEquipped(item),
+                  }"
+                  :disabled="
+                    avatarStore.isSaving ||
+                    !avatarStore.avatarLoaded ||
+                    (item.id !== null && !item.owned)
+                  "
+                  :aria-label="item.name"
+                  :aria-pressed="isOptionEquipped(item)"
+                  @click="handleItemClick(item)"
+                >
+                  <span
+                    v-if="item.id !== null && !item.owned"
+                    class="lock"
+                    aria-hidden="true"
+                    >🔒</span
+                  >
+                  <span
+                    v-if="item.id === null"
+                    class="empty-item-icon"
+                    aria-hidden="true"
+                    >∅</span
+                  >
+                  <img
+                    v-else-if="item.slot === 'FUNDO'"
+                    :src="avatarAssetUrl(item.assetRef)"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <AvatarItemPreview
+                    v-else
+                    :slot="item.slot"
+                    :asset-ref="item.assetRef"
+                    aria-hidden="true"
+                  />
+                  <span>{{ item.name }}</span>
+                  <span
+                    v-if="
+                      item.id !== null &&
+                      item.owned &&
+                      !item.isDefault &&
+                      item.seenAt === null
+                    "
+                    class="new-item"
+                    >Novo</span
+                  >
+                  <span
+                    v-if="item.id !== null && !item.owned"
+                    class="locked-hint"
+                    >Bloqueado</span
+                  >
+                </button>
+                <p
+                  v-if="
+                    !avatarStore.isLoadingAvatar &&
+                    !avatarStore.avatarError &&
+                    activeItems.length === 0
+                  "
+                  class="empty-state"
+                >
+                  Nenhum item nesta categoria.
+                </p>
+              </div>
+
+              <div
+                v-else-if="activeTab === 'SELO'"
+                id="avatar-badge-panel"
+                class="badge-panel"
+                role="tabpanel"
+                aria-label="Selo de tipo sanguíneo"
+              >
+                <div class="badge-card">
+                  <img
+                    v-if="avatarStore.bloodTypeBadge"
+                    :src="avatarAssetUrl(avatarStore.bloodTypeBadge.assetRef)"
+                    :alt="`Selo ${avatarStore.bloodTypeBadge.bloodType}`"
+                    class="badge-card__img"
+                  />
+                  <div class="badge-card__info">
+                    <h3>Selo {{ avatarStore.bloodTypeBadge?.bloodType }}</h3>
+                    <p>
+                      Você ganhou esse selo automaticamente por ter o tipo
+                      sanguíneo cadastrado. Escolha se ele aparece no seu
+                      Hemárcio.
+                    </p>
+                  </div>
+                  <label class="badge-card__switch">
+                    <input
+                      type="checkbox"
+                      :checked="avatarStore.showBloodTypeBadge"
+                      :disabled="avatarStore.isSaving"
+                      @change="handleBadgeChange"
+                    />
+                    <span>{{
+                      avatarStore.showBloodTypeBadge ? "Exibindo" : "Oculto"
+                    }}</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </Transition>
@@ -179,24 +270,56 @@
 <script setup lang="ts">
 import { createHemocioneSdk } from "@hemocione/sdk";
 import { storeToRefs } from "pinia";
-import { onMounted, ref, shallowRef, watch, computed } from "vue";
-import { useAvatarStore, type AvatarItem, type AvatarSlot, type AvatarTab } from "~/stores/avatar";
+import {
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+  ref,
+  shallowRef,
+  watch,
+  computed,
+} from "vue";
+import {
+  useAvatarStore,
+  type AvatarItem,
+  type AvatarSlot,
+  type AvatarTab,
+} from "~/stores/avatar";
 import HemarcioCharacter from "~/components/avatar/HemarcioCharacter.vue";
 import AvatarItemPreview from "~/components/avatar/AvatarItemPreview.vue";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
-import { AVATAR_LAYER_CLASS, AVATAR_LAYER_ORDER, AVATAR_LAYER_RECTS } from "~/utils/avatarLayerLayout";
+import {
+  AVATAR_LAYER_CLASS,
+  AVATAR_LAYER_ORDER,
+  AVATAR_LAYER_RECTS,
+} from "~/utils/avatarLayerLayout";
 
 const avatarStore = useAvatarStore();
+const widgetButtonRef = ref<HTMLButtonElement | null>(null);
+const drawerRef = ref<HTMLElement | null>(null);
+const shareError = ref("");
+const viewedItemIds = new Set<number>();
+let previousOverflow = "";
 const { isEditorOpen, activeTab } = storeToRefs(avatarStore);
 const topSafeAreaInset = shallowRef<{ value: number } | null>(null);
 const shareableImage = ref<File | null>(null);
 const canShare =
   typeof navigator !== "undefined" && typeof navigator.share === "function";
-const stageCharacterRef = ref<InstanceType<typeof HemarcioCharacter> | null>(null);
+const stageCharacterRef = ref<InstanceType<typeof HemarcioCharacter> | null>(
+  null,
+);
 const shareOnlyFundoRef = ref<HTMLImageElement | null>(null);
-const shareOnlyFundoAssetRef = computed(() => avatarStore.equippedAssetRef("FUNDO"));
+const shareOnlyFundoAssetRef = computed(() =>
+  avatarStore.equippedAssetRef("FUNDO"),
+);
 
-const slotTabs: AvatarSlot[] = ["OLHOS", "CORPO", "PERNAS", "ACESSORIOS", "FUNDO"];
+const slotTabs: AvatarSlot[] = [
+  "OLHOS",
+  "CORPO",
+  "PERNAS",
+  "ACESSORIOS",
+  "FUNDO",
+];
 const optionalSlots: AvatarSlot[] = ["ACESSORIOS", "FUNDO"];
 
 type EmptyAvatarOption = {
@@ -207,6 +330,7 @@ type EmptyAvatarOption = {
   assetRef: "";
   owned: true;
   seenAt: null;
+  isDefault: true;
 };
 
 type AvatarOption = AvatarItem | EmptyAvatarOption;
@@ -233,7 +357,9 @@ const tabPanelId = (tab: AvatarTab) => {
 };
 
 const visibleBloodTypeBadgeAssetRef = computed(() =>
-  avatarStore.showBloodTypeBadge ? avatarStore.bloodTypeBadge?.assetRef ?? null : null
+  avatarStore.showBloodTypeBadge
+    ? (avatarStore.bloodTypeBadge?.assetRef ?? null)
+    : null,
 );
 
 const activeItems = computed<AvatarOption[]>(() => {
@@ -250,13 +376,16 @@ const activeItems = computed<AvatarOption[]>(() => {
       assetRef: "",
       owned: true,
       seenAt: null,
+      isDefault: true,
     },
     ...items,
   ];
 });
 
 const isOptionEquipped = (item: AvatarOption) =>
-  item.id === null ? avatarStore.isSlotEmpty(item.slot) : avatarStore.isEquipped(item);
+  item.id === null
+    ? avatarStore.isSlotEmpty(item.slot)
+    : avatarStore.isEquipped(item);
 
 const stageBackdropStyle = computed(() => {
   const assetRef = avatarStore.equippedAssetRef("FUNDO");
@@ -267,18 +396,81 @@ const stageBackdropStyle = computed(() => {
     : {};
 });
 
-const handlePopState = (_event: Event) => {
+const handlePopState = () => {
   if (isEditorOpen.value) avatarStore.closeEditor();
 };
 
-watch(isEditorOpen, (newValue) => {
-  if (newValue) {
-    window.addEventListener("popstate", handlePopState);
-    window.history.pushState({ avatarDialog: "open" }, "");
-  } else {
-    window.removeEventListener("popstate", handlePopState);
+const handleDialogKeydown = (event: KeyboardEvent) => {
+  if (event.key === "Escape") {
+    event.preventDefault();
+    avatarStore.closeEditor();
+  }
+  if (event.key !== "Tab") return;
+  const buttons = drawerRef.value?.querySelectorAll<HTMLElement>(
+    'button:not(:disabled), input:not(:disabled), [tabindex="0"]',
+  );
+  if (!buttons?.length) return;
+  const first = buttons[0];
+  const last = buttons[buttons.length - 1];
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault();
+    first.focus();
+  }
+};
+
+const acknowledgeViewedItems = () => {
+  const ids = [...viewedItemIds];
+  viewedItemIds.clear();
+  if (ids.length) void avatarStore.markItemsSeen(ids).catch(() => {});
+};
+
+watch([isEditorOpen, activeTab, () => avatarStore.items], () => {
+  if (!isEditorOpen.value || !isSlotTab(activeTab.value)) return;
+  for (const item of avatarStore.itemsBySlot[activeTab.value]) {
+    if (item.owned) viewedItemIds.add(item.id);
   }
 });
+
+watch(isEditorOpen, async (open) => {
+  if (open) {
+    previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    document.getElementById("__nuxt")?.setAttribute("inert", "");
+    window.addEventListener("popstate", handlePopState);
+    window.history.pushState(
+      { ...window.history.state, avatarDialog: "open" },
+      "",
+    );
+    await nextTick();
+    drawerRef.value?.querySelector<HTMLButtonElement>(".close-btn")?.focus();
+  } else {
+    window.removeEventListener("popstate", handlePopState);
+    if (window.history.state?.avatarDialog === "open") window.history.back();
+    document.body.style.overflow = previousOverflow;
+    document.getElementById("__nuxt")?.removeAttribute("inert");
+    widgetButtonRef.value?.focus();
+    acknowledgeViewedItems();
+  }
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("popstate", handlePopState);
+  if (isEditorOpen.value) {
+    document.body.style.overflow = previousOverflow;
+    document.getElementById("__nuxt")?.removeAttribute("inert");
+    avatarStore.closeEditor();
+    acknowledgeViewedItems();
+  }
+});
+
+const handleBadgeChange = async (event: Event) => {
+  const input = event.target as HTMLInputElement;
+  await avatarStore.toggleBloodTypeBadge();
+  input.checked = avatarStore.showBloodTypeBadge;
+};
 
 const AVATAR_SHARE_CANVAS_SIZE = 440;
 
@@ -291,12 +483,17 @@ const regenerateShareableImage = async () => {
   const stageEl = stageCharacterRef.value?.$el as HTMLElement | undefined;
   if (!stageEl) return;
 
-  const layerImages: Array<{ key: keyof typeof AVATAR_LAYER_RECTS; el: HTMLImageElement }> = [];
+  const layerImages: Array<{
+    key: keyof typeof AVATAR_LAYER_RECTS;
+    el: HTMLImageElement;
+  }> = [];
   for (const key of AVATAR_LAYER_ORDER) {
     const el =
       key === "fundo"
         ? shareOnlyFundoRef.value
-        : stageEl.querySelector<HTMLImageElement>(`img.layer.${AVATAR_LAYER_CLASS[key]}`);
+        : stageEl.querySelector<HTMLImageElement>(
+            `img.layer.${AVATAR_LAYER_CLASS[key]}`,
+          );
     if (el) layerImages.push({ key, el });
   }
 
@@ -315,12 +512,22 @@ const regenerateShareableImage = async () => {
   for (const { key, el } of layerImages) {
     if (!el.complete || el.naturalWidth === 0) continue;
     const rect = AVATAR_LAYER_RECTS[key];
+    const x = (canvas.width * rect.left) / 100;
+    const y = (canvas.height * rect.top) / 100;
+    const width = (canvas.width * rect.width) / 100;
+    const height = (canvas.height * rect.height) / 100;
+    const scale =
+      key === "fundo"
+        ? Math.max(width / el.naturalWidth, height / el.naturalHeight)
+        : Math.min(width / el.naturalWidth, height / el.naturalHeight);
+    const drawWidth = el.naturalWidth * scale;
+    const drawHeight = el.naturalHeight * scale;
     context.drawImage(
       el,
-      (canvas.width * rect.left) / 100,
-      (canvas.height * rect.top) / 100,
-      (canvas.width * rect.width) / 100,
-      (canvas.height * rect.height) / 100
+      x + (width - drawWidth) / 2,
+      y + (height - drawHeight) / 2,
+      drawWidth,
+      drawHeight,
     );
   }
 
@@ -340,19 +547,33 @@ const refreshShareableImage = () => {
   });
 };
 
-const shareHemarcio = () => {
-  if (!canShare || !shareableImage.value) return;
-
-  const sdk = createHemocioneSdk();
-  sdk
-    .share({
-      files: [shareableImage.value],
-      title: "Meu Hemárcio",
-      text: "Olha meu Hemárcio no app da Hemocione! 🩸",
-    })
-    .catch(() => {
-      // Cancelar a folha de compartilhamento é um fluxo normal.
-    });
+const shareHemarcio = async () => {
+  const file = shareableImage.value;
+  if (!file) return;
+  shareError.value = "";
+  try {
+    if (
+      canShare &&
+      (!navigator.canShare || navigator.canShare({ files: [file] }))
+    ) {
+      await createHemocioneSdk().share({
+        files: [file],
+        title: "Meu Hemárcio",
+        text: "Olha meu Hemárcio no app da Hemocione! 🩸",
+      });
+    } else {
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "hemarcio.png";
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+  } catch (error) {
+    if (!(error instanceof Error && error.name === "AbortError")) {
+      shareError.value = "Não foi possível compartilhar. Tente novamente.";
+    }
+  }
 };
 
 const handleItemClick = (item: AvatarOption) => {
@@ -369,16 +590,18 @@ const handleItemClick = (item: AvatarOption) => {
 };
 
 watch(
-  () =>
-    (["OLHOS", "CORPO", "PERNAS", "ACESSORIOS", "FUNDO"] as const).map((slot) =>
-      avatarStore.equippedAssetRef(slot)
-    ),
-  refreshShareableImage
+  () => [
+    isEditorOpen.value,
+    visibleBloodTypeBadgeAssetRef.value,
+    ...slotTabs.map((slot) => avatarStore.equippedAssetRef(slot)),
+  ],
+  refreshShareableImage,
+  { flush: "post" },
 );
 
 onMounted(async () => {
   await avatarStore.fetchAvatar();
-  void avatarStore.resolvePendingEquip();
+  if (avatarStore.avatarLoaded) void avatarStore.resolvePendingEquip();
   void avatarStore.fetchAchievements();
   void useTopSafeAreaInset().then((inset) => {
     topSafeAreaInset.value = inset;
@@ -557,6 +780,28 @@ onMounted(async () => {
   outline-offset: 2px;
 }
 
+.new-count,
+.new-item {
+  border-radius: 999px;
+  padding: 0.15rem 0.4rem;
+  color: #fff;
+  background: var(--hemo-color-primary);
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+.new-count {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.editor-message {
+  color: #a00808;
+  font-size: 0.85rem;
+}
+.empty-state {
+  grid-column: 1 / -1;
+}
+
 .stage-wrap {
   position: relative;
   display: flex;
@@ -564,7 +809,8 @@ onMounted(async () => {
   align-items: flex-end;
   justify-content: center;
   width: min(100%, 420px);
-  min-height: 340px;
+  min-height: 240px;
+  height: min(340px, 38dvh);
   margin: 0 auto 0.6rem;
   overflow: hidden;
   border-radius: 1.5rem;
@@ -614,7 +860,9 @@ onMounted(async () => {
   font: inherit;
   font-size: 0.78rem;
   font-weight: 800;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
 }
 
 .share-btn:not(:disabled):hover {
@@ -772,7 +1020,9 @@ onMounted(async () => {
   font-weight: 700;
   line-height: 1.2;
   text-align: center;
-  transition: transform 160ms ease, border-color 160ms ease,
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
     box-shadow 160ms ease;
 }
 
@@ -854,6 +1104,18 @@ onMounted(async () => {
 
 .item-card:disabled {
   cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .avatar-drawer-overlay {
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar-drawer {
+    width: min(600px, 100%);
+    height: min(760px, 95dvh);
+    border-radius: 1.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -3,9 +3,14 @@
     <div class="achievement-card-content">
       <div class="achievement-icon">
         <img
-          v-if="achievement.rewardItem"
+          v-if="achievement.rewardItem?.slot === 'FUNDO'"
           :src="avatarAssetUrl(achievement.rewardItem.assetRef)"
           :alt="achievement.rewardItem.name"
+        />
+        <AvatarItemPreview
+          v-else-if="achievement.rewardItem"
+          :slot="achievement.rewardItem.slot"
+          :asset-ref="achievement.rewardItem.assetRef"
         />
         <img v-else src="/icons/medal.svg" alt="conquista desbloqueada" />
       </div>
@@ -18,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import AvatarItemPreview from "~/components/avatar/AvatarItemPreview.vue";
 import type { Achievement } from "~/stores/avatar";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 
@@ -68,7 +74,7 @@ const achievementText = computed(() => {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
-  white-space: nowrap;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
@@ -92,8 +98,14 @@ const achievementText = computed(() => {
   justify-content: center;
   align-items: center;
   height: 45px;
+  flex: 0 0 45px;
   aspect-ratio: 1;
   background-color: var(--hemo-color-warn);
+}
+
+.achievement-icon :deep(.hemarcio) {
+  width: 40px;
+  height: 40px;
 }
 
 .achievement-icon img {

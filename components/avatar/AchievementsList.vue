@@ -5,6 +5,15 @@
     role="tabpanel"
     aria-label="Conquistas"
   >
+    <p v-if="avatarStore.isLoadingAchievements" role="status">
+      Carregando suas conquistas…
+    </p>
+    <div v-else-if="avatarStore.achievementsError" role="alert">
+      <p>{{ avatarStore.achievementsError }}</p>
+      <button type="button" @click="avatarStore.fetchAchievements()">
+        Tentar novamente
+      </button>
+    </div>
     <article
       v-for="achievement in avatarStore.achievements"
       :key="achievement.id"
@@ -26,7 +35,10 @@
 
       <template v-if="achievement.unlocked">
         <div class="achievement-unlocked">
-          <time v-if="achievement.unlockedAt" :datetime="achievement.unlockedAt">
+          <time
+            v-if="achievement.unlockedAt"
+            :datetime="achievement.unlockedAt"
+          >
             {{ formatAchievementDate(achievement.unlockedAt) }}
           </time>
           <div v-if="achievement.rewardItem" class="achievement-reward">
@@ -46,7 +58,11 @@
           </div>
         </div>
         <button
-          v-if="achievement.rewardItem && achievement.rewardItem.id !== null && achievement.rewardItem.slot !== 'BADGE'"
+          v-if="
+            achievement.rewardItem &&
+            achievement.rewardItem.id !== null &&
+            achievement.rewardItem.slot !== 'BADGE'
+          "
           type="button"
           class="equip-cta"
           @click="handleEquip(achievement.rewardItem.id)"
@@ -55,10 +71,7 @@
         </button>
       </template>
 
-      <div
-        v-else-if="achievement.progress"
-        class="achievement-progress"
-      >
+      <div v-else-if="achievement.progress" class="achievement-progress">
         <div
           class="progress-bar"
           role="progressbar"
@@ -78,8 +91,14 @@
       </div>
     </article>
 
-    <p v-if="avatarStore.achievements.length === 0" class="empty-state">
-      Suas conquistas vão aparecer aqui. Continue participando para desbloquear novas recompensas!
+    <p
+      v-if="
+        avatarStore.achievementsLoaded && avatarStore.achievements.length === 0
+      "
+      class="empty-state"
+    >
+      Suas conquistas vão aparecer aqui. Continue participando para desbloquear
+      novas recompensas!
     </p>
   </div>
 </template>
@@ -113,6 +132,7 @@ const handleEquip = async (itemId: number) => {
 
 onMounted(() => {
   void avatarStore.fetchAchievements();
+  void avatarStore.fetchAvatar();
 });
 </script>
 
@@ -146,6 +166,7 @@ onMounted(() => {
 .achievement-card__topline {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: 0.65rem;
 }

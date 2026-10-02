@@ -54,6 +54,8 @@ const SLOT_TO_FIELD: Record<AvatarSlot, keyof AvatarEquipped> = {
   FUNDO: "fundoItemId",
 };
 
+const avatarRequests = new WeakMap<object, Promise<void>>();
+
 export const useAvatarStore = defineStore("avatar", {
   state: () => ({
     items: [] as AvatarItem[],
@@ -64,91 +66,124 @@ export const useAvatarStore = defineStore("avatar", {
     activeTab: "OLHOS" as AvatarTab,
     showBloodTypeBadge: true,
     pendingEquipItemId: null as number | null,
+    isLoadingAvatar: false,
+    avatarLoaded: false,
+    avatarError: "",
+    isLoadingAchievements: false,
+    achievementsLoaded: false,
+    achievementsError: "",
+    isSaving: false,
+    saveError: "",
   }),
   actions: {
     async fetchAvatar() {
-      if (this.items.length > 0) return;
-
+      if (this.avatarLoaded) return;
+      const existingRequest = avatarRequests.get(this);
+      if (existingRequest) return existingRequest;
+      this.isLoadingAvatar = true;
+      this.avatarError = "";
       const config = useRuntimeConfig();
       const userStore = useUserStore();
-
-      const data: {
-        items: AvatarItem[];
-        equipped: AvatarEquipped;
-        bloodTypeBadge: BloodTypeBadge | null;
-        showBloodTypeBadge?: boolean;
-      } = await $fetch(config.public.hemocioneIdApiUrl + "/users/me/avatar", {
-        headers: { Authorization: `Bearer ${userStore.token}` },
-      });
-      this.items = data.items;
-      this.equipped = data.equipped;
-      this.bloodTypeBadge = data.bloodTypeBadge;
-      this.showBloodTypeBadge = data.showBloodTypeBadge ?? data.bloodTypeBadge !== null;
+      const request = (async () => {
+        try {
+          const data = await $fetch<{
+            items: AvatarItem[];
+            equipped: AvatarEquipped;
+            bloodTypeBadge: BloodTypeBadge | null;
+            showBloodTypeBadge?: boolean;
+          }>(config.public.hemocioneIdApiUrl + "/users/me/avatar", {
+            headers: { Authorization: `Bearer ${userStore.token}` },
+          });
+          this.items = data.items;
+          this.equipped = data.equipped;
+          this.bloodTypeBadge = data.bloodTypeBadge;
+          this.showBloodTypeBadge =
+            data.showBloodTypeBadge ?? data.bloodTypeBadge !== null;
+          this.avatarLoaded = true;
+        } catch {
+          this.avatarError =
+            "Não foi possível carregar seu Hemárcio. Tente novamente.";
+        } finally {
+          this.isLoadingAvatar = false;
+          avatarRequests.delete(this);
+        }
+      })();
+      avatarRequests.set(this, request);
+      await request;
     },
     async fetchAchievements() {
-      if (this.achievements.length > 0) return;
-
+      if (this.achievementsLoaded || this.isLoadingAchievements) return;
+      this.isLoadingAchievements = true;
+      this.achievementsError = "";
       const config = useRuntimeConfig();
       const userStore = useUserStore();
-
-      const data: Achievement[] = await $fetch(
-        config.public.hemocioneIdApiUrl + "/users/me/achievements",
-        { headers: { Authorization: `Bearer ${userStore.token}` } }
-      );
-      this.achievements = data;
+      try {
+        this.achievements = await $fetch<Achievement[]>(
+          config.public.hemocioneIdApiUrl + "/users/me/achievements",
+          { headers: { Authorization: `Bearer ${userStore.token}` } },
+        );
+        this.achievementsLoaded = true;
+      } catch {
+        this.achievementsError =
+          "Não foi possível carregar suas conquistas. Tente novamente.";
+      } finally {
+        this.isLoadingAchievements = false;
+      }
+    },
+    async saveAvatar(
+      patch: Partial<AvatarEquipped> & { showBloodTypeBadge?: boolean },
+    ) {
+      if (this.isSaving) return;
+      this.isSaving = true;
+      this.saveError = "";
+      const config = useRuntimeConfig();
+      const userStore = useUserStore();
+      try {
+        const data = await $fetch<AvatarEquipped>(
+          config.public.hemocioneIdApiUrl + "/users/me/avatar",
+          {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${userStore.token}` },
+            body: patch,
+          },
+        );
+        const equipped = { ...this.equipped, ...data };
+        for (const slot of REQUIRED_AVATAR_SLOTS) {
+          const field = SLOT_TO_FIELD[slot];
+          equipped[field] ??=
+            this.items.find((item) => item.slot === slot && item.isDefault)
+              ?.id ??
+            this.equipped?.[field] ??
+            null;
+        }
+        this.equipped = equipped;
+        if (patch.showBloodTypeBadge !== undefined) {
+          this.showBloodTypeBadge = patch.showBloodTypeBadge;
+        }
+      } catch {
+        this.saveError =
+          "Não foi possível salvar. Sua seleção anterior foi mantida. Tente novamente.";
+      } finally {
+        this.isSaving = false;
+      }
     },
     async equipItem(item: AvatarItem) {
       if (!item.owned || !this.equipped) return;
-
-      const config = useRuntimeConfig();
-      const userStore = useUserStore();
-      const updatedEquipped = { ...this.equipped, [SLOT_TO_FIELD[item.slot]]: item.id };
-
-      const data: AvatarEquipped = await $fetch(
-        config.public.hemocioneIdApiUrl + "/users/me/avatar",
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${userStore.token}` },
-          body: JSON.stringify(updatedEquipped),
-        }
-      );
-      this.equipped = data;
+      await this.saveAvatar({ [SLOT_TO_FIELD[item.slot]]: item.id });
     },
     async unequipItem(slot: AvatarSlot) {
       if (!this.equipped || REQUIRED_AVATAR_SLOTS.includes(slot)) return;
-
-      const config = useRuntimeConfig();
-      const userStore = useUserStore();
-      const updatedEquipped = { ...this.equipped, [SLOT_TO_FIELD[slot]]: null };
-
-      const data: AvatarEquipped = await $fetch(
-        config.public.hemocioneIdApiUrl + "/users/me/avatar",
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${userStore.token}` },
-          body: JSON.stringify(updatedEquipped),
-        }
-      );
-      this.equipped = data;
+      await this.saveAvatar({ [SLOT_TO_FIELD[slot]]: null });
     },
     async toggleBloodTypeBadge() {
-      const config = useRuntimeConfig();
-      const userStore = useUserStore();
-      this.showBloodTypeBadge = !this.showBloodTypeBadge;
-
-      await $fetch(
-        config.public.hemocioneIdApiUrl + "/users/me/avatar",
-        {
-          method: "PUT",
-          headers: { Authorization: `Bearer ${userStore.token}` },
-          body: JSON.stringify({ showBloodTypeBadge: this.showBloodTypeBadge }),
-        }
-      );
+      await this.saveAvatar({ showBloodTypeBadge: !this.showBloodTypeBadge });
     },
-    async markItemsSeen() {
+    async markItemsSeen(ids?: number[]) {
       if (this.items.length === 0) await this.fetchAvatar();
 
-      const itemIds = this.unseenItems.map((item) => item.id);
+      const itemIds = this.unseenItems
+        .filter((item) => !ids || ids.includes(item.id))
+        .map((item) => item.id);
       if (itemIds.length === 0) return;
 
       const config = useRuntimeConfig();
@@ -163,7 +198,7 @@ export const useAvatarStore = defineStore("avatar", {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({ itemIds }),
-        }
+        },
       );
 
       const seenAt = new Date().toISOString();
@@ -189,10 +224,6 @@ export const useAvatarStore = defineStore("avatar", {
     openEditor(tab?: AvatarTab) {
       this.isEditorOpen = true;
       if (tab) this.activeTab = tab;
-
-      void this.markItemsSeen().catch((error) => {
-        console.error("Error marking avatar items as seen", error);
-      });
     },
     closeEditor() {
       this.isEditorOpen = false;
@@ -203,6 +234,11 @@ export const useAvatarStore = defineStore("avatar", {
       this.achievements = [];
       this.bloodTypeBadge = null;
       this.showBloodTypeBadge = true;
+      this.avatarLoaded = false;
+      this.achievementsLoaded = false;
+      this.avatarError = "";
+      this.achievementsError = "";
+      this.saveError = "";
     },
     isEquipped(item: AvatarItem) {
       return this.equipped?.[SLOT_TO_FIELD[item.slot]] === item.id;
@@ -213,7 +249,13 @@ export const useAvatarStore = defineStore("avatar", {
   },
   getters: {
     itemsBySlot(state): Record<AvatarSlot, AvatarItem[]> {
-      const groups: Record<AvatarSlot, AvatarItem[]> = { OLHOS: [], CORPO: [], PERNAS: [], ACESSORIOS: [], FUNDO: [] };
+      const groups: Record<AvatarSlot, AvatarItem[]> = {
+        OLHOS: [],
+        CORPO: [],
+        PERNAS: [],
+        ACESSORIOS: [],
+        FUNDO: [],
+      };
       for (const item of state.items) groups[item.slot].push(item);
       return groups;
     },
@@ -225,7 +267,7 @@ export const useAvatarStore = defineStore("avatar", {
     },
     unseenItems(state): AvatarItem[] {
       return state.items.filter(
-        (item) => item.owned && !item.isDefault && item.seenAt === null
+        (item) => item.owned && !item.isDefault && item.seenAt === null,
       );
     },
   },
