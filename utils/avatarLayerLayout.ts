@@ -25,7 +25,10 @@ export const AVATAR_LAYER_RECTS: Record<string, AvatarLayerRect> = {
   acessorios: { top: 0, left: 0, width: 100, height: 100 },
 };
 
-export const AVATAR_LAYER_CLASS: Record<keyof typeof AVATAR_LAYER_RECTS, string> = {
+export const AVATAR_LAYER_CLASS: Record<
+  keyof typeof AVATAR_LAYER_RECTS,
+  string
+> = {
   fundo: "fundo",
   base: "base",
   pernas: "pernas",
@@ -38,8 +41,8 @@ export const AVATAR_LAYER_CLASS: Record<keyof typeof AVATAR_LAYER_RECTS, string>
 
 export const AVATAR_LAYER_ORDER: Array<keyof typeof AVATAR_LAYER_RECTS> = [
   "fundo",
-  "base",
   "pernas",
+  "base",
   "corpo",
   "olhosBase",
   "olhos",
