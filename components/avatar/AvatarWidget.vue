@@ -1077,7 +1077,7 @@ onMounted(async () => {
 }
 
 .item-card.locked img,
-.item-card.locked :deep(.hemarcio) {
+.item-card.locked :deep(.item-preview img) {
   filter: grayscale(1);
 }
 
