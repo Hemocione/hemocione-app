@@ -37,7 +37,10 @@ const crop = computed<PreviewCrop>(() => {
     return accessoryCrops[name] ?? { sourceWidth: 1200, sourceHeight: 1200, x: 280, y: 100, width: 640, height: 650 };
   }
   if (props.slot === "CORPO") {
-    if (name === "colete_completo" || name === "faixa_competidor") {
+    if (name === "faixa_competidor") {
+      return { sourceWidth: 712, sourceHeight: 670, x: 175, y: 255, width: 360, height: 320 };
+    }
+    if (name === "colete_completo") {
       return { sourceWidth: 712, sourceHeight: 670, x: 60, y: 255, width: 590, height: 410 };
     }
     return { sourceWidth: 712, sourceHeight: 670, x: 0, y: 0, width: 712, height: 670 };

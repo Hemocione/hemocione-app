@@ -13,9 +13,9 @@
 <clipPath id="sash-torso-clip"><path d="M81 275 Q318 251 551 275 C543 377 456 469 319 474 C183 470 91 378 81 275 Z"/></clipPath>
 </defs>
 <g clip-path="url(#sash-torso-clip)" stroke-linecap="round" stroke-linejoin="round">
-<path d="M534 276 Q390 368 197 455" fill="none" stroke="#0D2E4D" stroke-width="56"/>
-<path d="M534 276 Q390 368 197 455" fill="none" stroke="#FFF8E1" stroke-width="46"/>
-<path d="M534 276 Q390 368 197 455" fill="none" stroke="#1B4B7A" stroke-width="24"/>
-<path d="M534 276 Q390 368 197 455" fill="none" stroke="#F9A825" stroke-width="8"/>
+<path d="M534 276 Q390 368 197 455" fill="none" stroke="#0D2E4D" stroke-width="76"/>
+<path d="M534 276 Q390 368 197 455" fill="none" stroke="#FFF8E1" stroke-width="64"/>
+<path d="M534 276 Q390 368 197 455" fill="none" stroke="#1B4B7A" stroke-width="34"/>
+<path d="M534 276 Q390 368 197 455" fill="none" stroke="#F9A825" stroke-width="12"/>
 </g>
 </svg>
