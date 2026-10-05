@@ -1,0 +1,5 @@
+interface:
+  display_name: "Hemocione Avatar Assets"
+  short_description: "Crie e valide SVGs proporcionais do Hemárcio"
+  brand_color: "#D71920"
+  default_prompt: "Use $hemocione-avatar-assets para criar ou corrigir um item SVG do Hemárcio."

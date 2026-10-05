@@ -92,3 +92,4 @@ dist
 .vercel
 
 *.keystore
+.env*

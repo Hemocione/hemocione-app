@@ -15,7 +15,7 @@
         :year="year"
         :is-last="index === sortedYears.length - 1"
         :is-first="index === 0"
-        :donations="donationsGroupedByYear[year]"
+        :items="itemsGroupedByYear[year]"
       />
       <div class="ending-wrapper">
         <div class="ending-line-with-dot">
@@ -102,7 +102,9 @@
 </style>
 
 <script setup lang="ts">
-import { useUserStore, type Donation } from "@/stores/user";
+import { useUserStore } from "@/stores/user";
+import { useAvatarStore, type Achievement } from "@/stores/avatar";
+import type { TimelineItem } from "~/types/timeline";
 import { storeToRefs } from "pinia";
 definePageMeta({
   pageTransition: {
@@ -110,33 +112,63 @@ definePageMeta({
     mode: "out-in",
   },
 });
-await setTimeout(() => {}, 5000);
 const userStore = useUserStore();
+const avatarStore = useAvatarStore();
 const { pendingDonations, confirmedDonations } = storeToRefs(userStore);
+const { achievements } = storeToRefs(avatarStore);
+
+onMounted(() => {
+  void avatarStore.fetchAchievements();
+});
+
 const pendingReviewDonationsCount = computed(
   () => pendingDonations.value.length
 );
-const donationsGroupedByYear = computed(() =>
-  confirmedDonations.value.reduce(
-    (acc: Record<string, Donation[]>, donation) => {
-      const year = String(
-        donation.donationDate instanceof Date
-          ? donation.donationDate.getFullYear()
-          : new Date(String(donation.donationDate)).getFullYear()
-      );
-      if (!acc[year]) {
-        acc[year] = [];
-      }
-      acc[year].push(donation);
-      return acc;
-    },
-    {}
-  )
-);
+
+// Merges confirmed donations and unlocked achievements into a single
+// chronological timeline. There is no backend link between a donation and an
+// achievement, so both lists are interleaved purely by their own dates.
+const timelineItems = computed<TimelineItem[]>(() => {
+  const donationItems: TimelineItem[] = confirmedDonations.value.map(
+    (donation) => ({
+      type: "donation",
+      date: new Date(Date.parse(String(donation.donationDate))),
+      data: donation,
+    })
+  );
+  const achievementItems: TimelineItem[] = achievements.value
+    .filter(
+      (achievement): achievement is Achievement & { unlockedAt: string } =>
+        achievement.unlocked && !!achievement.unlockedAt
+    )
+    .map((achievement) => ({
+      type: "achievement",
+      date: new Date(Date.parse(achievement.unlockedAt)),
+      data: achievement,
+    }));
+
+  return [...donationItems, ...achievementItems];
+});
+
+const itemsGroupedByYear = computed(() => {
+  const groups: Record<string, TimelineItem[]> = {};
+  for (const item of timelineItems.value) {
+    const year = String(item.date.getFullYear());
+    if (!groups[year]) {
+      groups[year] = [];
+    }
+    groups[year].push(item);
+  }
+  // Each year's items are sorted independently and explicitly, since the
+  // merge doesn't assume donations/achievements arrive pre-sorted.
+  for (const year of Object.keys(groups)) {
+    groups[year].sort((a, b) => b.date.getTime() - a.date.getTime());
+  }
+  return groups;
+});
+
 const sortedYears = computed(() =>
-  Object.keys(donationsGroupedByYear.value).sort(
-    (a, b) => Number(b) - Number(a)
-  )
+  Object.keys(itemsGroupedByYear.value).sort((a, b) => Number(b) - Number(a))
 );
 
 const endingText = computed(() => {

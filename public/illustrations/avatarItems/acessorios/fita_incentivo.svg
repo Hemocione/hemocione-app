@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Encouragement ribbon pinned to the left chest. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <g stroke-linecap="round" stroke-linejoin="round">
+    <path d="M442 622 L409 699 L443 684 L462 717 L478 639 Z" fill="#F6A609" stroke="#8C5200" stroke-width="8" />
+    <path d="M478 622 L510 699 L479 684 L459 717 L443 639 Z" fill="#FFCB35" stroke="#8C5200" stroke-width="8" />
+    <path d="M460 639 C416 611 417 562 449 562 C470 562 479 584 460 610 C441 584 450 562 471 562 C503 562 504 611 460 639 Z" fill="#F6A609" stroke="#8C5200" stroke-width="9" />
+    <circle cx="460" cy="627" r="13" fill="#FFCB35" stroke="#8C5200" stroke-width="6" />
+  </g>
+</svg>
