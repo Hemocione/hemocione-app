@@ -189,6 +189,12 @@ const baseInternalPages: InternalPage[] = [
     icon: "trophy",
   },
   {
+    path: "/jogos",
+    name: "Jogos",
+    priority: 1,
+    icon: "game",
+  },
+  {
     path: "/where",
     name: "Onde Doar",
     priority: 1,
