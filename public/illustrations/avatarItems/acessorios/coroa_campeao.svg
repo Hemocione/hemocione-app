@@ -1,8 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
-<!-- A compact crown that sits above the eyes instead of spanning the whole head. -->
-<g transform="rotate(-3 600 250)" stroke-linejoin="round">
-<path d="M450 286 L470 180 L548 224 L600 132 L652 224 L730 180 L750 286 Q600 306 450 286 Z" fill="#FFB300" stroke="#8B5A00" stroke-width="12"/>
-<path d="M456 284 Q600 304 744 284 L738 320 Q600 335 462 320 Z" fill="#F3A600" stroke="#8B5A00" stroke-width="10"/>
-<path d="M600 151 L600 270" stroke="#FFE58A" stroke-width="10" stroke-linecap="round" opacity=".9"/>
-</g>
+  <g stroke="#8B5A00" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M410 282 L422 143 L522 208 L635 75 L679 208 L778 143 L790 282 Q600 312 410 282 Z" fill="#FFC635" stroke-width="12"/>
+    <path d="M432 172 L445 259 M541 215 L626 114 M697 219 L759 179" fill="none" stroke="#FFF0AF" stroke-width="11"/>
+    <path d="M416 278 Q600 310 784 278 L776 326 Q600 355 424 326 Z" fill="#F9A825" stroke-width="11"/>
+    <path d="M439 305 Q600 329 761 305" fill="none" stroke="#FFE58A" stroke-width="8"/>
+    <path d="M600 224 L625 249 L600 274 L575 249 Z" fill="#DE0000" stroke="#7A0008" stroke-width="6"/>
+    <path d="M592 243 L600 235 L608 243" fill="none" stroke="#FF9C91" stroke-width="5"/>
+    <circle cx="472" cy="247" r="12" fill="#FFF8E1" stroke-width="5"/>
+    <circle cx="728" cy="247" r="12" fill="#FFF8E1" stroke-width="5"/>
+    <path d="M793 100 V132 M777 116 H809" fill="none" stroke="#F9C75B" stroke-width="8"/>
+  </g>
 </svg>
