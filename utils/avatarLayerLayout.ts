@@ -25,6 +25,45 @@ export const AVATAR_LAYER_RECTS: Record<string, AvatarLayerRect> = {
   acessorios: { top: 0, left: 0, width: 100, height: 100 },
 };
 
+export type AvatarFraming = "full" | "face";
+
+export interface AvatarFramingView {
+  /** Zoom factor applied to the character layers. */
+  scale: number;
+  /** Point of the reference frame (in %) that lands on the frame center. */
+  focusX: number;
+  focusY: number;
+}
+
+/**
+ * How much of Hemárcio each display shows. "full" is the whole body (editor
+ * and share image). "face" is a bust shot for the small avatar outside the
+ * editor: the eyes sit just below the center, the top of the head and any
+ * hat or crown stay in frame, and the body is cropped below the chest.
+ */
+export const AVATAR_FRAMINGS: Record<AvatarFraming, AvatarFramingView> = {
+  full: { scale: 1, focusX: 50, focusY: 50 },
+  face: { scale: 1.5, focusX: 50, focusY: 36 },
+};
+
+/** Layers that always fill the frame, whatever the framing. */
+const FRAME_FILLING_LAYERS = new Set<string>(["fundo"]);
+
+export const framedLayerRect = (
+  key: keyof typeof AVATAR_LAYER_RECTS,
+  framing: AvatarFraming,
+): AvatarLayerRect => {
+  const rect = AVATAR_LAYER_RECTS[key];
+  if (FRAME_FILLING_LAYERS.has(key)) return rect;
+  const { scale, focusX, focusY } = AVATAR_FRAMINGS[framing];
+  return {
+    top: (rect.top - focusY) * scale + 50,
+    left: (rect.left - focusX) * scale + 50,
+    width: rect.width * scale,
+    height: rect.height * scale,
+  };
+};
+
 export const AVATAR_LAYER_CLASS: Record<
   keyof typeof AVATAR_LAYER_RECTS,
   string
