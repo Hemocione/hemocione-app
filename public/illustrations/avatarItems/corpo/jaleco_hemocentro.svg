@@ -11,13 +11,13 @@
 </g>
 
 <g stroke="#A2A29D" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M123 286 Q172 269 231 281 L318 330 L405 281 Q464 269 513 286 L533 361 L483 374 L493 511 Q412 544 319 533 Q225 544 143 511 L153 374 L103 361 Z" fill="#F0EFE6" stroke-width="8"/>
+  <path d="M62 286 Q133 260 231 281 L318 330 L405 281 Q503 260 574 286 L584 374 Q553 386 513 377 L493 511 Q412 544 319 533 Q225 544 143 511 L123 377 Q83 386 52 374 Z" fill="#F0EFE6" stroke-width="8"/>
   <path d="M231 281 L318 330 L405 281 L366 393 L319 366 L272 393 Z" fill="#DDDDD5" stroke-width="6"/>
   <path d="M231 281 L271 296 L319 365 L265 343 Z M405 281 L365 296 L319 365 L373 343 Z" fill="#FFFFFF" stroke-width="5"/>
-  <path d="M319 366 L319 529 M151 365 L176 316 M485 365 L460 316" fill="none" stroke-width="6"/>
+  <path d="M319 366 L319 529 M123 377 L140 314 M513 377 L496 314" fill="none" stroke-width="6"/>
   <path d="M180 439 H254 L250 482 Q218 497 184 482 Z M383 399 H459 L455 451 Q421 468 387 451 Z" fill="#FFFFFF" stroke-width="5"/>
   <path d="M421 409 C415 419 405 427 405 436 A16 16 0 0 0 437 436 C437 427 427 419 421 409 Z" fill="#DE0000" stroke="#7A0008" stroke-width="3"/>
-  <path d="M124 346 L150 354 M488 354 L514 346" fill="none" stroke="#FFFFFF" stroke-width="9"/>
+  <path d="M60 358 Q89 370 121 361 M515 361 Q547 370 576 358" fill="none" stroke="#FFFFFF" stroke-width="9"/>
   <circle cx="331" cy="402" r="5" fill="#A2A29D" stroke="none"/>
   <circle cx="331" cy="449" r="5" fill="#A2A29D" stroke="none"/>
   <circle cx="331" cy="496" r="5" fill="#A2A29D" stroke="none"/>
