@@ -40,6 +40,9 @@ const crop = computed<PreviewCrop>(() => {
     return { sourceWidth: 100, sourceHeight: 100, x: 0, y: 2, width: 100, height: 76 };
   }
   if (props.slot === "CORPO") {
+    if (name === "capa_heroi") {
+      return { sourceWidth: 712, sourceHeight: 670, x: 535, y: 0, width: 177, height: 220 };
+    }
     if (name === "faixa_competidor") {
       return { sourceWidth: 712, sourceHeight: 670, x: 175, y: 255, width: 360, height: 320 };
     }
