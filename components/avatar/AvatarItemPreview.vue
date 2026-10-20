@@ -36,6 +36,9 @@ const crop = computed<PreviewCrop>(() => {
   if (props.slot === "ACESSORIOS") {
     return accessoryCrops[name] ?? { sourceWidth: 1200, sourceHeight: 1200, x: 280, y: 100, width: 640, height: 650 };
   }
+  if (props.slot === "OLHOS" && name === "oculos_veterano") {
+    return { sourceWidth: 100, sourceHeight: 100, x: 0, y: 2, width: 100, height: 76 };
+  }
   if (props.slot === "CORPO") {
     if (name === "faixa_competidor") {
       return { sourceWidth: 712, sourceHeight: 670, x: 175, y: 255, width: 360, height: 320 };
