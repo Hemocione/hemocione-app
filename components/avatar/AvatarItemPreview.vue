@@ -10,6 +10,7 @@ import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
 import type { AvatarSlot } from "~/stores/avatar";
 
 interface PreviewCrop {
+  clipPath?: string;
   sourceWidth: number;
   sourceHeight: number;
   x: number;
@@ -31,6 +32,12 @@ const accessoryCrops: Record<string, PreviewCrop> = {
   fita_incentivo: { sourceWidth: 1200, sourceHeight: 1200, x: 390, y: 540, width: 150, height: 190 },
 };
 
+const bodyCrops: Record<string, PreviewCrop> = {
+  capa_heroi: { sourceWidth: 712, sourceHeight: 670, x: 30, y: 265, width: 580, height: 340 },
+  faixa_competidor: { sourceWidth: 712, sourceHeight: 670, x: 190, y: 280, width: 330, height: 190, clipPath: "polygon(75.84% 36.42%, 77.95% 47.91%, 29.35% 73.73%, 23.17% 62.54%)" },
+  colete_completo: { sourceWidth: 712, sourceHeight: 670, x: 120, y: 270, width: 395, height: 255, clipPath: "polygon(16.43% 41.04%, 73.03% 41.04%, 73.88% 62.39%, 68.82% 73.13%, 58.99% 78.36%, 30.20% 78.36%, 20.37% 73.13%, 15.17% 62.39%)" },
+};
+
 const crop = computed<PreviewCrop>(() => {
   const name = props.assetRef.split("/").pop()?.replace(/\.svg$/, "") ?? "";
   if (props.slot === "ACESSORIOS") {
@@ -40,16 +47,7 @@ const crop = computed<PreviewCrop>(() => {
     return { sourceWidth: 100, sourceHeight: 100, x: 0, y: 2, width: 100, height: 76 };
   }
   if (props.slot === "CORPO") {
-    if (name === "capa_heroi") {
-      return { sourceWidth: 712, sourceHeight: 670, x: 535, y: 0, width: 177, height: 220 };
-    }
-    if (name === "faixa_competidor") {
-      return { sourceWidth: 712, sourceHeight: 670, x: 175, y: 255, width: 360, height: 320 };
-    }
-    if (name === "colete_completo") {
-      return { sourceWidth: 712, sourceHeight: 670, x: 60, y: 255, width: 590, height: 410 };
-    }
-    return { sourceWidth: 712, sourceHeight: 670, x: 0, y: 0, width: 712, height: 670 };
+    return bodyCrops[name] ?? { sourceWidth: 712, sourceHeight: 670, x: 0, y: 0, width: 712, height: 670 };
   }
   if (props.slot === "PERNAS") {
     return { sourceWidth: 364, sourceHeight: 398, x: 0, y: 0, width: 364, height: 398 };
@@ -61,6 +59,7 @@ const imageStyle = computed(() => {
   const { sourceWidth, sourceHeight, x, y, width, height } = crop.value;
   const scale = 56 / Math.max(width, height);
   return {
+    clipPath: crop.value.clipPath,
     width: `${sourceWidth * scale}px`,
     height: `${sourceHeight * scale}px`,
     left: `${28 - (x + width / 2) * scale}px`,
