@@ -10,6 +10,7 @@
     <span class="avatar-stage" aria-hidden="true">
       <HemarcioCharacter
         size="home"
+        framing="face"
         :olhos-asset-ref="avatarStore.equippedAssetRef('OLHOS')"
         :corpo-asset-ref="avatarStore.equippedAssetRef('CORPO')"
         :pernas-asset-ref="avatarStore.equippedAssetRef('PERNAS')"
