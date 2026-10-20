@@ -26,7 +26,7 @@ const props = defineProps<{
 const accessoryCrops: Record<string, PreviewCrop> = {
   chapeu_estreante: { sourceWidth: 1200, sourceHeight: 1200, x: 410, y: 70, width: 380, height: 250 },
   coroa_campeao: { sourceWidth: 1200, sourceHeight: 1200, x: 430, y: 110, width: 340, height: 250 },
-  cracha_evento: { sourceWidth: 1200, sourceHeight: 1200, x: 365, y: 530, width: 210, height: 190 },
+  cracha_evento: { sourceWidth: 1200, sourceHeight: 1200, x: 420, y: 530, width: 360, height: 230 },
   selo_liberado: { sourceWidth: 1200, sourceHeight: 1200, x: 275, y: 465, width: 165, height: 165 },
   fita_incentivo: { sourceWidth: 1200, sourceHeight: 1200, x: 390, y: 540, width: 150, height: 190 },
 };
