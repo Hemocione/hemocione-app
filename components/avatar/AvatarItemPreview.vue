@@ -34,7 +34,7 @@ const accessoryCrops: Record<string, PreviewCrop> = {
 };
 
 const bodyCrops: Record<string, PreviewCrop> = {
-  capa_heroi: { sourceWidth: 712, sourceHeight: 670, x: 30, y: 265, width: 580, height: 340 },
+  capa_heroi: { sourceWidth: 712, sourceHeight: 670, x: 30, y: 245, width: 575, height: 270, clipPath: "polygon(7.02% 36.57%, 82.02% 36.57%, 84.27% 49.25%, 79.49% 64.18%, 68.82% 72.39%, 58.43% 76.12%, 51.26% 71.64%, 63.20% 64.93%, 71.63% 55.22%, 73.74% 50.75%, 46.35% 50.15%, 42.70% 50.15%, 15.45% 46.27%, 14.04% 50.75%, 17.56% 58.96%, 26.69% 67.16%, 37.92% 70.90%, 30.48% 76.12%, 19.66% 71.64%, 9.83% 63.43%, 4.21% 52.24%)" },
   faixa_competidor: { sourceWidth: 712, sourceHeight: 670, x: 190, y: 280, width: 330, height: 190, clipPath: "polygon(75.84% 36.42%, 77.95% 47.91%, 29.35% 73.73%, 23.17% 62.54%)" },
   colete_completo: { sourceWidth: 712, sourceHeight: 670, x: 120, y: 270, width: 395, height: 255, clipPath: "polygon(16.43% 41.04%, 73.03% 41.04%, 73.88% 62.39%, 68.82% 73.13%, 58.99% 78.36%, 30.20% 78.36%, 20.37% 73.13%, 15.17% 62.39%)" },
   macacao_encanador: { sourceWidth: 712, sourceHeight: 670, x: 130, y: 265, width: 375, height: 280, clipPath: "polygon(19.66% 40.90%, 26.83% 40.30%, 31.18% 50.60%, 58.29% 50.60%, 62.50% 40.30%, 69.52% 40.90%, 66.57% 54.63%, 68.82% 71.49%, 59.69% 79.10%, 29.78% 79.10%, 20.37% 71.49%, 22.47% 54.63%)" },

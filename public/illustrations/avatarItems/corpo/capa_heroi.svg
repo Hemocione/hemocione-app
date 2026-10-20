@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Keep the raised thumb outside the arm. Leave room inside the body viewBox. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 712 670">
-<g stroke-linecap="round" stroke-linejoin="round" stroke="#58122F" stroke-width="10">
-  <path d="M135 280 C115 352 89 444 48 560 Q135 604 232 567 L214 477 C147 441 112 356 135 280 Z" fill="#941B46"/>
-  <path d="M501 280 C521 352 547 444 588 560 Q501 604 404 567 L422 477 C489 441 524 356 501 280 Z" fill="#941B46"/>
-  <path d="M131 309 Q105 453 77 548 Q140 574 209 554 M505 309 Q531 453 559 548 Q496 574 427 554" fill="none" stroke="#F9C75B" stroke-width="9"/>
-  <path d="M133 377 Q121 462 107 520 M503 377 Q515 462 529 520" fill="none" stroke="#BD3C66" stroke-width="12"/>
-  <path d="M155 293 Q318 355 481 293" fill="none" stroke="#F9C75B" stroke-width="9"/>
-  <path d="M132 284 Q176 284 197 309 L174 331 L129 309 Z M504 284 Q460 284 439 309 L462 331 L507 309 Z" fill="#F9C75B" stroke-width="7"/>
+<g stroke-linecap="round" stroke-linejoin="round" stroke="#58122F" stroke-width="8">
+  <path d="M81 273 C78 340 110 408 185 450 Q217 468 256 475 L217 499 C151 484 105 452 75 409 C48 370 39 324 49 283 Q62 274 81 273 Z" fill="#941B46"/>
+  <path d="M552 273 C555 340 523 408 448 450 Q416 468 377 475 L416 499 C482 484 528 452 558 409 C585 370 594 324 584 283 Q571 274 552 273 Z" fill="#941B46"/>
+  <path d="M58 289 C48 349 78 419 123 455 Q163 485 216 491 L237 479 C172 468 127 439 97 394 C76 362 67 324 70 281 Z" fill="#F9C75B" stroke-width="5"/>
+  <path d="M575 289 C585 349 555 419 510 455 Q470 485 417 491 L396 479 C461 468 506 439 536 394 C557 362 566 324 563 281 Z" fill="#F9C75B" stroke-width="5"/>
+  <path d="M86 320 Q101 409 172 455 M547 320 Q532 409 461 455" fill="none" stroke="#BD3C66" stroke-width="10"/>
+  <path d="M83 255 C141 282 222 292 304 301 L304 336 C217 331 150 308 109 296 Q95 314 88 340 L67 331 Q60 284 83 255 Z" fill="#941B46"/>
+  <path d="M550 255 C492 282 411 292 330 301 L330 336 C417 331 483 308 524 296 Q538 314 545 340 L566 331 Q573 284 550 255 Z" fill="#941B46"/>
+  <path d="M84 270 Q114 282 145 290 M549 270 Q519 282 488 290" fill="none" stroke="#F9C75B" stroke-width="6"/>
+  <path d="M317 292 L336 311 L317 332 L298 311 Z" fill="#F9C75B" stroke-width="6"/>
+  <path d="M317 305 L323 311 L317 318 L311 311 Z" fill="#DE0000" stroke="#7A0008" stroke-width="3"/>
 </g>
 <defs>
   <g id="raised-arm">
