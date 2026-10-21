@@ -2,79 +2,25 @@
 
 Itens de débito técnico identificados durante releases que ficaram para o próximo ciclo. Sempre que abrir um novo bump de versão, dá uma checada aqui antes pra varrer o que dá pra resolver junto.
 
-## Pendentes — endereçar no próximo release (0.2.2)
+## Como gerar um release
 
-### iOS — Info.plist
+- **Android:** crie `android/keystore.properties` (gitignored; `storeFile=../hemocione.keystore`, `storePassword`, `keyAlias`, `keyPassword`) e rode `scripts/release-android.sh`. Envie o `app-release.aab` no Play Console.
+- **iOS:** no macOS, com o Xcode logado no time `JGY96PPKZK`, rode `scripts/release-ios.sh`. O script faz o archive e o upload para o App Store Connect via `ios/App/ExportOptions.plist`.
 
-#### 1. Adicionar `NSLocationWhenInUseUsageDescription`
+## Pendentes
 
-- **Origem:** Apple ITMS-90683 warning ao subir build 0.2.1 (2). SDK do OneSignal referencia `CLLocationManager` no binário, então Apple exige a string mesmo sem o app chamar localização.
-- **Fix:** adicionar em `ios/App/App/Info.plist`:
-  ```xml
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>Sua localização permite sugerir locais de doação próximos a você.</string>
-  ```
-- **Custo:** ~30s.
-- **Bloqueante?** Não (warning, não erro). Build 0.2.1 (2) foi aceita. Sem o fix, vai aparecer em todo upload futuro.
-
-#### 2. Adicionar `ITSAppUsesNonExemptEncryption=false`
-
-- **Origem:** Hoje todo upload força a pergunta de export compliance no App Store Connect ("Does your app use encryption?"). É fácil errar a resposta no fluxo manual (aconteceu na 0.2.1).
-- **Fix:** adicionar em `ios/App/App/Info.plist`:
-  ```xml
-  <key>ITSAppUsesNonExemptEncryption</key>
-  <false/>
-  ```
-- **Justificativa:** Hemocione usa apenas HTTPS via WKWebView e cryptografia OS-provided. Qualifica para isenção (Cat 5 Part 2 das US Export Administration Regulations). Marcar `false` aqui significa "não usa criptografia não-isenta" — equivalente legal a responder "No" no popup, mas resolvido estaticamente.
-- **Custo:** ~30s.
-- **Bloqueante?** Não (cosmético no fluxo de release, mas evita erro humano).
-
-### Android — Signing config no Gradle
-
-#### 3. Adicionar `signingConfig` em `android/app/build.gradle` lendo de `keystore.properties`
-
-- **Origem:** Release Android v0.2.1 exigiu Android Studio GUI (Build → Generate Signed Bundle / APK) porque não há `signingConfigs` configurado em `app/build.gradle`. `./gradlew bundleRelease` produz AAB unsigned, que o Play Console rejeita.
-- **Fix:**
-  1. Criar `android/keystore.properties` (gitignored) com:
-     ```properties
-     storeFile=../hemocione.keystore
-     storePassword=...
-     keyAlias=...
-     keyPassword=...
-     ```
-  2. Em `android/app/build.gradle`, no topo:
-     ```gradle
-     def keystorePropertiesFile = rootProject.file("keystore.properties")
-     def keystoreProperties = new Properties()
-     if (keystorePropertiesFile.exists()) {
-         keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-     }
-     ```
-  3. Adicionar dentro do bloco `android { ... }`:
-     ```gradle
-     signingConfigs {
-         release {
-             if (keystorePropertiesFile.exists()) {
-                 storeFile rootProject.file(keystoreProperties['storeFile'])
-                 storePassword keystoreProperties['storePassword']
-                 keyAlias keystoreProperties['keyAlias']
-                 keyPassword keystoreProperties['keyPassword']
-             }
-         }
-     }
-     buildTypes {
-         release {
-             signingConfig signingConfigs.release
-             // ... linhas existentes (minifyEnabled, proguardFiles)
-         }
-     }
-     ```
-  4. Adicionar `keystore.properties` ao `.gitignore` (e ao `.gitignore` do android/, por segurança).
-- **Custo:** ~15min (config + 1 build de teste local).
-- **Benefício:** release Android scriptável (`./gradlew bundleRelease`), base para CI/automação futura, menos dependência de GUI.
-- **Bloqueante?** Não. Fluxo Android Studio GUI continua funcionando.
+- **App Store "Privacidade do app":** declarar Localização (aproximada e precisa, funcionalidade do app), igual ao que o Play já declara desde a 0.3.0.
+- **Play "Status da política":** alerta "segmentar API 36" (aplicado em 2026-08-30). A produção já usa API 36; confira se alguma faixa de teste ainda tem um build antigo e desative.
 
 ## Histórico
+
+### v0.3.0 — 2026-10-21
+
+- **Conteúdo:** Hemárcio (avatar gamificado), Conquistas, menus Jogos, Instituições e Ajuda Aí, permissão de localização. Notas em `docs/release-notes/0.3.0.md`.
+- **Follow-ups resolvidos:** `NSLocationWhenInUseUsageDescription` (entrou antes, com a localização dos embeds); `ITSAppUsesNonExemptEncryption=false`; `signingConfig` lendo `android/keystore.properties`.
+- **Status:** enviada para revisão em 2026-10-21 nas duas lojas. Play: versionCode 6, lançamento 100%, publicação gerenciada desativada. App Store: build 3, lançamento automático após aprovação.
+- **Play "Segurança dos dados":** Localização aproximada e precisa declaradas (coletadas, não compartilhadas, opcionais, funcionalidade do app).
+- **versionCode 5 queimado:** o Play acusou 7 aparelhos sem GPS. O fix (`uses-feature ... required=false`) exigiu novo upload, e um versionCode enviado não volta a ser aceito.
 
 ### v0.2.1 — 2026-05-09
 
