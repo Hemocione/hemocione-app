@@ -1,5 +1,5 @@
 <template>
-  <div class="hemarcio" :class="[size]">
+  <div class="hemarcio" :class="[size, `framing-${framing}`]">
     <img v-if="fundoAssetRef" class="layer fundo" :style="rectStyle('fundo')" :src="assetUrl(fundoAssetRef)" alt="" />
     <img class="layer base" :style="rectStyle('base')" :src="assetUrl('base/hemarcio_base.svg')" alt="" />
     <img v-if="pernasAssetRef" class="layer pernas" :style="rectStyle('pernas')" :src="assetUrl(pernasAssetRef)" alt="" />
@@ -26,7 +26,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { avatarAssetUrl } from "~/utils/avatarAssetUrl";
-import { AVATAR_LAYER_RECTS } from "~/utils/avatarLayerLayout";
+import {
+  AVATAR_LAYER_RECTS,
+  framedLayerRect,
+  type AvatarFraming,
+} from "~/utils/avatarLayerLayout";
 
 const assetUrl = avatarAssetUrl;
 const DEFAULT_EYES_ASSET_REF = "olhos/olhos_padrao.svg";
@@ -34,6 +38,7 @@ const DEFAULT_EYES_ASSET_REF = "olhos/olhos_padrao.svg";
 const props = withDefaults(
   defineProps<{
     size?: "large" | "thumbnail" | "home";
+    framing?: AvatarFraming;
     olhosAssetRef: string | null;
     corpoAssetRef: string | null;
     pernasAssetRef: string | null;
@@ -41,7 +46,7 @@ const props = withDefaults(
     fundoAssetRef: string | null;
     bloodTypeBadgeAssetRef?: string | null;
   }>(),
-  { size: "large", bloodTypeBadgeAssetRef: null }
+  { size: "large", framing: "full", bloodTypeBadgeAssetRef: null }
 );
 
 const showDefaultEyesBehindGlasses = computed(() =>
@@ -49,7 +54,7 @@ const showDefaultEyesBehindGlasses = computed(() =>
 );
 
 const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
-  const rect = AVATAR_LAYER_RECTS[key];
+  const rect = framedLayerRect(key, props.framing);
   return {
     top: `${rect.top}%`,
     left: `${rect.left}%`,
@@ -75,6 +80,9 @@ const rectStyle = (key: keyof typeof AVATAR_LAYER_RECTS) => {
 .hemarcio.home {
   width: 100%;
   height: 100%;
+}
+.hemarcio.framing-face {
+  overflow: hidden;
 }
 .layer {
   position: absolute;

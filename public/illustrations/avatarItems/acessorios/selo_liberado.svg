@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Eligibility badge: compact green approval shield on the viewer-left shoulder. -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
-  <g stroke-linecap="round" stroke-linejoin="round">
+  <g transform="translate(410 595) scale(1.22) translate(-355 -550)" stroke-linecap="round" stroke-linejoin="round">
     <path d="M310 487
              L400 487
              Q417 487 417 504
@@ -20,6 +20,7 @@
              L305 510
              Q305 502 313 502 Z"
           fill="#1F9C56" />
+    <path d="M317 511 H387" fill="none" stroke="#73E5A0" stroke-width="5"/>
     <path d="M318 543 L343 568 L395 515" fill="none" stroke="#FFFFFF" stroke-width="16" />
   </g>
 </svg>

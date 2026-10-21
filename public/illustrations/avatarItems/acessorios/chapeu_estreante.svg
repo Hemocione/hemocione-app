@@ -1,8 +1,10 @@
-<svg viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
-<!-- A light rookie cap: narrower than the head, lifted clear of the eyes AND fully covering the drop's pointed top (v1 left the tip visible above the cap). -->
-<g transform="translate(0,-55) rotate(2 600 245)" stroke-linejoin="round">
-<path d="M475 268 Q485 155 600 138 Q715 155 725 268 Z" fill="#2E7D32" stroke="#174C2A" stroke-width="12"/>
-<path d="M430 270 Q600 242 770 270 Q776 285 762 297 Q600 318 438 297 Q424 285 430 270 Z" fill="#388E3C" stroke="#174C2A" stroke-width="12"/>
-<path d="M515 178 Q600 151 685 178" fill="none" stroke="#66BB6A" stroke-width="11" stroke-linecap="round" opacity=".8"/>
-</g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <g stroke="#174C2A" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M424 270 C431 159 529 96 639 70 C710 107 768 175 776 270 Z" fill="#2E7D32"/>
+    <path d="M438 241 Q602 215 764 241 L776 274 Q600 301 424 274 Z" fill="#174C2A"/>
+    <path d="M392 270 Q600 239 808 270 Q828 292 803 310 Q600 338 397 310 Q372 292 392 270 Z" fill="#388E3C"/>
+    <path d="M475 181 Q535 121 606 106" fill="none" stroke="#66BB6A" stroke-width="12"/>
+    <path d="M430 291 Q601 315 770 291" fill="none" stroke="#66BB6A" stroke-width="7"/>
+    <path d="M600 176 C590 193 577 203 577 219 A23 23 0 0 0 623 219 C623 203 610 193 600 176 Z" fill="#FFF8E1" stroke-width="6"/>
+  </g>
 </svg>
