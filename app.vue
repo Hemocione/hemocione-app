@@ -202,7 +202,7 @@ if (urlToken) {
   await userStore.setToken(String(urlToken));
   await confirmLogin();
   executingLogin.value = false;
-  window.history.replaceState({}, document.title, window.location.pathname);
+  replaceUrlKeepingRouterState(window.location.pathname);
 } else {
   evaluateCurrentLogin();
 }

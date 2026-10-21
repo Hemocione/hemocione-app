@@ -339,7 +339,7 @@ const handlePopState = (_event: Event) => {
 watch(drawer, (newValue) => {
   if (newValue) {
     window.addEventListener("popstate", handlePopState);
-    window.history.pushState({ drawer: "open" }, "");
+    pushOverlayHistoryEntry("drawer");
   } else {
     window.removeEventListener("popstate", handlePopState);
   }
