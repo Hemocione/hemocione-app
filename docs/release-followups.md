@@ -9,7 +9,8 @@ Itens de débito técnico identificados durante releases que ficaram para o pró
 
 ## Pendentes
 
-Nenhum item pendente. Os itens 1, 2 e 3 do ciclo 0.2.1 foram resolvidos na 0.3.0.
+- **App Store "Privacidade do app":** declarar Localização (aproximada e precisa, funcionalidade do app), igual ao que o Play já declara desde a 0.3.0.
+- **Play "Status da política":** alerta "segmentar API 36" (aplicado em 2026-08-30). A produção já usa API 36; confira se alguma faixa de teste ainda tem um build antigo e desative.
 
 ## Histórico
 
@@ -17,7 +18,9 @@ Nenhum item pendente. Os itens 1, 2 e 3 do ciclo 0.2.1 foram resolvidos na 0.3.0
 
 - **Conteúdo:** Hemárcio (avatar gamificado), Conquistas, menus Jogos, Instituições e Ajuda Aí, permissão de localização. Notas em `docs/release-notes/0.3.0.md`.
 - **Follow-ups resolvidos:** `NSLocationWhenInUseUsageDescription` (entrou antes, com a localização dos embeds); `ITSAppUsesNonExemptEncryption=false`; `signingConfig` lendo `android/keystore.properties`.
-- **Atenção no Play Console:** o app agora pede `ACCESS_FINE_LOCATION`. Atualize a seção "Segurança dos dados" (localização aproximada e precisa, uso no app, não compartilhada).
+- **Status:** enviada para revisão em 2026-10-21 nas duas lojas. Play: versionCode 6, lançamento 100%, publicação gerenciada desativada. App Store: build 3, lançamento automático após aprovação.
+- **Play "Segurança dos dados":** Localização aproximada e precisa declaradas (coletadas, não compartilhadas, opcionais, funcionalidade do app).
+- **versionCode 5 queimado:** o Play acusou 7 aparelhos sem GPS. O fix (`uses-feature ... required=false`) exigiu novo upload, e um versionCode enviado não volta a ser aceito.
 
 ### v0.2.1 — 2026-05-09
 
