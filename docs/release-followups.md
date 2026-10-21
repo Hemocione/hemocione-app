@@ -2,6 +2,11 @@
 
 Itens de débito técnico identificados durante releases que ficaram para o próximo ciclo. Sempre que abrir um novo bump de versão, dá uma checada aqui antes pra varrer o que dá pra resolver junto.
 
+## Como gerar um release
+
+- **Android:** crie `android/keystore.properties` (gitignored; `storeFile=../hemocione.keystore`, `storePassword`, `keyAlias`, `keyPassword`) e rode `scripts/release-android.sh`. Envie o `app-release.aab` no Play Console.
+- **iOS:** no macOS, com o Xcode logado no time `JGY96PPKZK`, rode `scripts/release-ios.sh`. O script faz o archive e o upload para o App Store Connect via `ios/App/ExportOptions.plist`.
+
 ## Pendentes
 
 Nenhum item pendente. Os itens 1, 2 e 3 do ciclo 0.2.1 foram resolvidos na 0.3.0.
