@@ -13,6 +13,13 @@ Itens de débito técnico identificados durante releases que ficaram para o pró
 
 ## Histórico
 
+### v0.4.0 — 2026-10-22
+
+- **Conteúdo:** Hemárcio no app — menu e página `/hemarcio` (chat inline do `@hemocione/sdk` 0.2.0 vendorizado), ponte `hemocione:open-hemarcio`/`hemarcio-capable` para os produtos embutidos, botão "Quando posso doar de novo?" na home. Notas em `docs/release-notes/0.4.0.md`.
+- **Teste:** emulador Android (API 35) com conta de dev: home, menu, chat logado com pergunta e resposta, teclado, Jogos embutido. iOS não testado em aparelho (dono liberou pelo resultado do Android).
+- **Status:** enviada para revisão em 2026-10-22 nas duas lojas. Play: versionCode 7, lançamento 100%, publicação gerenciada desativada. App Store: build 4, "Aguardando revisão", lançamento automático após aprovação. A 0.3.0 já estava "Pronto para distribuição" (no ar) na Apple e ativa no Play.
+- **Build Android no Mac:** `openjdk@23` saiu do brew (`openjdk` virou 27). Usado `JAVA_HOME=/opt/homebrew/Cellar/openjdk/23.0.2/libexec/openjdk.jdk/Contents/Home`. `tmux` no Mac fica em `/opt/homebrew/bin/tmux` (fora do PATH do SSH).
+
 ### v0.3.0 — 2026-10-21
 
 - **Conteúdo:** Hemárcio (avatar gamificado), Conquistas, menus Jogos, Instituições e Ajuda Aí, permissão de localização. Notas em `docs/release-notes/0.3.0.md`.
