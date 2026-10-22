@@ -23,39 +23,10 @@ export function buildHemarcioPath(
   return `/hemarcio?${params.toString()}`;
 }
 
-type QueryValue = string | null | (string | null)[] | undefined;
-
-// URL of the chat iframe: slug as path, route query forwarded (ask/ctx
-// included), session token and iframed flag appended.
-export function buildChatUrl(
-  baseUrl: string,
-  opts: {
-    slug?: string | string[];
-    query?: Record<string, QueryValue>;
-    token?: string | null;
-    includeToken?: boolean;
-  } = {},
-): string {
-  const url = new URL(baseUrl);
-  const slugPath = Array.isArray(opts.slug)
-    ? opts.slug.filter(Boolean).join("/")
-    : opts.slug;
-  url.pathname = slugPath || "/";
-  for (const [key, raw] of Object.entries(opts.query ?? {})) {
-    // Same as the old IframeWrapper: String(value) (arrays join with ",",
-    // a value-less key becomes "null").
-    url.searchParams.set(key, String(raw));
-  }
-  url.searchParams.delete("token");
-  if (opts.includeToken) url.searchParams.set("token", String(opts.token));
-  url.searchParams.set("iframed", "true");
-  return url.toString();
-}
-
 const MAX_CONTEXT_LENGTH = 2000;
 
 // null = no context; undefined = invalid (message must be ignored).
-function sanitizeContext(value: unknown): HemocioneChatContext | null | undefined {
+export function sanitizeContext(value: unknown): HemocioneChatContext | null | undefined {
   if (value === undefined || value === null) return null;
   if (typeof value !== "object" || Array.isArray(value)) return undefined;
   const proto = Object.getPrototypeOf(value);
@@ -87,4 +58,63 @@ export function registerHemarcioHandlers(
     if (context === undefined) return;
     await navigate(buildHemarcioPath(data.intent, context));
   });
+}
+
+interface ChatLike {
+  ask(intent: HemarcioIntent, context?: HemocioneChatContext): void;
+  setToken(token: string | null): void;
+  destroy(): void;
+}
+
+type CreateChat = (opts: {
+  mode: "inline";
+  container: HTMLElement;
+  chatUrl: string;
+  token: string | null;
+  context: HemocioneChatContext;
+}) => ChatLike;
+
+// Drives the inline Hemarcio chat of the /hemarcio page. The embedded chat
+// never reads ?token= from its URL: token and question travel through the
+// SDK chat protocol (init / ask).
+export function createHemarcioPage(opts: {
+  createChat: CreateChat;
+  container: HTMLElement;
+  chatUrl: string;
+  token: string | null;
+}) {
+  const defaults: HemocioneChatContext = { product: "app", screen: "home" };
+  const chat = opts.createChat({
+    mode: "inline",
+    container: opts.container,
+    chatUrl: opts.chatUrl,
+    token: opts.token,
+    context: defaults,
+  });
+  return {
+    // Returns true when ask/ctx were present (caller strips them from the URL).
+    handleQuery(query: Record<string, unknown>): boolean {
+      const { ask, ctx } = query;
+      if (typeof ask !== "string" || !ask) return false;
+      if (!isHemarcioIntentId(ask)) return true;
+      let parsed: unknown = null;
+      if (typeof ctx === "string" && ctx) {
+        try {
+          parsed = JSON.parse(ctx);
+        } catch {
+          return true;
+        }
+      }
+      const clean = sanitizeContext(parsed);
+      if (clean === undefined) return true;
+      chat.ask(ask, { ...defaults, ...(clean ?? {}) });
+      return true;
+    },
+    setToken(token: string | null) {
+      chat.setToken(token);
+    },
+    destroy() {
+      chat.destroy();
+    },
+  };
 }

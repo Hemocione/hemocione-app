@@ -1,5 +1,8 @@
-<template><div style="display: none" /></template>
+<template>
+  <div ref="container" class="hemarcio-page" />
+</template>
 <script setup lang="ts">
+import { createHemocioneChat } from "@hemocione/sdk";
 import { useUserStore } from "~/stores/user";
 
 definePageMeta({
@@ -7,49 +10,56 @@ definePageMeta({
   allowFullscreen: true,
 });
 
-const iframeId = "hemarcio-iframe";
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const chatUrl = useRuntimeConfig().public.chatUrl;
+const container = ref<HTMLElement | null>(null);
+let page: ReturnType<typeof createHemarcioPage> | null = null;
 
-// The persistent iframe survives navigation. If it already exists, a new
-// `?ask=` must be pushed into it by changing its src. If it is created now,
-// IframeWrapper reads the route query itself.
-const iframeExisted = import.meta.client && !!document.getElementById(iframeId);
-
-usePersistentIframe(iframeId, chatUrl, true);
-
-const reloadChatWithAsk = () => {
-  const iframe = document
-    .getElementById(iframeId)
-    ?.querySelector("iframe") as HTMLIFrameElement | null;
-  if (!iframe) return;
-  iframe.src = buildChatUrl(chatUrl, {
-    slug: route.params.slug,
-    query: route.query as Record<string, string>,
-    token: userStore.token,
-    includeToken: true,
-  });
-};
-
-// Drop ask/ctx from the app URL so a reload does not repeat the question.
-const stripAsk = () => {
+// ask/ctx leave the app URL after use so a reload does not repeat the question.
+const consumeQuery = () => {
+  if (!page?.handleQuery(route.query)) return;
   const { ask: _ask, ctx: _ctx, ...rest } = route.query;
   router.replace({ query: rest });
 };
 
-const handleAsk = (navigateIframe: boolean) => {
-  if (typeof route.query.ask !== "string" || !route.query.ask) return;
-  if (navigateIframe) reloadChatWithAsk();
-  setTimeout(stripAsk, 0);
-};
+onMounted(() => {
+  if (!container.value) return;
+  page = createHemarcioPage({
+    createChat: createHemocioneChat,
+    container: container.value,
+    chatUrl,
+    token: userStore.token || null,
+  });
+  consumeQuery();
+});
 
-onMounted(() => handleAsk(iframeExisted));
-
-// Page already open and a new ask arrives (same route, new query).
+// A new ask while the page is already open reuses the same chat.
 watch(
   () => [route.query.ask, route.query.ctx],
-  () => handleAsk(true)
+  () => consumeQuery()
 );
+
+watch(
+  () => userStore.token,
+  (token) => page?.setToken(token || null)
+);
+
+onBeforeUnmount(() => {
+  page?.destroy();
+  page = null;
+});
 </script>
+<style scoped>
+.hemarcio-page {
+  width: 100%;
+  height: calc(var(--available-height) - var(--navbar-size));
+}
+
+.hemarcio-page :deep([data-hemocione-chat]) {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+</style>

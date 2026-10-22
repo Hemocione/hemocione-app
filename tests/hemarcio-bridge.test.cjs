@@ -115,63 +115,6 @@ test("buildHemarcioPath without context has only ask", () => {
   );
 });
 
-test("buildChatUrl forwards ask/ctx, token and iframed", () => {
-  const ctx = JSON.stringify({ product: "eventos" });
-  const url = new URL(
-    bridge.buildChatUrl("https://chat.hemocione.com.br", {
-      slug: ["a", "b"],
-      query: { ask: "eventos.preparar", ctx, token: "stale" },
-      token: "jwt",
-      includeToken: true,
-    }),
-  );
-  assert.equal(url.origin, "https://chat.hemocione.com.br");
-  assert.equal(url.pathname, "/a/b");
-  assert.equal(url.searchParams.get("ask"), "eventos.preparar");
-  assert.equal(url.searchParams.get("ctx"), ctx);
-  assert.equal(url.searchParams.get("token"), "jwt");
-  assert.equal(url.searchParams.get("iframed"), "true");
-});
-
-// Parity with the old IframeWrapper (src.searchParams.set(key, value as string)).
-function oldBuild(base, slug, query, token) {
-  const src = new URL(base);
-  const slugPath = Array.isArray(slug) ? slug.filter(Boolean).join("/") : slug;
-  src.pathname = slugPath || "/";
-  for (const [key, value] of Object.entries(query)) {
-    src.searchParams.set(key, value);
-  }
-  src.searchParams.delete("token");
-  src.searchParams.set("token", token);
-  src.searchParams.set("iframed", "true");
-  return src.toString();
-}
-
-test("buildChatUrl keeps exact parity with the old IframeWrapper", () => {
-  const base = "https://eventos.hemocione.com.br";
-  const cases = [
-    { a: ["1", "2"], z: "x" },
-    { flag: null, b: "2" },
-    { q: "a b&c", token: "stale", n: "1" },
-  ];
-  for (const query of cases) {
-    assert.equal(
-      bridge.buildChatUrl(base, {
-        slug: ["e", "f"],
-        query,
-        token: "jwt",
-        includeToken: true,
-      }),
-      oldBuild(base, ["e", "f"], query, "jwt"),
-    );
-  }
-  assert.match(
-    bridge.buildChatUrl(base, { query: { a: ["1", "2"] } }),
-    /a=1%2C2/,
-  );
-  assert.match(bridge.buildChatUrl(base, { query: { flag: null } }), /flag=null/);
-});
-
 test("open-hemarcio ignores array, non-plain and oversized context", async () => {
   class Foo {}
   const bad = [
@@ -191,10 +134,70 @@ test("open-hemarcio ignores array, non-plain and oversized context", async () =>
   assert.equal(navigated.length, 1);
 });
 
-test("includeToken with undefined token sends token=undefined like the old code", () => {
-  const base = "https://eventos.hemocione.com.br";
-  assert.equal(
-    bridge.buildChatUrl(base, { includeToken: true, token: undefined }),
-    oldBuild(base, undefined, {}, undefined),
-  );
+function fakePage(token = "jwt") {
+  const calls = [];
+  const chat = {
+    ask: (...a) => calls.push(["ask", ...a]),
+    setToken: (t) => calls.push(["setToken", t]),
+    destroy: () => calls.push(["destroy"]),
+  };
+  let created = 0;
+  const page = bridge.createHemarcioPage({
+    createChat: (opts) => {
+      created++;
+      calls.push(["create", opts]);
+      return chat;
+    },
+    container: {},
+    chatUrl: "https://chat.hemocione.com.br",
+    token,
+  });
+  return { page, calls, created: () => created };
+}
+
+test("page creates one inline chat with token and default context", () => {
+  const { calls } = fakePage();
+  const opts = calls[0][1];
+  assert.equal(opts.mode, "inline");
+  assert.equal(opts.token, "jwt");
+  assert.deepEqual(opts.context, { product: "app", screen: "home" });
+});
+
+test("page asks once with intent and merged ctx; ask again does not remount", () => {
+  const { page, calls, created } = fakePage();
+  const ctx = JSON.stringify({ product: "eventos", eventSlug: "x" });
+  assert.equal(page.handleQuery({ ask: "eventos.preparar", ctx }), true);
+  assert.equal(page.handleQuery({ ask: "app.proxima-doacao" }), true);
+  const asks = calls.filter((c) => c[0] === "ask");
+  assert.equal(asks.length, 2);
+  assert.deepEqual(asks[0].slice(1), [
+    "eventos.preparar",
+    { product: "eventos", screen: "home", eventSlug: "x" },
+  ]);
+  assert.deepEqual(asks[1].slice(1), [
+    "app.proxima-doacao",
+    { product: "app", screen: "home" },
+  ]);
+  assert.equal(created(), 1);
+});
+
+test("page ignores no ask, bad intent, bad ctx (but consumes the params)", () => {
+  const { page, calls } = fakePage();
+  assert.equal(page.handleQuery({}), false);
+  assert.equal(page.handleQuery({ ask: "evil" }), true);
+  assert.equal(page.handleQuery({ ask: "ondedoar.ponto", ctx: "{not json" }), true);
+  assert.equal(page.handleQuery({ ask: "ondedoar.ponto", ctx: "[1]" }), true);
+  assert.equal(calls.filter((c) => c[0] === "ask").length, 0);
+});
+
+test("page forwards token updates and destroys", () => {
+  const { page, calls } = fakePage();
+  page.setToken("new");
+  page.setToken(null);
+  page.destroy();
+  assert.deepEqual(calls.slice(1), [
+    ["setToken", "new"],
+    ["setToken", null],
+    ["destroy"],
+  ]);
 });

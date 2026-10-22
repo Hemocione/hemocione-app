@@ -35,15 +35,25 @@ const setLoaded = () => {
 
 const routeSlug = props.route.params.slug;
 const routeQuery = props.route.query;
+const routeSlugPath = Array.isArray(routeSlug)
+  ? routeSlug.filter(Boolean).join("/")
+  : routeSlug;
 
-const iframeSrc = computed(() =>
-  buildChatUrl(props.src, {
-    slug: routeSlug,
-    query: routeQuery,
-    token: userStore.token,
-    includeToken: props.includeToken,
-  })
-);
+const iframeSrc = computed(() => {
+  const src = new URL(props.src);
+  src.pathname = routeSlugPath || "/";
+  // add query params to iframe
+  for (const [key, value] of Object.entries(routeQuery)) {
+    src.searchParams.set(key, value as string);
+  }
+  src.searchParams.delete("token"); // remove token from query params if present
+  if (props.includeToken) {
+    // build url correctly with token
+    src.searchParams.set("token", userStore.token); // add token to query params
+  }
+  src.searchParams.set("iframed", "true");
+  return src.toString();
+});
 </script>
 <style scoped>
 .iframe-wrapper {
