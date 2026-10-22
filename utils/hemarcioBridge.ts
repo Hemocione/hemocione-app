@@ -72,6 +72,7 @@ type CreateChat = (opts: {
   chatUrl: string;
   token: string | null;
   context: HemocioneChatContext;
+  onNavigateTop?: (url: string) => void;
 }) => ChatLike;
 
 // Drives the inline Hemarcio chat of the /hemarcio page. The embedded chat
@@ -82,14 +83,16 @@ export function createHemarcioPage(opts: {
   container: HTMLElement;
   chatUrl: string;
   token: string | null;
+  onNavigateTop: (url: string) => void;
 }) {
-  const defaults: HemocioneChatContext = { product: "app", screen: "home" };
+  const defaults: HemocioneChatContext = { product: "app" };
   const chat = opts.createChat({
     mode: "inline",
     container: opts.container,
     chatUrl: opts.chatUrl,
     token: opts.token,
     context: defaults,
+    onNavigateTop: opts.onNavigateTop,
   });
   return {
     // Returns true when ask/ctx were present (caller strips them from the URL).

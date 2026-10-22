@@ -31,6 +31,11 @@ onMounted(() => {
     container: container.value,
     chatUrl,
     token: userStore.token || null,
+    // The chat's login button must not navigate the WebView away: hand the
+    // user to the app's own auth gate instead.
+    onNavigateTop: () => {
+      userStore.logout();
+    },
   });
   consumeQuery();
 });

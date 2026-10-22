@@ -98,7 +98,7 @@ const goRegisterDonation = () => {
 };
 
 const askNextDonation = () => {
-  navigateTo(buildHemarcioPath("app.proxima-doacao"));
+  navigateTo(buildHemarcioPath("app.proxima-doacao", { product: "app", screen: "home" }));
 };
 
 const goToEvents = () => {

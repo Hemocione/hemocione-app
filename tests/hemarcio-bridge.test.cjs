@@ -134,7 +134,7 @@ test("open-hemarcio ignores array, non-plain and oversized context", async () =>
   assert.equal(navigated.length, 1);
 });
 
-function fakePage(token = "jwt") {
+function fakePage(token = "jwt", onNavigateTop = () => {}) {
   const calls = [];
   const chat = {
     ask: (...a) => calls.push(["ask", ...a]),
@@ -151,6 +151,7 @@ function fakePage(token = "jwt") {
     container: {},
     chatUrl: "https://chat.hemocione.com.br",
     token,
+    onNavigateTop,
   });
   return { page, calls, created: () => created };
 }
@@ -160,7 +161,31 @@ test("page creates one inline chat with token and default context", () => {
   const opts = calls[0][1];
   assert.equal(opts.mode, "inline");
   assert.equal(opts.token, "jwt");
-  assert.deepEqual(opts.context, { product: "app", screen: "home" });
+  assert.deepEqual(opts.context, { product: "app" });
+});
+
+test("page passes onNavigateTop to the chat; calling it uses the handler", () => {
+  const seen = [];
+  const { calls } = fakePage("jwt", (u) => seen.push(u));
+  const opts = calls[0][1];
+  assert.equal(typeof opts.onNavigateTop, "function");
+  opts.onNavigateTop("https://id.hemocione.com.br/login");
+  assert.deepEqual(seen, ["https://id.hemocione.com.br/login"]);
+});
+
+test("home ask carries screen home explicitly via ctx", () => {
+  const { page, calls } = fakePage();
+  const path = bridge.buildHemarcioPath("app.proxima-doacao", {
+    product: "app",
+    screen: "home",
+  });
+  const q = Object.fromEntries(new URL(path, "https://x").searchParams);
+  page.handleQuery(q);
+  const ask = calls.find((c) => c[0] === "ask");
+  assert.deepEqual(ask.slice(1), [
+    "app.proxima-doacao",
+    { product: "app", screen: "home" },
+  ]);
 });
 
 test("page asks once with intent and merged ctx; ask again does not remount", () => {
@@ -172,11 +197,11 @@ test("page asks once with intent and merged ctx; ask again does not remount", ()
   assert.equal(asks.length, 2);
   assert.deepEqual(asks[0].slice(1), [
     "eventos.preparar",
-    { product: "eventos", screen: "home", eventSlug: "x" },
+    { product: "eventos", eventSlug: "x" },
   ]);
   assert.deepEqual(asks[1].slice(1), [
     "app.proxima-doacao",
-    { product: "app", screen: "home" },
+    { product: "app" },
   ]);
   assert.equal(created(), 1);
 });
