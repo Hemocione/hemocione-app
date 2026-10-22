@@ -6,6 +6,15 @@
     </div>
     <DonationCard :donation="donation" v-if="donation" />
     <CommonNoDonationsRegistered v-else />
+    <button
+      v-if="userStore.token"
+      type="button"
+      class="hemarcio-cta"
+      @click="askNextDonation"
+    >
+      <img src="/hemarcio-face.svg" alt="" class="hemarcio-face" />
+      <span>Quando posso doar de novo?</span>
+    </button>
   </div>
 </template>
 
@@ -47,6 +56,29 @@
   gap: 1em;
 }
 
+.hemarcio-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 2.5rem;
+  padding: 0 1rem;
+  border: 1px solid var(--hemo-color-primary);
+  border-radius: 0.5rem;
+  background: white;
+  color: var(--hemo-color-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.hemarcio-face {
+  width: 1.5rem;
+  height: 1.5rem;
+  object-fit: contain;
+}
+
 .donations {
   width: 100%;
 }
@@ -63,6 +95,10 @@ const goToDonations = () => {
 
 const goRegisterDonation = () => {
   navigateTo("/donations/new");
+};
+
+const askNextDonation = () => {
+  navigateTo(buildHemarcioPath("app.proxima-doacao", { product: "app", screen: "home" }));
 };
 
 const goToEvents = () => {

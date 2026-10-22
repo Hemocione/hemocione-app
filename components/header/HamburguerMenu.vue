@@ -207,6 +207,12 @@ const baseInternalPages: InternalPage[] = [
     icon: "question",
   },
   {
+    path: "/hemarcio",
+    name: "Hemárcio",
+    priority: 1,
+    icon: "hemarcio",
+  },
+  {
     path: "/ask-for-help",
     name: "Pedir Ajuda",
     priority: 1,
