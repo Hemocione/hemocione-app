@@ -12,7 +12,7 @@
       class="hemarcio-cta"
       @click="askNextDonation"
     >
-      <img src="/icons/hemarcio.svg" alt="" class="hemarcio-face" />
+      <img src="/hemarcio-face.svg" alt="" class="hemarcio-face" />
       <span>Quando posso doar de novo?</span>
     </button>
   </div>

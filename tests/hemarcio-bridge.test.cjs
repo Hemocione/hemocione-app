@@ -190,3 +190,11 @@ test("open-hemarcio ignores array, non-plain and oversized context", async () =>
   });
   assert.equal(navigated.length, 1);
 });
+
+test("includeToken with undefined token sends token=undefined like the old code", () => {
+  const base = "https://eventos.hemocione.com.br";
+  assert.equal(
+    bridge.buildChatUrl(base, { includeToken: true, token: undefined }),
+    oldBuild(base, undefined, {}, undefined),
+  );
+});

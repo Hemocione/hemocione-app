@@ -47,7 +47,7 @@ export function buildChatUrl(
     url.searchParams.set(key, String(raw));
   }
   url.searchParams.delete("token");
-  if (opts.includeToken) url.searchParams.set("token", opts.token ?? "");
+  if (opts.includeToken) url.searchParams.set("token", String(opts.token));
   url.searchParams.set("iframed", "true");
   return url.toString();
 }
