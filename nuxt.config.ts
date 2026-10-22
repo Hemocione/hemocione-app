@@ -46,7 +46,7 @@ export default defineNuxtConfig({
         process.env.NUXT_INSTITUTIONS_URL ||
         "https://instituicoes.hemocione.com.br",
       chatUrl:
-        process.env.NUXT_PUBLIC_CHAT_URL || "https://chat.hemocione.com.br",
+        process.env.NUXT_CHAT_URL || "https://chat.hemocione.com.br",
       testUrl: process.env.NUXT_TEST_URL || "https://wxmmdm-5173.csb.app",
       posthogPublicKey: process.env.NUXT_POSTHOG_PUBLIC_KEY || "",
       posthogHost: process.env.NUXT_POSTHOG_HOST || "https://us.i.posthog.com",

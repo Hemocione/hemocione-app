@@ -132,3 +132,61 @@ test("buildChatUrl forwards ask/ctx, token and iframed", () => {
   assert.equal(url.searchParams.get("token"), "jwt");
   assert.equal(url.searchParams.get("iframed"), "true");
 });
+
+// Parity with the old IframeWrapper (src.searchParams.set(key, value as string)).
+function oldBuild(base, slug, query, token) {
+  const src = new URL(base);
+  const slugPath = Array.isArray(slug) ? slug.filter(Boolean).join("/") : slug;
+  src.pathname = slugPath || "/";
+  for (const [key, value] of Object.entries(query)) {
+    src.searchParams.set(key, value);
+  }
+  src.searchParams.delete("token");
+  src.searchParams.set("token", token);
+  src.searchParams.set("iframed", "true");
+  return src.toString();
+}
+
+test("buildChatUrl keeps exact parity with the old IframeWrapper", () => {
+  const base = "https://eventos.hemocione.com.br";
+  const cases = [
+    { a: ["1", "2"], z: "x" },
+    { flag: null, b: "2" },
+    { q: "a b&c", token: "stale", n: "1" },
+  ];
+  for (const query of cases) {
+    assert.equal(
+      bridge.buildChatUrl(base, {
+        slug: ["e", "f"],
+        query,
+        token: "jwt",
+        includeToken: true,
+      }),
+      oldBuild(base, ["e", "f"], query, "jwt"),
+    );
+  }
+  assert.match(
+    bridge.buildChatUrl(base, { query: { a: ["1", "2"] } }),
+    /a=1%2C2/,
+  );
+  assert.match(bridge.buildChatUrl(base, { query: { flag: null } }), /flag=null/);
+});
+
+test("open-hemarcio ignores array, non-plain and oversized context", async () => {
+  class Foo {}
+  const bad = [
+    ["a"],
+    new Foo(),
+    "str",
+    { product: "x", blob: "y".repeat(2000) },
+  ];
+  for (const context of bad) {
+    await send("hemocione:open-hemarcio", { intent: "ondedoar.ponto", context });
+  }
+  assert.deepEqual(navigated, []);
+  await send("hemocione:open-hemarcio", {
+    intent: "ondedoar.ponto",
+    context: { product: "x" },
+  });
+  assert.equal(navigated.length, 1);
+});

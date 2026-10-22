@@ -42,13 +42,32 @@ export function buildChatUrl(
     : opts.slug;
   url.pathname = slugPath || "/";
   for (const [key, raw] of Object.entries(opts.query ?? {})) {
-    const value = Array.isArray(raw) ? raw[0] : raw;
-    if (typeof value === "string") url.searchParams.set(key, value);
+    // Same as the old IframeWrapper: String(value) (arrays join with ",",
+    // a value-less key becomes "null").
+    url.searchParams.set(key, String(raw));
   }
   url.searchParams.delete("token");
   if (opts.includeToken) url.searchParams.set("token", opts.token ?? "");
   url.searchParams.set("iframed", "true");
   return url.toString();
+}
+
+const MAX_CONTEXT_LENGTH = 2000;
+
+// null = no context; undefined = invalid (message must be ignored).
+function sanitizeContext(value: unknown): HemocioneChatContext | null | undefined {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== "object" || Array.isArray(value)) return undefined;
+  const proto = Object.getPrototypeOf(value);
+  if (proto !== Object.prototype && proto !== null) return undefined;
+  let json: string;
+  try {
+    json = JSON.stringify(value);
+  } catch {
+    return undefined;
+  }
+  if (json.length > MAX_CONTEXT_LENGTH) return undefined;
+  return value as HemocioneChatContext;
 }
 
 interface ReceiverLike {
@@ -64,8 +83,8 @@ export function registerHemarcioHandlers(
   receiver.on("hemocione:hemarcio-capable", async () => ({ capable: true }));
   receiver.on("hemocione:open-hemarcio", async (data) => {
     if (!data || !isHemarcioIntentId(data.intent)) return;
-    const context =
-      data.context && typeof data.context === "object" ? data.context : null;
+    const context = sanitizeContext(data.context);
+    if (context === undefined) return;
     await navigate(buildHemarcioPath(data.intent, context));
   });
 }
