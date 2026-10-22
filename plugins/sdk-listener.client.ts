@@ -1,5 +1,6 @@
 import {
   createIframeReceiver,
+  isHemocioneOrigin,
   type FinishLoadingData,
   type ShareData,
   type ShareInstagramData,
@@ -8,7 +9,9 @@ import {
 
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.hook("app:beforeMount", () => {
-    const iframeListener = createIframeReceiver();
+    // Only Hemocione origins may talk to the app (all embeds are
+    // *.hemocione.com.br); required since SDK 0.2.0 warns on an open receiver.
+    const iframeListener = createIframeReceiver(isHemocioneOrigin);
 
     iframeListener.on(
       "hemocione:finish-loading",
@@ -42,5 +45,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         store.addVirtualDonation(data);
       }
     );
+
+    registerHemarcioHandlers(iframeListener, (path) => navigateTo(path));
   });
 });
