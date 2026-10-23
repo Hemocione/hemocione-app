@@ -36,6 +36,10 @@ onMounted(() => {
     onNavigateTop: () => {
       userStore.logout();
     },
+    // Product buttons in the chat open the app page, not the product site.
+    onNavigate: (path) => {
+      navigateTo(path);
+    },
   });
   consumeQuery();
 });
