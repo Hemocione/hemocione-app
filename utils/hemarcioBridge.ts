@@ -40,6 +40,39 @@ export function buildHemarcioPath(
   return `/hemarcio?${params.toString()}`;
 }
 
+// App pages the Hemarcio chat may open (pages/<route>/...). Account deletion,
+// the chat itself and test pages stay out.
+const APP_ROUTES = [
+  "/where",
+  "/events",
+  "/can-donate",
+  "/jogos",
+  "/competitions",
+  "/ask-for-help",
+  "/institutions",
+  "/achievements",
+  "/donations",
+];
+const EXACT_APP_ROUTES = ["/", "/account"];
+
+export function isAppRoute(path: unknown): path is string {
+  if (typeof path !== "string" || !path.startsWith("/") || path.startsWith("//")) {
+    return false;
+  }
+  let pathname: string;
+  try {
+    const url = new URL(path, "https://app.invalid");
+    if (url.origin !== "https://app.invalid") return false;
+    pathname = url.pathname;
+  } catch {
+    return false;
+  }
+  if (EXACT_APP_ROUTES.includes(pathname)) return true;
+  return APP_ROUTES.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`),
+  );
+}
+
 const MAX_CONTEXT_LENGTH = 2000;
 
 // null = no context; undefined = invalid (message must be ignored).
@@ -90,6 +123,7 @@ type CreateChat = (opts: {
   token: string | null;
   context: HemocioneChatContext;
   onNavigateTop?: (url: string) => void;
+  onNavigate?: (path: string) => void;
 }) => ChatLike;
 
 // Drives the inline Hemarcio chat of the /hemarcio page. The embedded chat
@@ -101,6 +135,8 @@ export function createHemarcioPage(opts: {
   chatUrl: string;
   token: string | null;
   onNavigateTop: (url: string) => void;
+  // Opens an app page asked by the chat (product buttons and links).
+  onNavigate?: (path: string) => void;
 }) {
   const defaults: HemocioneChatContext = { product: "app" };
   const chat = opts.createChat({
@@ -110,6 +146,9 @@ export function createHemarcioPage(opts: {
     token: opts.token,
     context: defaults,
     onNavigateTop: opts.onNavigateTop,
+    onNavigate: (path) => {
+      if (isAppRoute(path)) opts.onNavigate?.(path);
+    },
   });
   return {
     // Returns true when ask/ctx were present (caller strips them from the URL).

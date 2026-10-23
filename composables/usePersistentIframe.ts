@@ -1,5 +1,6 @@
 import { h, render, onMounted, onUnmounted, nextTick } from "vue";
 import CommonIframeWrapper from "~/components/common/IframeWrapper.vue";
+import { iframeRouteKey, shouldReloadIframe } from "~/utils/persistentIframe";
 
 const fadeIn = (element: HTMLElement) => {
   element.style.transition = "opacity 0.5s ease";
@@ -28,10 +29,17 @@ export function usePersistentIframe(
 
   onMounted(async () => {
     const iframeWrapper = document.getElementById("iframe-page-wrapper");
-    let iframe = document.getElementById(iframeId) as HTMLIFrameElement;
+    let iframe = document.getElementById(iframeId) as HTMLElement | null;
 
     if (!iframeWrapper) {
       return;
+    }
+
+    const routeKey = iframeRouteKey(route.params.slug, route.query);
+    if (iframe && shouldReloadIframe(iframe.dataset.routeKey ?? "", routeKey)) {
+      render(null, iframe);
+      iframe.remove();
+      iframe = null;
     }
 
     if (iframe) {
@@ -52,6 +60,7 @@ export function usePersistentIframe(
       div.style.height = "100%";
       div.style.display = "block";
       div.id = iframeId;
+      div.dataset.routeKey = routeKey;
       iframeWrapper.appendChild(div);
 
       render(component, div);
