@@ -5,7 +5,7 @@
       :src="iframeSrc"
       frameborder="0"
       allowfullscreen
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; geolocation; gyroscope; picture-in-picture"
+      :allow="allow"
       @load="setLoaded"
       class="iframe"
     ></iframe>
@@ -18,13 +18,17 @@
 </template>
 <script setup lang="ts">
 import { useUserStore } from "~/stores/user";
+import { iframeAllow } from "~/utils/iframeAllow";
 
 const userStore = useUserStore();
 const props = defineProps<{
   src: string;
   includeToken?: boolean;
   route?: any;
+  audioSession?: boolean;
 }>();
+
+const allow = iframeAllow({ audioSession: props.audioSession });
 
 const iframedLoaded = ref(false);
 const setLoaded = () => {
