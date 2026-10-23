@@ -226,3 +226,56 @@ test("page forwards token updates and destroys", () => {
     ["destroy"],
   ]);
 });
+
+test("isAppRoute accepts the app pages and their sub-paths only", () => {
+  for (const p of [
+    "/",
+    "/where",
+    "/events/event/doe-rj",
+    "/can-donate/comprovante/x",
+    "/jogos",
+    "/competitions",
+    "/ask-for-help",
+    "/institutions",
+    "/achievements",
+    "/donations",
+    "/donations/new",
+    "/account",
+    "/events?x=1#y",
+  ]) {
+    assert.equal(bridge.isAppRoute(p), true, p);
+  }
+  for (const p of [
+    "",
+    "where",
+    "//evil.com",
+    "https://evil.com/where",
+    "/wherever",
+    "/hemarcio",
+    "/account/delete",
+    "/test",
+    "/admin",
+  ]) {
+    assert.equal(bridge.isAppRoute(p), false, p);
+  }
+});
+
+test("page hands only app routes from the chat to onNavigate", () => {
+  const seen = [];
+  const calls = [];
+  bridge.createHemarcioPage({
+    createChat: (opts) => {
+      calls.push(opts);
+      return { ask() {}, setToken() {}, destroy() {} };
+    },
+    container: {},
+    chatUrl: "https://chat.hemocione.com.br",
+    token: "jwt",
+    onNavigateTop: () => {},
+    onNavigate: (p) => seen.push(p),
+  });
+  calls[0].onNavigate("/where");
+  calls[0].onNavigate("/account/delete");
+  calls[0].onNavigate("/events/event/doe-rj");
+  assert.deepEqual(seen, ["/where", "/events/event/doe-rj"]);
+});
