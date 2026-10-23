@@ -21,7 +21,8 @@ const fadeOut = (element: HTMLElement, callback: () => void) => {
 export function usePersistentIframe(
   iframeId: string,
   src: string,
-  includeToken = false
+  includeToken = false,
+  options: { audioSession?: boolean } = {}
 ) {
   const route = useRoute();
 
@@ -43,6 +44,7 @@ export function usePersistentIframe(
         src,
         includeToken,
         route,
+        audioSession: options.audioSession,
       });
 
       const div = document.createElement("div");
