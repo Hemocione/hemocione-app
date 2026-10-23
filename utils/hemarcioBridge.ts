@@ -14,7 +14,7 @@ export function isHemarcioIntentId(value: unknown): value is HemarcioIntent {
 // Path of the Hemarcio page that asks the chat a ready-made question.
 /**
  * Botao do Hemarcio na home. "Quando posso doar de novo?" so faz sentido quando a
- * pessoa ainda nao pode doar; nos outros casos o botao so abre o chat.
+ * pessoa ainda nao pode doar; nos outros casos o botao pede o intent de duvidas.
  */
 export function homeHemarcioCta(donationStatus?: string): { label: string; path: string } {
   if (donationStatus === "unable-to-donate") {
@@ -23,7 +23,10 @@ export function homeHemarcioCta(donationStatus?: string): { label: string; path:
       path: buildHemarcioPath("app.proxima-doacao", { product: "app", screen: "home" }),
     };
   }
-  return { label: "Tirar dúvidas com o Hemárcio", path: "/hemarcio" };
+  return {
+    label: "Tirar dúvidas com o Hemárcio",
+    path: buildHemarcioPath("app.duvidas", { product: "app", screen: "home" }),
+  };
 }
 
 export function buildHemarcioPath(
