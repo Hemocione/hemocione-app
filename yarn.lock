@@ -716,9 +716,9 @@
   resolved "https://registry.yarnpkg.com/@formkit/auto-animate/-/auto-animate-0.8.4.tgz#2c857102bbf612c0e7bd4a0aac0e05a7f0efd8e7"
   integrity sha512-DHHC01EJ1p70Q0z/ZFRBIY8NDnmfKccQoyoM84Tgb6omLMat6jivCdf272Y8k3nf4Lzdin/Y4R9q8uFtU0GbnA==
 
-"@hemocione/sdk@file:./vendor/hemocione-sdk-0.2.0.tgz":
-  version "0.2.0"
-  resolved "file:./vendor/hemocione-sdk-0.2.0.tgz#a1f266e65d620882e254604f83ea996d4679fbde"
+"@hemocione/sdk@file:./vendor/hemocione-sdk-0.2.1.tgz":
+  version "0.2.1"
+  resolved "file:./vendor/hemocione-sdk-0.2.1.tgz#e6477e9c7adcbaec84fad06c196aa380b20ca10f"
 
 "@hutson/parse-repository-url@^3.0.0":
   version "3.0.2"
