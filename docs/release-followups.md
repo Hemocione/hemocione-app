@@ -13,6 +13,13 @@ Itens de débito técnico identificados durante releases que ficaram para o pró
 
 ## Histórico
 
+### v0.4.1 — 2026-10-23
+
+- **Conteúdo:** botão do Hemárcio na home conforme o status de doação, com pergunta automática nos dois casos (`app.proxima-doacao` para quem ainda não pode doar, `app.duvidas` para os demais; SDK 0.2.1). Som dos jogos no iPhone: iframe dos jogos delega `microphone` para o WebKit aceitar `navigator.audioSession.type = "playback"` (chave de silencioso). Notas em `docs/release-notes/0.4.1.md`.
+- **Status:** Play: versionCode 8, 100%, em análise (a 0.4.0 já tinha sido aprovada e publicada). App Store: a 0.4.0 foi removida da revisão ("Rejeitado pelo desenvolvedor"), a versão virou 0.4.1 com build 5, "Aguardando revisão" (2026-10-23).
+- **Pendente:** conferir o som dos jogos num iPhone real com a chave de silencioso ligada. No Android não foi achada causa no código.
+- **Store via CDP:** o Chrome do Mac pede "Allow remote debugging" a cada nova sessão; uma conexão por vez.
+
 ### v0.4.0 — 2026-10-22
 
 - **Conteúdo:** Hemárcio no app — menu e página `/hemarcio` (chat inline do `@hemocione/sdk` 0.2.0 vendorizado), ponte `hemocione:open-hemarcio`/`hemarcio-capable` para os produtos embutidos, botão "Quando posso doar de novo?" na home. Notas em `docs/release-notes/0.4.0.md`.
