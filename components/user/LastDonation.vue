@@ -10,10 +10,10 @@
       v-if="userStore.token"
       type="button"
       class="hemarcio-cta"
-      @click="askNextDonation"
+      @click="openHemarcio"
     >
       <img src="/hemarcio-face.svg" alt="" class="hemarcio-face" />
-      <span>Quando posso doar de novo?</span>
+      <span>{{ hemarcioCta.label }}</span>
     </button>
   </div>
 </template>
@@ -97,8 +97,9 @@ const goRegisterDonation = () => {
   navigateTo("/donations/new");
 };
 
-const askNextDonation = () => {
-  navigateTo(buildHemarcioPath("app.proxima-doacao", { product: "app", screen: "home" }));
+const hemarcioCta = computed(() => homeHemarcioCta(userStore.userDonationStatus?.status));
+const openHemarcio = () => {
+  navigateTo(hemarcioCta.value.path);
 };
 
 const goToEvents = () => {
