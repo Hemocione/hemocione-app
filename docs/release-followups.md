@@ -13,6 +13,13 @@ Itens de débito técnico identificados durante releases que ficaram para o pró
 
 ## Histórico
 
+### v0.4.2 — 2026-10-23
+
+- **Conteúdo:** o Hemárcio guia o doador pelo app. Botões de produto (`showProductLink` no chat) e links de produto abrem a página do app via SDK 0.4.0 (`hemocione-chat:navigate`, `onNavigate` na `/hemarcio`, rotas em `isAppRoute`). O iframe persistente recarrega numa página específica (`utils/persistentIframe.ts`). Notas em `docs/release-notes/0.4.2.md`.
+- **Teste:** E2E com bundle estático, chat.d e usuário de dev: botão "Abrir Jogos" → `/jogos`; evento do card no chat → `/events/event/<slug>` com o iframe recarregado.
+- **Status:** web em produção (app.hemocione.com.br). Enviada às lojas em 2026-10-26. Play: versionCode 9, 100%, publicada em 2026-10-26. App Store: build 6, "Aguardando revisão", lançamento automático após aprovação (a 0.4.1 está "Pronto para distribuição").
+- **Store via CDP:** o Chrome do Mac tem vários perfis. Use o perfil com `guima@hemocione.com.br` (`u/3`); o perfil da Vammo abre a tela de termos do Play.
+
 ### v0.4.1 — 2026-10-23
 
 - **Conteúdo:** botão do Hemárcio na home conforme o status de doação, com pergunta automática nos dois casos (`app.proxima-doacao` para quem ainda não pode doar, `app.duvidas` para os demais; SDK 0.2.1). Som dos jogos no iPhone: iframe dos jogos delega `microphone` para o WebKit aceitar `navigator.audioSession.type = "playback"` (chave de silencioso). Notas em `docs/release-notes/0.4.1.md`.
